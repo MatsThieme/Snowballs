@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ES2015",
+    "target": "ES2015",
+    "lib": [ "ESNext", "DOM" ],
+    "sourceMap": false,
+    "baseUrl": ".",
+    "paths": {
+      "se": [ "./node_modules/snowball-engine/dist/Scene" ]
+    },
+    "outDir": "dist"
+  }
+}
