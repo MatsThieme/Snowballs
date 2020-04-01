@@ -35,11 +35,7 @@
     <Content Include="Assets\Font\src.txt" />
     <Content Include="Assets\InputMappingAxes.json" />
     <Content Include="Assets\InputMappingButtons.json" />
-    <Content Include="Assets\spriteTest1.png" />
-    <Content Include="Assets\spriteTest2.png" />
-    <Content Include="Assets\spriteTest3.png" />
     <Content Include="package.json" />
-    <Content Include="README.md" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
@@ -47,16 +43,116 @@
     <Folder Include="Assets\Font\" />
     <Folder Include="Behaviours\" />
     <Folder Include="Prefabs\" />
+    <Folder Include="Prefabs\Scene\Cameras\" />
+    <Folder Include="Prefabs\Scene\Level\" />
+    <Folder Include="Prefabs\Scene\Players\" />
     <Folder Include="Prefabs\UI\" />
     <Folder Include="Prefabs\Scene\" />
     <Folder Include="Prefabs\UI\MainMenu\" />
     <Folder Include="Prefabs\UI\HUD\" />
+    <Folder Include="SnowballEngine\" />
+    <Folder Include="SnowballEngine\Camera\" />
+    <Folder Include="SnowballEngine\GameObject\" />
+    <Folder Include="SnowballEngine\GameObject\Components\" />
+    <Folder Include="SnowballEngine\Input\" />
+    <Folder Include="SnowballEngine\Physics\" />
+    <Folder Include="SnowballEngine\UI\" />
+    <Folder Include="SnowballEngine\UI\UIElements\" />
+    <Folder Include="SnowballEngine\Worker\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Behaviours\CameraFollowPlayers.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\PlayerMovementBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\TileMapBackgroundBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\LoadingScreenPrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\Scene\Cameras\MainCameraPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Level\TileMapPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\UI\DebugOverlayPrefab.ts" />
     <TypeScriptCompile Include="Prefabs\UI\MainMenu\MainMenuPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="SnowballEngine\Angle.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Camera\CameraManager.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Camera\Frame.ts" />
+    <TypeScriptCompile Include="SnowballEngine\ClientInfo.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Face.ts" />
+    <TypeScriptCompile Include="SnowballEngine\FontLoader.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Framedata.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Align.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Alignable.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\AnimatedSprite.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\AudioListener.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\AudioSource.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\Behaviour.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\Camera.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\CircleCollider.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\CircleRenderer.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\Collider.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\Component.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\ComponentType.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\ParticleSystem.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\PolygonCollider.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\PolygonRenderer.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\RigidBody.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\Texture.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\TileMap.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Components\Transform.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\Drawable.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameObject\GameObject.ts" />
+    <TypeScriptCompile Include="SnowballEngine\GameTime.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Helpers.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\Input.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputAxis.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputButton.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputGamepad.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputKeyboard.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputMapping.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputMouse.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Input\InputType.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Line.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Noise.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="SnowballEngine\Particle.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Physics\AABB.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Physics\Collision.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Physics\CollisionWorker.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Physics\Physics.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Physics\PhysicsMaterial.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Projection.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Scene.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Settings.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Sprite.ts" />
+    <TypeScriptCompile Include="SnowballEngine\SpriteAnimation.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UI.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UIButton.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UICheckbox.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UIDropdown.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UIElement.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UIInputField.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UINumberInputField.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UIText.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElements\UITextInputField.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIElementType.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIFont.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIFontSize.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIFrame.ts" />
+    <TypeScriptCompile Include="SnowballEngine\UI\UIMenu.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Vector2.ts" />
+    <TypeScriptCompile Include="SnowballEngine\Worker\AsyncWorker.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

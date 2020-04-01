@@ -7,9 +7,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Camera, FontLoader, Scene, Settings, Vector2 } from 'se';
 import { LoadingScreenPrefab } from './Prefabs/LoadingScreenPrefab.js';
-import { MainMenuPrefab } from './Prefabs/UI/MainMenu/MainMenuPrefab';
+import { MainCameraPrefab } from './Prefabs/Scene/Cameras/MainCameraPrefab.js';
+import { TileMapPrefab } from './Prefabs/Scene/Level/TileMapPrefab.js';
+import { PlayerPrefab } from './Prefabs/Scene/Players/PlayerPrefab.js';
+import { DebugOverlayPrefab } from './Prefabs/UI/DebugOverlayPrefab.js';
+import { MainMenuPrefab } from './Prefabs/UI/MainMenu/MainMenuPrefab.js';
+import { Noise } from './SnowballEngine/Noise.js';
+import { FontLoader, Scene, Settings } from './SnowballEngine/Scene.js';
 class Game {
     constructor() {
         this.scene = new Scene();
@@ -21,15 +26,19 @@ class Game {
             scene.domElement.width = 1920;
             scene.domElement.height = 1080;
             scene.loadingScreen = LoadingScreenPrefab;
-            yield FontLoader.load('Font/JosefinSlab-Regular.ttf', Settings.mainFont);
-            scene.newGameObject('camera', gameObject => {
-                gameObject.addComponent(Camera, camera => {
-                    camera.resolution = new Vector2(1920, 1080);
-                    camera.size = new Vector2(16, 9);
-                });
-            });
-            scene.ui.addMenu('MainMenu', MainMenuPrefab);
+            yield FontLoader.load('/Font/JosefinSlab-Regular.ttf', Settings.mainFont);
+            const noise = new Noise(10000);
+            for (let i = 0; i < 100; i++) {
+                console.log(noise.get(5 + i / 100));
+            }
+            scene.newGameObject('Camera', MainCameraPrefab);
+            scene.newGameObject('TileMap', TileMapPrefab);
+            scene.newGameObject('Player1', PlayerPrefab);
+            scene.ui.addMenu('Main Menu', MainMenuPrefab);
+            scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
         });
     }
 }
 new Game();
+// to fix:
+// aabb tilemap

@@ -10,9 +10,7 @@
     "clean": "tsc --build --clean"
   },
   "devDependencies": {
-    "typescript": "^3.2.2"
+    "typescript": "3.8.3"
   },
-  "dependencies": {
-    "snowball-engine": "0.0.13"
-  }
+  "dependencies": {}
 }
