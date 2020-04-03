@@ -34,6 +34,14 @@ export class Collision {
     }
     private solve(): Solved | undefined {
         if (!this.normal) return;
+
+        if ((<Collider>this.A).isTrigger || (<Collider>this.B).isTrigger) {
+            if (this.A.type !== ComponentType.TileMap && (<Collider>this.A).isTrigger) (<Collider>this.A).onTrigger(this);
+            if (this.B.type !== ComponentType.TileMap && (<Collider>this.B).isTrigger) (<Collider>this.B).onTrigger(this);
+
+            return;
+        }
+
         const rbA = this.A.gameObject.rigidbody;
         const rbB = this.B.gameObject.rigidbody;
 
@@ -45,8 +53,8 @@ export class Collision {
 
         // project out of collision
         const project = this.normal.clone.setLength(this.penetrationDepth / 2);
-        if (rbA.mass > 0) this.A.gameObject.transform.relativePosition.add((rbB.mass === 0 ? project.clone.scale(2) : project).flipped);
-        if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
+        //if (rbA.mass > 0) this.A.gameObject.transform.relativePosition.add((rbB.mass === 0 ? project.clone.scale(2) : project).flipped);
+        //if (rbB.mass > 0) this.B.gameObject.transform.relativePosition.add(rbA.mass === 0 ? project.clone.scale(2) : project);
 
 
         //const contact = Vector2.average(...this.contactPoints);
@@ -83,6 +91,10 @@ export class Collision {
 
         //impulsesA.push({ impulse: tangentImpulse.flipped, at: ra });
         //impulsesB.push({ impulse: tangentImpulse, at: rb });
+
+        if (this.A.type !== ComponentType.TileMap) (<Collider>this.A).onCollision(this);
+        if (this.B.type !== ComponentType.TileMap) (<Collider>this.B).onCollision(this);
+
 
         return {
             collision: this,

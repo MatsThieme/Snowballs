@@ -1,4 +1,9 @@
 export class Settings {
+    /*
+     *
+     * Game volume multiplier
+     * 
+     */
     public static volume: number = 1;
     public static appPath: string = '';//'https://thieme.ml/ABS';
     private static relativeAssetPath: string = '/Assets/';

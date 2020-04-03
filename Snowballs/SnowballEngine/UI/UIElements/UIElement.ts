@@ -66,14 +66,8 @@ export abstract class UIElement {
         const trigger = this.input.getButton(InputType.Trigger);
         const pointerPosition = new Vector2(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
 
-        if (trigger.down && !trigger.clicked && this.aabb.intersectsPoint(pointerPosition)) {
-            this.click = this.down = true;
-        } else if (trigger.down && trigger.clicked && this.aabb.intersectsPoint(pointerPosition)) {
-            this.down = true;
-            this.click = false;
-        } else if (this.down || this.click) {
-            this.click = this.down = false;
-        }
+        this.down = trigger.down && this.aabb.intersectsPoint(pointerPosition);
+        this.click = trigger.click && this.aabb.intersectsPoint(pointerPosition);
 
         if (!this.sprite) this.sprite = new Sprite(this.draw.bind(this));
     }

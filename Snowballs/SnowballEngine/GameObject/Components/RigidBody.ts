@@ -114,24 +114,7 @@ export class RigidBody extends Component {
                 for (const c of _c.impulses)
                     this.applyImpulse(c.impulse, c.at);
 
-            //this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
-
-            //for (const c of contactPoints) {
-            //    this.gameObject.scene.newGameObject('contact', gameObject => {
-            //        gameObject.addComponent(Texture, texture => {
-            //            texture.sprite = new Sprite((context, canvas) => {
-            //                canvas.width = canvas.height = 10;
-            //                context.fillStyle = '#f00';
-            //                context.fillRect(0, 0, 10, 10);
-            //            });
-
-            //            texture.size = new Vector2(0.1, 0.1);
-            //        });
-
-            //        gameObject.transform.relativePosition = c;
-            //        setTimeout(() => gameObject.destroy(), 1000);
-            //    });
-            //}
+            this.gameObject.transform.relativePosition.add(...solvedCollisions.map(c => c.project));
         }
 
 

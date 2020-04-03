@@ -7,6 +7,8 @@ import { Alignable } from '../Alignable.js';
 import { GameObject } from '../GameObject.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
+import { Behaviour } from './Behaviour.js';
+import { Collision } from '../../Physics/Collision.js';
 
 export abstract class Collider extends Component implements Alignable {
     private static nextID: number = 0;
@@ -17,9 +19,10 @@ export abstract class Collider extends Component implements Alignable {
     public material: PhysicsMaterial;
     private _autoMass: number;
     public density: number;
+    public isTrigger: boolean;
     protected abstract _area: number;
     protected abstract _aabb: AABB;
-    public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
+    public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center, isTrigger: boolean = false) {
         super(gameObject, type);
         this.relativePosition = relativePosition;
         this.alignH = alignH;
@@ -27,6 +30,7 @@ export abstract class Collider extends Component implements Alignable {
         this.material = material;
         this._autoMass = 0;
         this.density = density;
+        this.isTrigger = isTrigger;
         this.id = Collider.nextID++;
     }
     public get position(): Vector2 {
@@ -48,4 +52,10 @@ export abstract class Collider extends Component implements Alignable {
         return align;
     }
     public abstract async update(gameTime: GameTime): Promise<void>;
+    public onTrigger(collision: Collision): void {
+        this.gameObject.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.onTrigger(collision));
+    }
+    public onCollision(collision: Collision): void {
+        this.gameObject.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.onColliding(collision));
+    }
 }

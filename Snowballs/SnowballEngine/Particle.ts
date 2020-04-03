@@ -22,6 +22,12 @@ export class Particle implements Drawable {
         this.particleSystem = particleSystem;
         this.rotation = new Angle(undefined, Math.random() * 360);
     }
+
+    /**
+     *
+     * Returns the size of the 
+     * 
+     */
     public get size(): Vector2 {
         return this.particleSystem.size;
     }
@@ -39,6 +45,12 @@ export class Particle implements Drawable {
         this.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime));
         if (this.sprite instanceof SpriteAnimation) this.sprite.update(gameTime);
     }
+
+    /**
+     *
+     * Returns the current alpha value of this Particle.
+     * 
+     */
     public get alpha(): number {
         if (performance.now() < this.startTime + this.particleSystem.fadeInDuration && this.particleSystem.fadeInDuration > 0) {
             return (performance.now() - this.startTime) / this.particleSystem.fadeInDuration;

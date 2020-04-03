@@ -4,7 +4,6 @@ import { TileMapPrefab } from './Prefabs/Scene/Level/TileMapPrefab.js';
 import { PlayerPrefab } from './Prefabs/Scene/Players/PlayerPrefab.js';
 import { DebugOverlayPrefab } from './Prefabs/UI/DebugOverlayPrefab.js';
 import { MainMenuPrefab } from './Prefabs/UI/MainMenu/MainMenuPrefab.js';
-import { Noise } from './SnowballEngine/Noise.js';
 import { FontLoader, Scene, Settings } from './SnowballEngine/Scene.js';
 
 class Game {
@@ -23,15 +22,11 @@ class Game {
 
         await FontLoader.load('/Font/JosefinSlab-Regular.ttf', Settings.mainFont);
 
-        const noise = new Noise(10000);
-        for (let i = 0; i < 100; i++) {
-            console.log(noise.get(5 + i / 100));
-        }
-
         scene.newGameObject('Camera', MainCameraPrefab);
 
         scene.newGameObject('TileMap', TileMapPrefab);
         scene.newGameObject('Player1', PlayerPrefab);
+
 
         scene.ui.addMenu('Main Menu', MainMenuPrefab);
 

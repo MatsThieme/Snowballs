@@ -10,6 +10,7 @@ export class InputGamepad {
         return [...<Gamepad[]>navigator.getGamepads()].filter(g => g?.mapping === 'standard');
     }
     public getButton(b: number): InputButton {
+        if (typeof b !== 'number') return new InputButton();
         if (this.gamepads.findIndex(g => g.buttons[b].pressed) != -1) this.buttons[b].down = true;
         else this.buttons[b].down = false;
         return this.buttons[b];

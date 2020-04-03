@@ -12,7 +12,7 @@ export class ClientInfo {
             }
 
             setTimeout(() => {
-                resolve(frames / ms);
+                resolve(frames / ms * 1000);
                 cancelAnimationFrame(handle);
             }, ms);
         });

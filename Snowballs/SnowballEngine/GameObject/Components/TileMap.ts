@@ -32,6 +32,8 @@ export class TileMap extends Component {
 
         this.backgroundLayers = backgroundLayers;
         this.backgroundMaxDistance = backgroundMaxDistance;
+
+        backgroundLayers.forEach(b => console.log(b.distance / this.backgroundMaxDistance * 50));
     }
     public get currentFrame(): Frame[] {
         return [...this.tileFrames, ...this.backgroundFrames];
@@ -64,7 +66,7 @@ export class TileMap extends Component {
 
         for (const b of this.backgroundLayers) {
             const spriteSizeWorld = new Vector2(this.scaledSize.y * b.sprite.canvasImageSource.width / b.sprite.canvasImageSource.height, this.scaledSize.y);
-            const position = new Vector2(this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - spriteSizeWorld.x, this.position.y);
+            const position = new Vector2(this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - spriteSizeWorld.x * 2, this.position.y);
 
             while (position.x + spriteSizeWorld.x < point.x + camera.size.x / 2 && position.x + spriteSizeWorld.x < this.position.x + this.scaledSize.x) {
                 position.x += spriteSizeWorld.x;
@@ -79,7 +81,7 @@ export class TileMap extends Component {
         return this._tileMap;
     }
     public get scaledSize(): Vector2 {
-        return new Vector2(this._tileMap[0].length, this._tileMap.length).scale(this.tileSize).scale(this.gameObject.transform.relativeScale);
+        return new Vector2(this._tileMap.length > 0 ? this._tileMap[0].length : 0, this._tileMap.length).scale(this.tileSize).scale(this.gameObject.transform.relativeScale);
     }
     public get position() {
         return Vector2.add(this.relativePosition, this.gameObject.transform.position);

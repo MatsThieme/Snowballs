@@ -20,8 +20,6 @@ export class Physics {
         else Physics.ignoreCollisions[id] = 1;
     }
     public static collision(first: GameObject, second: GameObject): Promise<Collision>[] {
-        const start = performance.now();
-
         if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions[first.id > second.id ? (first.id << 16) + second.id : (second.id << 16) + first.id]) return [];
 
         const promises: Promise<Collision>[] = [];
@@ -54,10 +52,6 @@ export class Physics {
                     else if (otherCollider.type === ComponentType.CircleCollider) promises.push(Physics.collisionCircleTileMap(<CircleCollider>otherCollider, <any>collider));
                 }
             }
-        }
-
-        if (performance.now() - start > 1) {
-            console.log(performance.now() - start);
         }
 
         return promises;

@@ -2,7 +2,8 @@ export enum InputType {
     Interact,
     Trigger,
     TogglePauseMenu,
-    ToggleInventoryGUI,
+    ToggleInventory,
+    Jump,
 
     MoveHorizontal,
     MoveVertical,

@@ -68,6 +68,6 @@ export class PolygonRenderer extends Component {
         return this._position.clone.add(this.polygonCollider.position).sub(this.polygonCollider.relativePosition);
     }
     public get currentFrame(): Frame | undefined {
-        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, this.polygonCollider.position);
+        return new Frame(this.position, this.size, this.sprite, this.gameObject.transform.rotation, this.gameObject.drawPriority, 1, undefined, this.polygonCollider.position);
     }
 }

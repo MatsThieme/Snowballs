@@ -10,13 +10,31 @@ export class SpriteAnimation {
         this.swapTime = swapTime;
         this.timer = 0;
     }
+
+    /*
+     * 
+     * Returns the current frame to render.
+     * 
+     */
     public get currentFrame(): Sprite {
         return this.sprites[this.currentIndex];
     }
+
+    /**
+     * 
+     * Adds the deltaTime to timer property.
+     * 
+     */
     public update(gameTime: GameTime) {
         this.timer += gameTime.deltaTime;
         this.timer %= this.sprites.length * this.swapTime;
     }
+
+    /**
+     * 
+     * Reset the animation timer.
+     * 
+     */
     public reset() {
         this.timer = 0;
     }

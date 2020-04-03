@@ -1,7 +1,8 @@
 import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, Vector2 } from '../../../SnowballEngine/Scene.js';
 export function MainMenuPrefab(menu) {
     menu.aabb = new AABB(ClientInfo.resolution, new Vector2());
-    //menu.active = true;
+    menu.active = true;
+    menu.pauseScene = true;
     menu.background = new Sprite((context, canvas) => {
         canvas.width = menu.aabb.size.x;
         canvas.height = menu.aabb.size.y;

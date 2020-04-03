@@ -44,7 +44,16 @@ export class Camera extends Component {
 
                 this.context.globalAlpha = frame.alpha;
 
-                this.context.drawImage(frame.sprite.canvasImageSource, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                this.context.filter = frame.filter;
+
+                try {
+                    this.context.drawImage(frame.sprite.canvasImageSource, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                }
+                catch (error) {
+
+                }
+
+                this.context.filter = 'none';
 
                 this.context.restore();
             }

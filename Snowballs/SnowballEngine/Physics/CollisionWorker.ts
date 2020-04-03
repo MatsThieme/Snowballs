@@ -3,11 +3,6 @@ self.addEventListener('message', (e: MessageEvent) => {
 
     if (e.data === 'close') return close();
 
-    if (!(<any>self).used) {
-        (<any>self).used = true;
-        console.log('first use');
-    }
-
     if (e.data.name === 'p') {
         return postMessage(PolygonCollision(e.data.data));
     } else if (e.data.name === 'c') {

@@ -23,10 +23,10 @@ export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t
 
 /**
  * 
- * Execute code that may only be executed in a user event triggered context.
+ * Execute code that may only be executed in a user event triggered context, e.g. fullscreen api or pointerlock api.
  * 
  * @param cb Call on user event.
- * @param params Params to pass the callback on user event.
+ * @param params Parameters to pass the callback on user event.
  * 
  * @returns Returns Promise which resolves as result of callback.
  * 
@@ -61,7 +61,7 @@ export function triggerOnUserInputEvent<T>(cb: (...[]) => T, params: any[] = [])
 
 /**
  * 
- * Returned Promise<T> resolves when all passed promises are resolved.
+ * Returned Promise<T> resolves when all promises are resolved.
  * 
  */
 export function awaitPromises<T>(...promises: Promise<T>[]): Promise<T[]> {

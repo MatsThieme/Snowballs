@@ -50,7 +50,6 @@ export class AsyncWorker {
         this.workers.sort((a, b) => (<any>a.isBusy) - (<any>b.isBusy)).splice(0, Math.min(count, this.workers.length)).forEach(w => w.postMessage('close'));
     }
     public createWorker(count: number): Promise<Worker[]> {
-        console.log('creating worker');
         return new Promise((resolve, reject) => {
             const w: Worker[] = [];
 

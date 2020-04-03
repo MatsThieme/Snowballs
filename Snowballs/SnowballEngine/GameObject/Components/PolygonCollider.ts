@@ -17,8 +17,8 @@ export class PolygonCollider extends Collider {
     private _vertices: Vector2[];
     private _computedVertices: Vector2[];
     public faces: Face[];
-    public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
-        super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV);
+    public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center, isTrigger: boolean = false) {
+        super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV, isTrigger);
 
         this.scaledSize = this.computeSize(vertices);
         this._vertices = this.orderVertices(vertices);

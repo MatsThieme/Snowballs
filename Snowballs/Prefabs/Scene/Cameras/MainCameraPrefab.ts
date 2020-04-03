@@ -1,5 +1,5 @@
 import { CameraFollowPlayers } from '../../../Behaviours/CameraFollowPlayers.js';
-import { Camera, ClientInfo, GameObject, Vector2 } from '../../../SnowballEngine/Scene.js';
+import { AudioListener, Camera, ClientInfo, GameObject, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export function MainCameraPrefab(gameObject: GameObject) {
     gameObject.addComponent(Camera, camera => {
@@ -9,4 +9,5 @@ export function MainCameraPrefab(gameObject: GameObject) {
 
     gameObject.transform.relativePosition = new Vector2(0, 4.5);
     gameObject.addComponent(CameraFollowPlayers);
+    gameObject.addComponent(AudioListener);
 }

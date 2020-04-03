@@ -21,5 +21,6 @@ export abstract class Behaviour extends Component {
     protected awake(): void { }
     public async start(): Promise<void> { }
     public async update(gameTime: GameTime): Promise<void> { }
-    public onCollision(collisions: Collision[]): void { }
+    public onColliding(collision: Collision): void { }
+    public onTrigger(collision: Collision): void { }
 }

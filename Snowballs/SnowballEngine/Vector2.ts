@@ -189,6 +189,8 @@ export class Vector2 {
      * 
      * Scale this with scalar.
      * 
+     * Returns this for chainability.
+     *
      */
     public scale(scalar: number | Vector2): Vector2 {
         this.x *= typeof scalar === 'number' ? scalar : scalar.x;

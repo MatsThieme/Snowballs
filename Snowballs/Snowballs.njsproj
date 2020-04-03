@@ -30,17 +30,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Game.ts" />
-    <Content Include="Assets\Font\JosefinSlab-Regular.ttf" />
-    <Content Include="Assets\Font\OFL.txt" />
-    <Content Include="Assets\Font\src.txt" />
-    <Content Include="Assets\InputMappingAxes.json" />
-    <Content Include="Assets\InputMappingButtons.json" />
     <Content Include="package.json" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="Assets\Font\" />
     <Folder Include="Behaviours\" />
     <Folder Include="Prefabs\" />
     <Folder Include="Prefabs\Scene\Cameras\" />
@@ -78,6 +71,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerStatsPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\UI\DebugOverlayPrefab.ts" />

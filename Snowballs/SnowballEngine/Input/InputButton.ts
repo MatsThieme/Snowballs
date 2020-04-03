@@ -16,6 +16,9 @@ export class InputButton {
     public get clicked(): boolean {
         return this._clicked;
     }
+    public get click(): boolean {
+        return this.down && !this.clicked;
+    }
     public update(): void {
         if (!this.down) {
             this.wasDown = false;
