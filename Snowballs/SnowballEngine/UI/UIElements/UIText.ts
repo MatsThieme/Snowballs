@@ -10,7 +10,7 @@ export class UIText extends UIElement {
     public constructor(menu: UIMenu, input: Input) {
         super(menu, input, UIElementType.Text);
     }
-    protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
         context.save();
@@ -37,8 +37,5 @@ export class UIText extends UIElement {
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 
         context.restore();
-    }
-    public get currentFrame(): UIFrame {
-        return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
     }
 }

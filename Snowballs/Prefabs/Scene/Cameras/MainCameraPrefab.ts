@@ -1,4 +1,5 @@
 import { CameraFollowPlayers } from '../../../Behaviours/CameraFollowPlayers.js';
+import { FreezeFarAwayObjects } from '../../../Behaviours/FreezeFarAwayObjects.js';
 import { AudioListener, Camera, ClientInfo, GameObject, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export function MainCameraPrefab(gameObject: GameObject) {
@@ -10,4 +11,5 @@ export function MainCameraPrefab(gameObject: GameObject) {
     gameObject.transform.relativePosition = new Vector2(0, 4.5);
     gameObject.addComponent(CameraFollowPlayers);
     gameObject.addComponent(AudioListener);
+    gameObject.addComponent(FreezeFarAwayObjects);
 }

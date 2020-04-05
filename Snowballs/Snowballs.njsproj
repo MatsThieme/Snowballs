@@ -57,6 +57,9 @@
     <TypeScriptCompile Include="Behaviours\CameraFollowPlayers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\FreezeFarAwayObjects.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\PlayerMovementBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

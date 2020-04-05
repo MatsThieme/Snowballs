@@ -22,7 +22,7 @@ export class CameraManager {
     public get mainCamera(): Camera {
         return this.cameras[this.mainCameraIndex % this.cameras.length];
     }
-    public update(gameObjects: GameObject[], ui: UIFrame) {
+    public update(gameObjects: GameObject[]) {
         this.context.canvas.width = this.mainCamera.resolution.x;
         this.context.canvas.height = this.mainCamera.resolution.y;
 
@@ -31,6 +31,7 @@ export class CameraManager {
         let frames: (Frame | undefined)[] = [];
 
         for (const gameObject of gameObjects) {
+            if (!gameObject.active) continue;
             frames.push(...gameObject.getComponents<PolygonRenderer>(ComponentType.PolygonRenderer).map(pR => pR.currentFrame));
             frames.push(...gameObject.getComponents<CircleRenderer>(ComponentType.CircleRenderer).map(cR => cR.currentFrame));
             frames.push(...gameObject.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).map(aS => aS.currentFrame));
@@ -46,7 +47,8 @@ export class CameraManager {
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 
         this.context.drawImage(this.cameras[this.mainCameraIndex].currentFrame, 0, 0);
-
+    }
+    public drawUI(ui: UIFrame) {
         this.context.drawImage(ui.sprite.canvasImageSource, ui.aabb.position.x, ui.aabb.position.y, ui.aabb.size.x, ui.aabb.size.y);
     }
 }

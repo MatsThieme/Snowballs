@@ -35,5 +35,3 @@ class Game {
     }
 }
 new Game();
-// to fix:
-// aabb tilemap

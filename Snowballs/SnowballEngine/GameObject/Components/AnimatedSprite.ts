@@ -33,6 +33,12 @@ export class AnimatedSprite extends Component implements Drawable, Alignable {
         if (this.spriteAnimations.length === 0) console.error('spriteAnimations empty, gameObject name:', this.gameObject.name);
         this.spriteAnimations[this._activeAnimation].update(gameTime);
     }
+
+    /**
+     * 
+     * Set the active animation by index.
+     * 
+     */
     public set activeAnimation(val: number) {
         this._activeAnimation = val % this.spriteAnimations.length;
         this.spriteAnimations[this._activeAnimation].reset();

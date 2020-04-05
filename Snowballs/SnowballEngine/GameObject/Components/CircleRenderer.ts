@@ -7,7 +7,6 @@ import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 
 
-// for debugging
 export class CircleRenderer extends Component {
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
@@ -15,6 +14,11 @@ export class CircleRenderer extends Component {
     private sprite: Sprite;
     private _position: Vector2;
     private size: Vector2;
+    /**
+    *
+    * For development.
+    *
+    */
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.CircleRenderer);
 

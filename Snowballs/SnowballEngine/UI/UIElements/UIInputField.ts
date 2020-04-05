@@ -55,11 +55,11 @@ export abstract class UIInputField extends UIElement {
 
                 if (this.cbOnInput) this.cbOnInput(this);
 
-                this.sprite = new Sprite(this.draw.bind(this));
+                this.draw();
             }
         } else this.domElement.blur();
     }
-    protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
         context.save();
@@ -87,8 +87,5 @@ export abstract class UIInputField extends UIElement {
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 
         context.restore();
-    }
-    public get currentFrame(): UIFrame {
-        return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
     }
 }

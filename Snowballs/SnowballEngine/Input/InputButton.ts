@@ -1,32 +1,44 @@
 export class InputButton {
     private _down: boolean;
+    private isDown: boolean;
     private wasDown: boolean;
-    private _clicked: boolean;
+    /**
+     * 
+     * Used to store state information about a button.
+     * 
+     */
     public constructor() {
         this._down = false;
+        this.isDown = false;
         this.wasDown = false;
-        this._clicked = false;
+    }
+    public get down(): boolean {
+        return this.isDown;
     }
     public set down(val: boolean) {
         this._down = val;
     }
-    public get down(): boolean {
-        return this._down;
-    }
+
+    /**
+     * 
+     * Returns whether the button was down in the last frame.
+     * 
+     */
     public get clicked(): boolean {
-        return this._clicked;
+        return this.isDown && this.wasDown;
     }
+
+    /**
+     * 
+     * Returns whether the button is clicked in this frame.
+     * 
+     */
     public get click(): boolean {
-        return this.down && !this.clicked;
+        return this.isDown && !this.wasDown;
     }
     public update(): void {
-        if (!this.down) {
-            this.wasDown = false;
-            this._clicked = false;
-            return;
-        }
-
-        if (this.down && !this.wasDown) this.wasDown = true;
-        else if (this.down && this.wasDown && !this._clicked) this._clicked = true;
+        if (!this._down) this.isDown = this.wasDown = false;
+        else if (this._down && !this.isDown) this.isDown = true;
+        else if (this._down && this.isDown) this.wasDown = true;
     }
 }

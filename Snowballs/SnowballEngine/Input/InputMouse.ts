@@ -3,8 +3,18 @@ import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
 
 export class InputMouse {
+    /**
+     * 
+     * Pointer position relative to the scene domelement position.
+     * 
+     */
     private _position: Vector2;
     private buttons: InputButton[];
+    /**
+     *
+     * Difference between window and the scene domElement position.
+     * 
+     */
     private diff: Vector2;
     public constructor() {
         this.buttons = [new InputButton(), new InputButton(), new InputButton()];

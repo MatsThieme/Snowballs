@@ -1,4 +1,4 @@
-import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2 } from '../../../SnowballEngine/Scene.js';
+import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2, UIDropdown } from '../../../SnowballEngine/Scene.js';
 
 export function MainMenuPrefab(menu: UIMenu) {
     menu.aabb = new AABB(ClientInfo.resolution, new Vector2());

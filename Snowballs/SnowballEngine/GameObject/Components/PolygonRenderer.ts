@@ -6,7 +6,6 @@ import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
 
-// for debugging
 export class PolygonRenderer extends Component {
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
@@ -14,6 +13,11 @@ export class PolygonRenderer extends Component {
     private sprite: Sprite;
     private _position: Vector2;
     private size: Vector2;
+    /**
+     * 
+     * For development.
+     * 
+     */
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.PolygonRenderer);
 

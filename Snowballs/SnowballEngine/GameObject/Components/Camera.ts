@@ -20,6 +20,12 @@ export class Camera extends Component {
     public get currentFrame(): CanvasImageSource {
         return this.canvas;
     }
+
+    /**
+     * 
+     * Draw active gameObjects to a canvas.
+     * 
+     */
     public update(frames: Frame[]) {
         this.canvas.width = this.resolution.x;
         this.canvas.height = this.resolution.y;
@@ -48,10 +54,7 @@ export class Camera extends Component {
 
                 try {
                     this.context.drawImage(frame.sprite.canvasImageSource, framePos.x, framePos.y, frameSize.x, frameSize.y);
-                }
-                catch (error) {
-
-                }
+                } catch { }
 
                 this.context.filter = 'none';
 
@@ -59,25 +62,55 @@ export class Camera extends Component {
             }
         }
     }
+
+    /**
+     * 
+     * Returns whether a rectangle intersects the camera AABB.
+     * 
+     */
     public AABBInCamera(rect: AABB): boolean {
         return rect.screenSpaceIntersects(this.AABB);
     }
+
+    /**
+     * 
+     * Transforms a world point into a screen point.
+     * 
+     */
     public worldToScreenPoint(position: Vector2): Vector2 {
         const localPosition = new Vector2(position.x, -position.y).sub(new Vector2(this.gameObject.transform.position.x, -this.gameObject.transform.position.y)).add(this.size.clone.scale(0.5));
 
         return this.worldToScreen(localPosition);
     }
+
+    /**
+     *
+     * Transforms a screen point into a world point.
+     *
+     */
     public screenToWorldPoint(position: Vector2): Vector2 {
         const x = this.screenToWorld(position).add(new Vector2(this.gameObject.transform.position.x, -this.gameObject.transform.position.y)).sub(this.size.clone.scale(0.5));
         return new Vector2(x.x, -x.y);
     }
+
+    /**
+     * 
+     * Transforms a world vector into a screen vector.
+     *
+     */
     public worldToScreen(vector: Vector2) {
         return new Vector2(vector.x * this.resolution.x / this.size.x, vector.y * this.resolution.y / this.size.y);
     }
+
+    /**
+     *
+     * Transforms a screen vector into a world vector.
+     *
+     */
     public screenToWorld(vector: Vector2) {
         return new Vector2(vector.x * this.size.x / this.resolution.x, vector.y * this.size.y / this.resolution.y);
     }
-    private get AABB(): AABB {
+    public get AABB(): AABB {
         return new AABB(this.size, new Vector2(this.gameObject.transform.position.x - this.size.x / 2, this.gameObject.transform.position.y - this.size.y / 2));
     }
 }

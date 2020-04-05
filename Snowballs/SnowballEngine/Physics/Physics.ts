@@ -19,6 +19,12 @@ export class Physics {
         if (collide) delete Physics.ignoreCollisions[id];
         else Physics.ignoreCollisions[id] = 1;
     }
+
+    /**
+     * 
+     * Find collisions / intersections between two gameobjects.
+     * 
+     */
     public static collision(first: GameObject, second: GameObject): Promise<Collision>[] {
         if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions[first.id > second.id ? (first.id << 16) + second.id : (second.id << 16) + first.id]) return [];
 

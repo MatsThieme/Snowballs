@@ -34,16 +34,34 @@ export class Particle implements Drawable {
     public get scaledSize(): Vector2 {
         return this.particleSystem.scaledSize;
     }
+
+    /**
+     *
+     * Returns the current frame of this.
+     * 
+     */
     public get currentFrame(): Frame {
-        return new Frame(this.position, this.scaledSize, this.sprite instanceof SpriteAnimation ? this.sprite.currentFrame : this.sprite, new Angle(this.particleSystem.gameObject.transform.rotation.radian + this.rotation.radian), this.particleSystem.gameObject.drawPriority, this.alpha);
+        return new Frame(this.position, this.scaledSize, 'sprites' in this.sprite ? this.sprite.currentFrame : this.sprite, new Angle(this.particleSystem.gameObject.transform.rotation.radian + this.rotation.radian), this.particleSystem.gameObject.drawPriority, this.alpha);
     }
+
+    /**
+     * 
+     * Returns the absolute position of this.
+     * 
+     */
     public get position(): Vector2 {
         return this.particleSystem.position.clone.add(this.relativePosition);
     }
+
+    /**
+     * 
+     * Updates sprite animations and moves this.
+     * 
+     */
     public update(gameTime: GameTime) {
         this.rotation.degree += 360 / 1000 * gameTime.deltaTime * this.particleSystem.rotationSpeed;
         this.relativePosition.add(this.velocity.clone.scale(gameTime.deltaTime));
-        if (this.sprite instanceof SpriteAnimation) this.sprite.update(gameTime);
+        if ('sprites' in this.sprite) this.sprite.update(gameTime);
     }
 
     /**

@@ -2,6 +2,11 @@ import { Settings } from './Settings.js';
 
 export class Sprite {
     public canvasImageSource!: HTMLCanvasElement | OffscreenCanvas | HTMLImageElement;
+    /**
+     * 
+     * Used to load, store or create a canvas image source.
+     * 
+     */
     public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => void)) {
         if (typeof src === 'string') {
             this.canvasImageSource = new Image();

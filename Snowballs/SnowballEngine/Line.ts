@@ -4,36 +4,51 @@ export class Line {
     public a: Vector2;
     public b: Vector2;
     public s: Vector2;
+
+    /**
+     * 
+     * Line describes a line segment from a to b.
+     * 
+     */
     public constructor(a: Vector2, b: Vector2) {
         this.a = a;
         this.b = b;
         this.s = b.clone.sub(a);
     }
-    public get center(): Vector2 {
-        return Vector2.average(this.a, this.b);
-    }
-    public intersects(other: Line): Vector2 | undefined {
-        const p = this.a;
-        const r = this.s;
-        const q = other.a;
-        const s = other.s;
 
-        const abc = Vector2.cross(q.clone.sub(p), r);
-        const def = Vector2.cross(q.clone.sub(p), s);
-        const ghi = Vector2.cross(r, s);
+    /**
+     * 
+     * Returns the point of intersection or undefined if lines are not intersecting.
+     * 
+     */
+    public intersects(other: Line): Vector2 | undefined {
+        const abc = Vector2.cross(other.a.clone.sub(this.a), this.s);
+        const def = Vector2.cross(other.a.clone.sub(this.a), other.s);
+        const ghi = Vector2.cross(this.s, other.s);
 
         const u = abc / ghi;
-
         const t = def / ghi;
 
-        if (abc != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) return q.clone.add(s.clone.scale(u));
+        if (abc != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) return other.a.clone.add(other.s.clone.scale(u));
         else return;
     }
+
+    /**
+     * 
+     * Returns the shortest distance this to a point.
+     * 
+     */
     public distanceToPoint(point: Vector2): number {
         if (this.s.magnitude === 0) return point.distance(this.a);
 
         return point.distance(this.closestPoint(point));
     }
+
+    /**
+     * 
+     * Returns the closest point on this to an other point.
+     * 
+     */
     public closestPoint(point: Vector2): Vector2 {
         const distance = Vector2.dot(point.clone.sub(this.a), this.s) / this.s.magnitude;
 
@@ -41,6 +56,12 @@ export class Line {
         else if (distance > 1) return this.b;
         else return this.s.clone.scale(distance).add(this.a);
     }
+
+    /**
+     * 
+     * Returns an array of intersections of this and a circle.
+     * 
+     */
     public intersectsCircle(position: Vector2, radius: number): Vector2[] {
         const d = this.b.clone.sub(this.a);
         const f = this.a.clone.sub(position);

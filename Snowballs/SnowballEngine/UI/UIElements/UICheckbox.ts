@@ -20,10 +20,10 @@ export class UICheckbox extends UIElement {
         if (this.click) {
             this.checked = !this.checked;
             if (this.cbOnInput) this.cbOnInput(this);
-            this.sprite = new Sprite(this.draw.bind(this));
+            this.draw();
         }
     }
-    protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         const labelSize = this.menu.font.measureText(this.label, this.menu.font.getFont(Settings.mainFont, this.fontSize));
 
         canvas.height = Math.min(this.aabb.size.x, this.aabb.size.y);
@@ -64,8 +64,5 @@ export class UICheckbox extends UIElement {
         context.fillText(this.label, canvas.width, canvas.height / 2);
 
         context.restore();
-    }
-    public get currentFrame(): UIFrame {
-        return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
     }
 }

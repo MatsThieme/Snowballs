@@ -14,6 +14,12 @@ export class Transform extends Component {
         this.relativeRotation = new Angle();
         this.relativeScale = new Vector2(1, 1);
     }
+
+    /**
+     * 
+     * Returns the absolute position of the corresponding gameObject.
+     *
+     */
     public get position(): Vector2 {
         const scaledRP = this.relativePosition.clone.scale(this.scale);
         const angle = -(this.gameObject.parent?.transform.rotation.radian || 0);
@@ -21,9 +27,21 @@ export class Transform extends Component {
 
         return this.gameObject.parent?.transform.position.clone.add(x) || new Vector2(Math.cos(angle) * this.relativePosition.x - Math.sin(angle) * this.relativePosition.y, Math.sin(angle) * this.relativePosition.x + Math.cos(angle) * this.relativePosition.y);
     }
+
+    /**
+     *
+     * Returns the absolute rotation of the corresponding gameObject.
+     *
+     */
     public get rotation(): Angle {
         return new Angle((this.gameObject.parent?.transform.rotation.radian || 0) + this.relativeRotation.radian);
     }
+
+    /**
+     *
+     * Returns the absolute scale of the corresponding gameObject.
+     *
+     */
     public get scale(): Vector2 {
         return this.gameObject.parent?.transform.scale.clone.scale(this.relativeScale) || this.relativeScale.clone;
     }

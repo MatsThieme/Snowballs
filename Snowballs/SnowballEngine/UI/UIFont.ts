@@ -10,12 +10,30 @@ export class UIFont {
     private get fontMultiplier() {
         return this.menu.aabb.size.magnitude / 50;
     }
+
+    /**
+     * 
+     * Returns a font string, font size adjusts to menu size.
+     * 
+     */
     public getFont(name: string, size: UIFontSize = UIFontSize.Medium, bold: boolean = false) {
-        return `${(bold ? 'bold ' : '') + ~~(this.fontMultiplier * size)}px ${name}`;
+        return `${bold ? 'bold' : ''} ${~~(this.fontMultiplier * size)}px ${name}`;
     }
+
+    /**
+     * 
+     * Returns values parsed from a font string.
+     * 
+     */
     public parseFontString(font: string): { bold: boolean, px: number, name: string } {
         return { bold: font.indexOf('bold') !== -1, px: parseInt((<any>font.match(/[^\d]*(\d+)px.*/))[1]), name: (<any>font.match(/.*px (\w+).*/))[1] };
     }
+
+    /**
+     * 
+     * Returns the width and height of the text using the font string.
+     * 
+     */
     public measureText(text: string, font: string): Vector2 {
         const { px, bold, name } = this.parseFontString(font);
         const el = document.createElement('div');
@@ -34,6 +52,12 @@ export class UIFont {
 
         return new Vector2(width, height);
     }
+
+    /**
+     * 
+     * Returns the modified font string whichs px is scaled to fit the given size.
+     * 
+     */
     public fit(text: string, font: string, size: Vector2): string {
         const { px, bold, name } = this.parseFontString(font);
         const { x, y } = this.measureText(text, font);

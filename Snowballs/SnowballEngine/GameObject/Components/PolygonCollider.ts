@@ -9,7 +9,6 @@ import { GameObject } from '../GameObject.js';
 import { Collider } from './Collider.js';
 import { ComponentType } from './ComponentType.js';
 
-// Polygoncollider should have a relativePosition of 0, 0
 export class PolygonCollider extends Collider {
     protected _aabb: AABB;
     protected _area: number;
@@ -20,36 +19,59 @@ export class PolygonCollider extends Collider {
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, vertices: Vector2[] = [new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(1, 0)], alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center, isTrigger: boolean = false) {
         super(gameObject, ComponentType.PolygonCollider, relativePosition, material, density, alignH, alignV, isTrigger);
 
-        this.scaledSize = this.computeSize(vertices);
+        this.scaledSize = this.calculateSize(vertices);
         this._vertices = this.orderVertices(vertices);
-        this.faces = this.computeFaces(this._vertices);
-        this._area = this.computeArea();
-        this._aabb = this.computeAABB();
+        this.faces = this.calculateFaces(this._vertices);
+        this._computedVertices = this._vertices;
+        this._area = this.calculateArea();
+        this._aabb = this.calculateAABB();
         this.gameObject.rigidbody.updateInertia();
         this._computedVertices = this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
+    /**
+     * 
+     * Set the points describing the polygon, order is irrelevant.
+     * 
+     */
     public set vertices(vertices: Vector2[]) {
-        this.scaledSize = this.computeSize(vertices);
+        this.scaledSize = this.calculateSize(vertices);
         this._vertices = this.orderVertices(vertices);
-        this.faces = this.computeFaces(this._vertices);
-        this._area = this.computeArea();
-        this._aabb = this.computeAABB();
+        this.faces = this.calculateFaces(this._vertices);
+        this._area = this.calculateArea();
+        this._aabb = this.calculateAABB();
         this.gameObject.rigidbody.updateInertia();
         this._computedVertices = this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
     }
+    /**
+     * 
+     * Get absolute positioned, scaled and rotated vertices.
+     * 
+     */
     public get vertices(): Vector2[] {
-        return this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
+        return this._computedVertices;
     }
-    public centerPointsAt(vertices: Vector2[], center: Vector2 = new Vector2()): Vector2[] {
+
+    /**
+     * 
+     * Center vertices around a point.
+     * 
+     */
+    public centerPointsAt(vertices: Vector2[], point: Vector2 = new Vector2()): Vector2[] {
         const difference = Vector2.average(...vertices);
 
         for (const vertex of vertices) {
-            vertex.sub(difference).add(center);
+            vertex.sub(difference).add(point);
         }
 
         return vertices;
     }
-    private computeSize(vertices: Vector2[]): Vector2 {
+
+    /**
+     * 
+     * Calculates the AABB size of vertices.
+     * 
+     */
+    private calculateSize(vertices: Vector2[]): Vector2 {
         let maxX = -Infinity, minX = Infinity, maxY = -Infinity, minY = Infinity;
 
         for (const vertex of vertices) {
@@ -61,10 +83,22 @@ export class PolygonCollider extends Collider {
 
         return new Vector2(maxX - minX, maxY - minY);
     }
+
+    /**
+     * 
+     * Order vertices clockwise.
+     * 
+     */
     private orderVertices(vertices: Vector2[]): Vector2[] {
         return this.centerPointsAt(vertices).sort((a, b) => Vector2.up.angleTo(new Vector2(), a).degree - Vector2.up.angleTo(new Vector2(), b).degree);
     }
-    private computeFaces(vertices: Vector2[]): Face[] {
+
+    /**
+     * 
+     * Calculates the faces of a clockwise ordered vertices array.
+     * 
+     */
+    private calculateFaces(vertices: Vector2[]): Face[] {
         const faces = [];
 
         for (let i = 0; i < vertices.length; i++) {
@@ -73,6 +107,12 @@ export class PolygonCollider extends Collider {
 
         return faces;
     }
+
+    /**
+     * 
+     * Project this.vertices onto an axis, used in polygon intersection tests(Seperating Axis Theorem).
+     * 
+     */
     public project(axis: Vector2): Projection { // x=min, y=max
         let min = Infinity;
         let max = -Infinity;
@@ -94,9 +134,15 @@ export class PolygonCollider extends Collider {
 
         return new Projection(min, max, minVertex, maxVertex);
     }
-    private computeArea(): number {
-        let area = 0;
+
+    /**
+     * 
+     * Calculates the area of the polygon described by this.vertices.
+     * 
+     */
+    private calculateArea(): number {
         const vertices = this.vertices;
+        let area = 0;
 
         for (let i = 1; i < vertices.length; i++) {
             area += (vertices[i - 1].x + vertices[i].x) * (vertices[i - 1].y - vertices[i].y);
@@ -104,7 +150,7 @@ export class PolygonCollider extends Collider {
 
         return area / 2;
     }
-    private computeAABB(): AABB {
+    private calculateAABB(): AABB {
         const topLeft = new Vector2(Infinity, -Infinity);
 
         const vs = this.vertices;
@@ -116,47 +162,53 @@ export class PolygonCollider extends Collider {
 
         return new AABB(this.scaledSize, topLeft);
     }
+
+    /**
+     * 
+     * Calculates vertices, faces, aabb.
+     * 
+     */
     public async update(gameTime: GameTime): Promise<void> {
-        this.faces = this.computeFaces(this.vertices);
-        this.scaledSize = this.computeSize(this.vertices);
-        this._aabb = this.computeAABB();
         this._computedVertices = this._vertices.map(v => v.clone.scale(this.gameObject.transform.relativeScale).rotateAroundTo(new Vector2(), this.gameObject.transform.relativeRotation).add(this.position));
+        this.faces = this.calculateFaces(this.vertices);
+        this.scaledSize = this.calculateSize(this.vertices);
+        this._aabb = this.calculateAABB();
     }
-    public findMostAntiParallelFace(vec: Vector2): Face {
-        let ret!: Face;
-        let lowestDot = Infinity;
+    //public findMostAntiParallelFace(vec: Vector2): Face {
+    //    let ret!: Face;
+    //    let lowestDot = Infinity;
 
-        for (const face of this.faces) {
-            const d = Vector2.dot(face.normal.perpendicularClockwise, vec);
-            if (d < lowestDot) {
-                ret = face;
-                lowestDot = d;
-            }
-        }
+    //    for (const face of this.faces) {
+    //        const d = Vector2.dot(face.normal.perpendicularClockwise, vec);
+    //        if (d < lowestDot) {
+    //            ret = face;
+    //            lowestDot = d;
+    //        }
+    //    }
 
-        return ret;
-    }
-    public getAxis(otherColliderPosition: Vector2): Vector2[] {
-        const thisPosition: Vector2 = this.position;
-        const axis: Vector2[] = [];
+    //    return ret;
+    //}
+    //public getAxis(otherColliderPosition: Vector2): Vector2[] {
+    //    const thisPosition: Vector2 = this.position;
+    //    const axis: Vector2[] = [];
 
-        for (const normal of this.faces.map(f => f.normal)) {
-            if (axis.findIndex(a => a.equal(normal)) === -1) axis.push(normal);
-        }
+    //    for (const normal of this.faces.map(f => f.normal)) {
+    //        if (axis.findIndex(a => a.equal(normal)) === -1) axis.push(normal);
+    //    }
 
-        const blub: Vector2[] = [];
+    //    const bla: Vector2[] = [];
 
-        for (const a of axis) {
-            let foundOpposite = false;
-            for (const b of axis) {
-                if (Vector2.dot(a, b) === -1) foundOpposite = true;
-            }
+    //    for (const a of axis) {
+    //        let foundOpposite = false;
+    //        for (const b of axis) {
+    //            if (Vector2.dot(a, b) === -1) foundOpposite = true;
+    //        }
 
-            if (foundOpposite) {
-                blub.push(thisPosition.clone.add(a).distance(otherColliderPosition) > thisPosition.clone.add(a.flipped).distance(otherColliderPosition) ? a : a.flipped);
-            } else blub.push(a);
-        }
+    //        if (foundOpposite) {
+    //            bla.push(thisPosition.clone.add(a).distance(otherColliderPosition) > thisPosition.clone.add(a.flipped).distance(otherColliderPosition) ? a : a.flipped);
+    //        } else bla.push(a);
+    //    }
 
-        return blub;
-    }
+    //    return bla;
+    //}
 }

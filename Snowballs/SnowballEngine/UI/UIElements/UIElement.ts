@@ -34,8 +34,7 @@ export abstract class UIElement {
     public color: string;
     public stroke: boolean;
     public textShadow: number;
-    public abstract get currentFrame(): UIFrame;
-    protected abstract draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void;
+    protected abstract drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void;
     public constructor(menu: UIMenu, input: Input, type: UIElementType) {
         this.click = false;
         this.down = false;
@@ -57,8 +56,14 @@ export abstract class UIElement {
 
         this.id = UIElement.nextID++;
     }
-    public start(): void {
-        this.sprite = new Sprite(this.draw.bind(this));
+
+    /**
+     * 
+     * Draw the UIElement for the first time.
+     * 
+     */
+    public draw(): void {
+        this.sprite = new Sprite(this.drawCb.bind(this));
     }
     public update(gameTime: GameTime): void {
         if (!this.active) return;
@@ -69,8 +74,14 @@ export abstract class UIElement {
         this.down = trigger.down && this.aabb.intersectsPoint(pointerPosition);
         this.click = trigger.click && this.aabb.intersectsPoint(pointerPosition);
 
-        if (!this.sprite) this.sprite = new Sprite(this.draw.bind(this));
+        if (!this.sprite) this.draw();
     }
+
+    /**
+     * 
+     * Adjusts the AABB of this to fit the contents.
+     * 
+     */
     public fitText(paddingScalar: number): void {
         this.lastPaddingScalar = paddingScalar;
         if (this.type === UIElementType.Dropdown) {
@@ -91,8 +102,14 @@ export abstract class UIElement {
             this.aabb = new AABB(new Vector2(~~Math.max(m.x * paddingScalar, 1), ~~Math.max(m.y * paddingScalar, 1)), this._aabb.position);
         }
 
-        this.sprite = new Sprite(this.draw.bind(this));
+        this.draw();
     }
+
+    /**
+     *
+     * Absolute aabb of this, align is considered in position property.
+     * 
+     */
     public get aabb(): AABB {
         const localAlign = new Vector2(this.localAlignH === AlignH.Left ? 0 : this.localAlignH === AlignH.Center ? - this._aabb.size.x / 2 : - this._aabb.size.x, this.localAlignV === AlignV.Top ? 0 : this.localAlignV === AlignV.Center ? - this._aabb.size.y / 2 : - this._aabb.size.y);
         const globalAlign = new Vector2(this.alignH === AlignH.Left ? 0 : this.alignH === AlignH.Center ? this.menu.aabb.size.x / 2 : this.menu.aabb.size.x, this.alignV === AlignV.Top ? 0 : this.alignV === AlignV.Center ? this.menu.aabb.size.y / 2 : this.menu.aabb.size.y);
@@ -101,23 +118,35 @@ export abstract class UIElement {
     }
     public set aabb(val: AABB) {
         this._aabb = val;
-        this.sprite = new Sprite(this.draw.bind(this));
+        this.draw();
     }
+
+    /**
+     *
+     * The currently drawn label.
+     * 
+     */
     public get label(): string {
         return this._label;
     }
     public set label(val: string) {
         this._label = val;
         if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
-        else this.sprite = new Sprite(this.draw.bind(this));
+        else this.draw();
     }
+
+    /**
+     *
+     * The background image of this UIElement.
+     * 
+     */
     public get background(): Sprite | undefined {
         return this._background;
     }
     public set background(val: Sprite | undefined) {
         this._background = val;
         if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
-        else this.sprite = new Sprite(this.draw.bind(this));
+        else this.draw();
     }
     public get fontSize(): UIFontSize {
         return this._fontSize;
@@ -125,9 +154,18 @@ export abstract class UIElement {
     public set fontSize(val: UIFontSize) {
         this._fontSize = val;
         if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
-        else this.sprite = new Sprite(this.draw.bind(this));
+        else this.draw();
     }
+
+    /**
+     * 
+     * Remove UIElement from menu.
+     * 
+     */
     public remove(): void {
         this.menu.removeUIElement(this.id);
+    }
+    public get currentFrame(): UIFrame {
+        return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
     }
 }

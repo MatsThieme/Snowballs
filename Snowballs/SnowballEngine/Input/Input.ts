@@ -1,4 +1,5 @@
 import { Scene } from '../Scene.js';
+import { Vector2 } from '../Vector2.js';
 import { InputAxis } from './InputAxis.js';
 import { InputButton } from './InputButton.js';
 import { InputGamepad } from './InputGamepad.js';
@@ -6,7 +7,6 @@ import { InputKeyboard } from './InputKeyboard.js';
 import { InputMapping } from './InputMapping.js';
 import { InputMouse } from './InputMouse.js';
 import { InputType } from './InputType.js';
-import { Vector2 } from '../Vector2.js';
 
 export class Input {
     private mouse: InputMouse;
@@ -24,20 +24,27 @@ export class Input {
         this.inputMappingButtons = new InputMapping('InputMappingButtons.json');
         this.inputMappingAxes = new InputMapping('InputMappingAxes.json');
     }
+
+    /**
+     * 
+     * Returns a InputButton object mapped to the given inputtype.
+     * 
+     */
     public getButton(t: InputType): InputButton {
         if (['keyboard', 'mouse', 'gamepad'].map(n => this.inputMappingButtons[n][t]).filter(x => x).length === 0) return new InputButton();
 
-        const btns: InputButton[] = [this.keyboard.getButton(<string>this.inputMappingButtons.keyboard[t]), this.mouse.getButton(<number>this.inputMappingButtons.mouse[t]), this.gamepad.getButton(<number>this.inputMappingButtons.gamepad[t])].filter(e => e && e.down != undefined);
-
-        for (const btn of btns) {
-            if (btn.down) return btn;
-        }
+        const btns: InputButton[] = [this.keyboard.getButton(<string>this.inputMappingButtons.keyboard[t]), this.mouse.getButton(<number>this.inputMappingButtons.mouse[t]), this.gamepad.getButton(<number>this.inputMappingButtons.gamepad[t])].filter(e => e && e.down != undefined).sort((a, b) => (b.down ? b.clicked ? 2 : 1 : 0) - (a.down ? a.clicked ? 2 : 1 : 0));
 
         return btns[0] || new InputButton();
     }
-    public getAxis(t: InputType): InputAxis {
 
-        const axes: InputAxis[] = [this.keyboard.getAxis(<string>this.inputMappingAxes.keyboard[t]), this.mouse.getAxis(<number>this.inputMappingAxes.mouse[t]), this.gamepad.getAxis(<number>this.inputMappingAxes.gamepad[t])].filter(e => e && e.value != undefined).sort((a, b) => Math.abs(a.value) > Math.abs(b.value) ? -1 : 1);
+    /**
+     * 
+     * Returns the axis with the largest absolute value mapped to the given inputtype.
+     * 
+     */
+    public getAxis(t: InputType): InputAxis {
+        const axes: InputAxis[] = [this.keyboard.getAxis(<string>this.inputMappingAxes.keyboard[t]), this.mouse.getAxis(<number>this.inputMappingAxes.mouse[t]), this.gamepad.getAxis(<number>this.inputMappingAxes.gamepad[t])].filter(e => e && e.value != undefined).sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
 
         for (const axis of axes) {
             if (axis.value && axis.value != 0) return axis;

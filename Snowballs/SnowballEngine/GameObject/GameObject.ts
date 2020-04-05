@@ -106,10 +106,22 @@ export class GameObject {
 
         return component;
     }
+
+    /**
+     * 
+     * Remove a component.
+     * 
+     */
     public removeComponent<T extends Component>(component: T | number): void {
         const i = this.components.findIndex(v => v.componentId === (typeof component === 'number' ? component : component.componentId));
         if (i !== -1) this.components.splice(i, 1);
     }
+
+    /**
+     * 
+     * Returns all components of type.
+     * 
+     */
     public getComponents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
         return <T[]>this.components.filter((c: Component) => {
             if (typeof type === 'number') {
@@ -119,6 +131,12 @@ export class GameObject {
             return c instanceof <any>type;
         });
     }
+
+    /**
+     *
+     * Returns the first component of type.
+     *
+     */
     public getComponent<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
         for (const c of this.components) {
             if (typeof type === 'number') {
@@ -157,25 +175,41 @@ export class GameObject {
     public getComponentInParents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
         return this.parent?.getComponent(type) || this.parent?.getComponentInParents(type);
     }
+
+    /**
+     * 
+     * Add a child gameObject.
+     * 
+     */
     public addChild(gameObject: GameObject): GameObject {
         this.children.push(gameObject);
         gameObject.parent = this;
         return gameObject;
     }
+    /**
+     * 
+     * Update children, behaviours, ParticleSystem, AnimatedSprite and AudioListener.
+     * 
+     */
     public async update(gameTime: GameTime, currentCollisions: Collision[]): Promise<void> {
-        if (!this.active) return;
-
-        this.children.forEach(c => c.update(gameTime, currentCollisions));
-
-
         const behaviours = this.getComponents<Behaviour>(ComponentType.Behaviour);
 
         await awaitPromises(...behaviours.map(c => c.update(gameTime)));
+
+        if (!this.active) return;
+
+        this.children.forEach(c => c.update(gameTime, currentCollisions));
 
         this.getComponents<ParticleSystem>(ComponentType.ParticleSystem).forEach(p => p.update(gameTime));
         this.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).forEach(c => c.update(gameTime));
         this.getComponent<AudioListener>(ComponentType.AudioListener)?.update();
     }
+
+    /**
+     * 
+     * Remove this from scene.
+     * 
+     */
     public destroy(): void {
         this.scene.destroyGameObject(this.name);
     }

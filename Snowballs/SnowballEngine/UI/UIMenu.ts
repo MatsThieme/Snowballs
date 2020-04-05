@@ -9,8 +9,25 @@ import { UIFont } from './UIFont.js';
 import { UIFrame } from './UIFrame.js';
 
 export class UIMenu {
+    /**
+     * 
+     * if true the menu is visible and responsive to user interaction.
+     * 
+     */
     public active: boolean;
+
+    /**
+     * 
+     * if true and this.active the scene will be paused.
+     * 
+     */
     public pauseScene: boolean;
+
+    /**
+     *
+     * Set priority in drawing queue.
+     * 
+     */
     public drawPriority: number;
     private uiElements: Map<number, UIElement>;
     public aabb: AABB;
@@ -35,19 +52,43 @@ export class UIMenu {
 
         this.font = new UIFont(this);
     }
+
+    /**
+     * 
+     * Add a UIElement to this. The newly created UIElement can be adjusted within the callback.
+     * 
+     */
     public addUIElement<T extends UIElement>(type: new (menu: UIMenu, input: Input) => T, ...cb: ((uiElement: T, scene: Scene) => any)[]): T {
         const e = new type(this, this.input);
         this.uiElements.set(e.id, e);
         if (cb) cb.forEach(cb => cb(e, this.scene));
-        e.start();
+        e.draw();
         return e;
     }
+
+    /**
+     * 
+     * Removes the UIElement with the given id if present.
+     * 
+     */
     public removeUIElement(id: number): void {
         this.uiElements.delete(id);
     }
+
+    /**
+     *
+     * Returns the current UIFrame.
+     * 
+     */
     public get currentFrame(): UIFrame {
         return this.frame;
     }
+
+    /**
+     * 
+     * Adjusts canvas size to AABB and draws UIElements to it.
+     * 
+     */
     public update(gameTime: GameTime): void {
         this.canvas.width = this.aabb.size.x;
         this.canvas.height = this.aabb.size.y;

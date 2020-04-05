@@ -16,12 +16,10 @@ export class UIButton extends UIElement {
 
         if (this.click) {
             if (this.cbOnInput) this.cbOnInput(this);
-            this.sprite = new Sprite(this.draw.bind(this));
+            this.draw();
         }
-
-        if (!this.sprite) this.sprite = new Sprite(this.draw.bind(this));
     }
-    protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
         context.save();
@@ -48,8 +46,5 @@ export class UIButton extends UIElement {
         context.fillText(this.label, canvas.width / 2, canvas.height / 2);
 
         context.restore();
-    }
-    public get currentFrame(): UIFrame {
-        return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
     }
 }

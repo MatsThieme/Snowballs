@@ -1,7 +1,6 @@
 import { GameTime } from '../../GameTime.js';
 import { Collision } from '../../Physics/Collision.js';
 import { Physics } from '../../Physics/Physics.js';
-import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
 import { GameObject } from '../GameObject.js';
 import { CircleCollider } from './CircleCollider.js';
@@ -9,17 +8,31 @@ import { Collider } from './Collider.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
-import { Texture } from './Texture.js';
 
 export class RigidBody extends Component {
     private static nextID: number = 0;
     private id: number;
     private _mass: number;
     private _inertia: number;
+    /**
+     * 
+     * Velocity should not be modified directly, consider applying an impulse or change force.
+     * 
+     */
     public velocity: Vector2;
+    /**
+    *
+    * AngularVelocity should not be modified directly, consider applying an impulse or change torque.
+    *
+    */
     public angularVelocity: number;
-    public torque: number;
     public force: Vector2;
+    public torque: number;
+    /**
+     * 
+     * Specifies whether this rigidbody should compute its mass or use the mass property.
+     * 
+     */
     public useAutoMass: boolean;
     public freezePosition: boolean;
     public freezeRotation: boolean;
@@ -86,12 +99,24 @@ export class RigidBody extends Component {
     public updateInertia(): void {
         this._inertia = this.computeInertia();
     }
+
+    /**
+     * 
+     * Apply an impulse at a relative position.
+     * 
+     */
     public applyImpulse(impulse: Vector2, at: Vector2 = Vector2.zero): void {
         this.velocity.add(impulse.clone.scale(this.invMass));
         //this.angularVelocity += this.invInertia * Vector2.cross(at, impulse);
     }
+
+    /**
+     * 
+     * Apply forces.
+     * 
+     */
     public update(gameTime: GameTime, currentCollisions: Collision[]): void {
-        if (this.mass === 0) return;
+        if (this.mass === 0 || !this.gameObject.active) return;
 
 
         const solvedCollisions = [];

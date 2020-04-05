@@ -46,6 +46,12 @@ export class ParticleSystem extends Component implements Drawable {
     public get currentFrame(): Frame[] {
         return this.particles.map(p => p.currentFrame);
     }
+
+    /**
+     * 
+     * Move and emit particles.
+     * 
+     */
     public update(gameTime: GameTime) {
         this.timer += gameTime.deltaTime;
 

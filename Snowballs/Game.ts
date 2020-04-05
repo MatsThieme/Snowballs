@@ -27,7 +27,6 @@ class Game {
         scene.newGameObject('TileMap', TileMapPrefab);
         scene.newGameObject('Player1', PlayerPrefab);
 
-
         scene.ui.addMenu('Main Menu', MainMenuPrefab);
 
         scene.ui.addMenu('debug overlay', DebugOverlayPrefab);

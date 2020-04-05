@@ -39,18 +39,17 @@ export class UIDropdown extends UIElement {
                     if (new AABB(buttonSize, btnPos.add(this.aabb.position)).intersectsPoint(pointerPos) && this.activeIndex !== i - 1) {
                         this.activeIndex = i - 1;
                         if (this.cbOnInput) this.cbOnInput(this);
-                        this.sprite = new Sprite(this.draw.bind(this));
+                        this.draw();
                         break;
                     }
                 }
             } else if (new AABB(buttonSize, this.aabb.position).intersectsPoint(pointerPos) && !this.extendUpward || new AABB(buttonSize, this.aabb.position.clone.add(new Vector2(0, buttonSize.y * this.values.length))).intersectsPoint(pointerPos) && this.extendUpward) {
                 this.extended = true;
+                this.draw();
             }
         } else if (this.input.getButton(InputType.Trigger).down && !this.input.getButton(InputType.Trigger).clicked) this.extended = false;
-
-        this.sprite = new Sprite(this.draw.bind(this));
     }
-    protected draw(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
+    protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         canvas.width = this.aabb.size.x;
         canvas.height = this.aabb.size.y;
 
@@ -80,15 +79,12 @@ export class UIDropdown extends UIElement {
             context.shadowBlur = context.shadowOffsetX = context.shadowOffsetY = 0;
         }
     }
-    public get currentFrame(): UIFrame {
-        return new UIFrame(this.aabb, this.sprite || new Sprite(() => { }));
-    }
     public get values(): string[] {
         return this._values;
     }
     public set values(val: string[]) {
         this._values = val;
-        this.sprite = new Sprite(this.draw.bind(this));
+        this.draw();
     }
     public get value(): string {
         return this._values[this.activeIndex];

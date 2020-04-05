@@ -10,6 +10,12 @@ export class Component {
         this.gameObject = gameObject;
         this.type = type;
     }
+
+    /**
+     * 
+     * Remove this from this.gameObject.
+     * 
+     */
     public destroy(): void {
         this.gameObject.removeComponent(this.componentId);
     }

@@ -1,16 +1,17 @@
 import { Angle } from '../../Angle.js';
 import { Frame } from '../../Camera/Frame.js';
+import { clamp } from '../../Helpers.js';
 import { AABB } from '../../Physics/AABB.js';
 import { PhysicsMaterial } from '../../Physics/PhysicsMaterial.js';
 import { Sprite } from '../../Sprite.js';
 import { Vector2 } from '../../Vector2.js';
+import { Drawable } from '../Drawable.js';
 import { GameObject } from '../GameObject.js';
 import { Camera } from './Camera.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
-import { clamp } from '../../Helpers.js';
 
-export class TileMap extends Component {
+export class TileMap extends Component implements Drawable {
     public tileSize: Vector2;
     public relativePosition: Vector2;
     private tileFrames: Frame[];
@@ -38,6 +39,12 @@ export class TileMap extends Component {
     public get currentFrame(): Frame[] {
         return [...this.tileFrames, ...this.backgroundFrames];
     }
+
+    /**
+     * 
+     * Initialize the tilemap using a 2D array containing image sources.
+     * 
+     */
     public set tileMap(val: string[][]) {
         this._tileMap = [];
         this.tileFrames = [];
@@ -58,6 +65,12 @@ export class TileMap extends Component {
             }
         }
     }
+
+    /**
+     * 
+     * Calculates positioning of backgrounds for camera.
+     * 
+     */
     public calculateBackgroundForCamera(camera: Camera) {
         this.backgroundFrames = [];
 
@@ -77,12 +90,20 @@ export class TileMap extends Component {
             }
         }
     }
+
+    /**
+     * 
+     * Returns an array containing 1s and 0s describing the tiles which can collide.
+     * 
+     */
     public get collisionMap(): (1 | 0)[][] {
         return this._tileMap;
     }
+
     public get scaledSize(): Vector2 {
         return new Vector2(this._tileMap.length > 0 ? this._tileMap[0].length : 0, this._tileMap.length).scale(this.tileSize).scale(this.gameObject.transform.relativeScale);
     }
+
     public get position() {
         return Vector2.add(this.relativePosition, this.gameObject.transform.position);
     }

@@ -26,12 +26,16 @@ export function TileMapPrefab(gameObject: GameObject) {
                     const left = x - 1 < 0 || map[y][x - 1] !== '';
                     const right = x + 1 >= size.x || map[y][x + 1] !== '';
 
+                    const topRight = y - 1 > 0 && x + 1 < size.x && top && right && !map[y - 1][x + 1];
                     const bottomRight = y + 1 < size.y && x + 1 < size.x && bottom && right && !map[y + 1][x + 1];
                     const topLeft = y - 1 >= 0 && x - 1 >= 0 && top && left && !map[y - 1][x - 1];
                     const bottomLeft = y + 1 < size.y && x - 1 >= 0 && bottom && left && !map[y + 1][x - 1];
 
 
-                    if (!bottom && top && left && right) map[y][x] = 'Images/Snow/Tiles/bottom.png';
+                    if (topLeft && !topRight) map[y][x] = 'Images/Snow/Tiles/left_top_corner.png';
+                    else if (!topLeft && topRight) map[y][x] = 'Images/Snow/Tiles/right_top_corner.png';
+                    else if (topLeft && topRight) map[y][x] = 'Images/Snow/Tiles/left_top_right_top_corner.png';
+                    else if (!bottom && top && left && right) map[y][x] = 'Images/Snow/Tiles/bottom.png';
                     else if (bottom && !top && left && right) map[y][x] = 'Images/Snow/Tiles/top.png';
                     else if (bottom && top && !left && right) map[y][x] = 'Images/Snow/Tiles/left.png';
                     else if (bottom && top && left && !right) map[y][x] = 'Images/Snow/Tiles/right.png';
@@ -47,7 +51,6 @@ export function TileMapPrefab(gameObject: GameObject) {
                     else if (bottom && !top && !left && !right) map[y][x] = 'Images/Snow/Tiles/left_right_top.png';
                     else if (!bottom && !top && !left && !right) map[y][x] = 'Images/Snow/Tiles/left_right_top_bottom.png';
                     else if (bottom && top && left && right) map[y][x] = 'Images/Snow/Tiles/middle.png';
-                    if (topLeft) map[y][x] = 'Images/Snow/Tiles/test.png';
                 }
             }
         }

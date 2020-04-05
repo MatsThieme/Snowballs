@@ -27,9 +27,21 @@ export class CircleCollider extends Collider {
         this._aabb = new AABB(new Vector2(this.radius * 2, this.radius * 2), this.position);
         this.gameObject.rigidbody.updateInertia();
     }
+
+    /**
+     * 
+     * Update aabb.
+     * 
+     */
     public async update(gameTime: GameTime): Promise<void> {
         this._aabb = new AABB(new Vector2(this.radius * 2, this.radius * 2), this.position.add(new Vector2(-this.radius, this.radius)));
     }
+
+    /**
+     * 
+     * Returns true if this intersects other.
+     * 
+     */
     public intersects(other: CircleCollider): boolean {
         return other.position.sub(this.position).magnitudeSquared < (this.radius + other.radius) ** 2;
     }

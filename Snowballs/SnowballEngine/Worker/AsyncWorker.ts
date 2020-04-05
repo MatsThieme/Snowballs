@@ -11,7 +11,7 @@ export class AsyncWorker {
     }
     private async work(): Promise<void> {
         const worker = await this.getWorker();
-        if (!worker || worker.onmessage || worker.onerror) return;
+        if (!worker || worker.onmessage || worker.onerror || this.queue.length === 0) return;
 
         const { data, resolve, reject } = this.queue.splice(0, 1)[0];
 
@@ -31,6 +31,14 @@ export class AsyncWorker {
 
         worker.postMessage(data);
     }
+
+    /**
+     * 
+     * The resolved Promise will return the data returned by the worker.
+     * 
+     * @param data Data to pass to the worker.
+     * 
+     */
     public task<T>(data: any): Promise<T> {
         return new Promise((resolve, reject) => {
             this.queue.push({ data, resolve, reject });

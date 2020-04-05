@@ -130,18 +130,23 @@ export class Scene {
             gameObjects.forEach(gO => gO.rigidbody.update(this.gameTime, collisions));
 
             await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
+
+
+            this.cameraManager.update(this.getAllGameObjects());
         }
 
         this.ui.update(this.gameTime);
 
-        this.cameraManager.update(this.getAllGameObjects(), this.ui.currentFrame);
+        this.cameraManager.drawUI(this.ui.currentFrame);
 
 
         if (this.requestAnimationFrameHandle) this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
 
     /**
+     * 
      * Returns all GameObjects in this Scene.
+     * 
      */
     public getAllGameObjects(): GameObject[] {
         return [...this.gameObjects.values()];
@@ -197,6 +202,41 @@ export class Scene {
     }
 }
 
+/**
+ * 
+ * 
+ * to fix:
+ * collision response
+ * menu aabb
+ * 
+ * 
+ * to test:
+ * child collider
+ * 
+ * 
+ * to do:
+ * camera rotation
+ * TilemapCollision contact points
+ * 
+ * 
+ * optional optimisations:
+ * polygon intersection: support points
+ * replace line intersection with face clipping in collisionPolygon
+ * 
+ * 
+ * optional features:
+ * continuous collision
+ * joints
+ * extend particlesystem
+ *
+ * 
+ * to review:
+ * coordinate system, scale, rotation, position
+ * polygoncollider aabb topleft???
+ * gameObject.active
+ * 
+ * 
+ */
 
 export * from './Angle.js';
 export * from './Camera/CameraManager.js';

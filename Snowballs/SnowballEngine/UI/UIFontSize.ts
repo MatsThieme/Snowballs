@@ -1,3 +1,8 @@
+/**
+ * 
+ * Font size multipliers.
+ * 
+ */
 export enum UIFontSize {
     ExtraSmall = 0.3,
     Small = 0.7,

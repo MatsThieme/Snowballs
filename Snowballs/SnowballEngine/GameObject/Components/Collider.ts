@@ -22,6 +22,7 @@ export abstract class Collider extends Component implements Alignable {
     public isTrigger: boolean;
     protected abstract _area: number;
     protected abstract _aabb: AABB;
+    
     public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Collider, relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), density: number = 1, alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center, isTrigger: boolean = false) {
         super(gameObject, type);
         this.relativePosition = relativePosition;
@@ -36,10 +37,22 @@ export abstract class Collider extends Component implements Alignable {
     public get position(): Vector2 {
         return Vector2.add(this.relativePosition, this.gameObject.transform.position, this.align);
     }
+
+    /**
+     * 
+     * Calculate mass of this collider.
+     * 
+     */
     public get autoMass(): number {
         if (this._autoMass === 0) this._autoMass = this.area * this.density;
         return this._autoMass;
     }
+
+    /**
+     * 
+     * Returns the area of this shape.
+     * 
+     */
     public get area(): number {
         return this._area;
     }
@@ -52,9 +65,21 @@ export abstract class Collider extends Component implements Alignable {
         return align;
     }
     public abstract async update(gameTime: GameTime): Promise<void>;
+
+    /**
+     * 
+     * Execute the onTrigger function in all behaiours on this.gameObject.
+     * 
+     */
     public onTrigger(collision: Collision): void {
         this.gameObject.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.onTrigger(collision));
     }
+
+    /**
+     *
+     * Execute the onCollision function in all behaiours on this.gameObject.
+     *
+     */
     public onCollision(collision: Collision): void {
         this.gameObject.getComponents<Behaviour>(ComponentType.Behaviour).forEach(b => b.onColliding(collision));
     }

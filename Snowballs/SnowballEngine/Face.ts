@@ -6,10 +6,16 @@ export class Face {
     public v2: Vector2;
     public normal: Vector2;
     public line: Line;
+
+    /**
+     * 
+     * Describes a face / edge of a polygon.
+     * 
+     */
     public constructor(v1: Vector2, v2: Vector2) {
         this.v1 = v1;
         this.v2 = v2;
-        this.normal = v1.clone.sub(v2).perpendicularCounterClockwise.normalize();
+        this.normal = v2.clone.sub(v1).perpendicularClockwise.normalize();
         this.line = new Line(v1, v2);
     }
 }

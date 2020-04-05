@@ -18,9 +18,39 @@ export abstract class Behaviour extends Component {
         this.awake();
         if (this.gameObject.scene.isRunning) this.start();
     }
+
+    /**
+     * 
+     * Called by the constructor.
+     * 
+     */
     protected awake(): void { }
+
+    /**
+     * 
+     * Called on scene start, if scene is running it's called by the constructor.
+     * 
+     */
     public async start(): Promise<void> { }
+
+    /**
+     * 
+     * Called once every frame.
+     * 
+     */
     public async update(gameTime: GameTime): Promise<void> { }
+
+    /**
+     * 
+     * Called whenever a collider on this.gameObject collides.
+     * 
+     */
     public onColliding(collision: Collision): void { }
+
+    /**
+     * 
+     * Called if an other gameObjects collider intersects this.gameObject.collider.
+     * 
+     */
     public onTrigger(collision: Collision): void { }
 }
