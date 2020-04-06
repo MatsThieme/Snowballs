@@ -217,6 +217,8 @@ export class Scene {
  * to do:
  * camera rotation
  * TilemapCollision contact points
+ * cut tilemap backgrounds
+ * preload assets
  * 
  * 
  * optional optimisations:
@@ -228,7 +230,8 @@ export class Scene {
  * continuous collision
  * joints
  * extend particlesystem
- *
+ * tilemap 2d paralax background
+ * 
  * 
  * to review:
  * coordinate system, scale, rotation, position

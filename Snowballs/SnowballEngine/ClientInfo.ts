@@ -6,7 +6,7 @@ export class ClientInfo {
      * Measure the refresh rate of the active monitor for ms.
      * 
      */
-    public static measureMonitorFrameRate(ms: number): Promise<number> {
+    private static measureMonitorRefreshRate(ms: number): Promise<number> {
         return new Promise(resolve => {
             let frames: number = 0;
 
@@ -18,7 +18,7 @@ export class ClientInfo {
             }
 
             setTimeout(() => {
-                resolve(frames / ms * 1000);
+                resolve(Math.round(frames / ms * 1000));
                 cancelAnimationFrame(handle);
             }, ms);
         });
@@ -31,6 +31,7 @@ export class ClientInfo {
      */
     public static resolution: Vector2 = new Vector2(innerWidth, innerHeight);
 
+    public static monitorRefreshRate: number = 144;
     public static aspectRatio: Vector2 = ClientInfo.resolution.clone.setLength(new Vector2(16, 9).magnitude);
 
     /**
@@ -39,8 +40,8 @@ export class ClientInfo {
      * 
      */
     public static readonly cpuThreads: number = navigator.hardwareConcurrency;
-    private static start() {
-        window.addEventListener('resize', () => {
+    private static async start() {
+        addEventListener('resize', () => {
             ClientInfo.resolution.x = innerWidth;
             ClientInfo.resolution.y = innerHeight;
 
@@ -48,6 +49,9 @@ export class ClientInfo {
             ClientInfo.aspectRatio.x = a.x
             ClientInfo.aspectRatio.y = a.y;
         });
+
+        const fps = await ClientInfo.measureMonitorRefreshRate(1000);
+        ClientInfo.monitorRefreshRate = fps;
     }
 }
 

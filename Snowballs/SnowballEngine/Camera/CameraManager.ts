@@ -18,15 +18,14 @@ export class CameraManager {
         this.cameras = [];
         this.mainCameraIndex = 0;
         this.context = <CanvasRenderingContext2D>domElement.getContext('2d');
+        this.context.imageSmoothingQuality = 'high';
     }
     public get mainCamera(): Camera {
         return this.cameras[this.mainCameraIndex % this.cameras.length];
     }
     public update(gameObjects: GameObject[]) {
-        this.context.canvas.width = this.mainCamera.resolution.x;
-        this.context.canvas.height = this.mainCamera.resolution.y;
-
-        this.context.imageSmoothingQuality = 'high';
+        if (this.context.canvas.width !== this.mainCamera.resolution.x) this.context.canvas.width = this.mainCamera.resolution.x;
+        if (this.context.canvas.height !== this.mainCamera.resolution.y) this.context.canvas.height = this.mainCamera.resolution.y;
 
         let frames: (Frame | undefined)[] = [];
 
@@ -49,6 +48,9 @@ export class CameraManager {
         this.context.drawImage(this.cameras[this.mainCameraIndex].currentFrame, 0, 0);
     }
     public drawUI(ui: UIFrame) {
+        if (this.context.canvas.width !== this.mainCamera.resolution.x) this.context.canvas.width = this.mainCamera.resolution.x;
+        if (this.context.canvas.height !== this.mainCamera.resolution.y) this.context.canvas.height = this.mainCamera.resolution.y;
+
         this.context.drawImage(ui.sprite.canvasImageSource, ui.aabb.position.x, ui.aabb.position.y, ui.aabb.size.x, ui.aabb.size.y);
     }
 }

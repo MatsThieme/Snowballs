@@ -1,5 +1,7 @@
 let counter = 0;
 export const LoadingScreenPrefab = (context, canvas) => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.textAlign = 'center';
     context.textBaseline = 'middle';

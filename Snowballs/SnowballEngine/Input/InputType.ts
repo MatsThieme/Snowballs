@@ -9,5 +9,9 @@ export enum InputType {
     MoveVertical,
     PointerPositionHorizontal,
     PointerPositionVertical,
-    Rotate
+    Rotate,
+    MoveHorizontal1,
+    MoveVertical1,
+
+    Jump1
 };

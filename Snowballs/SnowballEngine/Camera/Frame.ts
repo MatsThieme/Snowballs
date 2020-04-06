@@ -1,5 +1,5 @@
-import { clamp } from '../Helpers.js';
 import { Angle } from '../Angle.js';
+import { clamp } from '../Helpers.js';
 import { Sprite } from '../Sprite.js';
 import { Vector2 } from '../Vector2.js';
 
@@ -10,8 +10,8 @@ export class Frame {
     public readonly rotation: Angle;
     public readonly drawPriority: number;
     public readonly alpha: number;
-    public readonly rotationPoint: Vector2 | undefined;
     public readonly filter: string;
+    public readonly rotationPoint?: Vector2;
     public constructor(worldCordinates: Vector2, size: Vector2, sprite: Sprite, rotation: Angle, drawPriority: number, alpha: number, filter: string = 'none', rotationPoint?: Vector2) {
         this.worldCordinates = worldCordinates;
         this.sprite = sprite;

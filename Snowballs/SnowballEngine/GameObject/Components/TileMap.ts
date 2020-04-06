@@ -57,6 +57,7 @@ export class TileMap extends Component implements Drawable {
                     this._tileMap[y][x] = 0;
                     continue;
                 }
+
                 this._tileMap[y][x] = 1;
 
                 if (!sprites.has(val[y][x])) sprites.set(val[y][x], new Sprite(val[y][x]));
@@ -79,14 +80,26 @@ export class TileMap extends Component implements Drawable {
 
         for (const b of this.backgroundLayers) {
             const spriteSizeWorld = new Vector2(this.scaledSize.y * b.sprite.canvasImageSource.width / b.sprite.canvasImageSource.height, this.scaledSize.y);
-            const position = new Vector2(this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - spriteSizeWorld.x * 2, this.position.y);
 
-            while (position.x + spriteSizeWorld.x < point.x + camera.size.x / 2 && position.x + spriteSizeWorld.x < this.position.x + this.scaledSize.x) {
-                position.x += spriteSizeWorld.x;
+            for (let x = this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - 100; x < point.x + camera.size.x / 2 && x < this.position.x + this.scaledSize.x; x += spriteSizeWorld.x) {
+                const sprite = new Sprite(b.sprite.canvasImageSource);
+                let xScalar = 1;
+                let xPosition = 0;
 
-                if (position.x + spriteSizeWorld.x > point.x - camera.size.x / 2) {
-                    this.backgroundFrames.push(new Frame(position.clone, spriteSizeWorld, b.sprite, new Angle(), this.gameObject.drawPriority, 1));
+
+                // cut background right
+                if (x + spriteSizeWorld.x > this.position.x + this.scaledSize.x) {
+                    xScalar = ((this.position.x + this.scaledSize.x) - x) / spriteSizeWorld.x;
+                    sprite.subSize = new Vector2(sprite.canvasImageSource.width * xScalar, sprite.canvasImageSource.height).round();
                 }
+
+                // cut background left
+                if (x < this.position.x && spriteSizeWorld.x - (this.position.x - x) > 0) {
+                    xPosition = this.position.x - x;
+                    sprite.subPosition = new Vector2(xPosition / spriteSizeWorld.x * b.sprite.canvasImageSource.width, 0);
+                }
+
+                this.backgroundFrames.push(new Frame(new Vector2(x + xPosition, this.position.y), spriteSizeWorld.clone.scale(new Vector2(xScalar, 1)), sprite, new Angle(), this.gameObject.drawPriority, 1));
             }
         }
     }

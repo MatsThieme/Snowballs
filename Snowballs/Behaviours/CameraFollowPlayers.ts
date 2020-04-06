@@ -2,13 +2,16 @@ import { Behaviour, Camera, ComponentType } from '../SnowballEngine/Scene.js';
 
 export class CameraFollowPlayers extends Behaviour {
     public async update() {
-        const player = this.scene.find('Player1');
+        const player1 = this.scene.find('Player1');
+        const player2 = this.scene.find('Player2');
         const camera = this.gameObject.getComponent<Camera>(ComponentType.Camera);
 
-        const playerPosition = player?.transform.position.x;
-        const cameraWidth = camera?.size.x;
+        if (!player1 || !player2 || !camera) return;
 
-        const scrollThreshold = 0.15;
+        const playerPosition = (player1.transform.position.x + player2.transform.position.x) / 2;
+        const cameraWidth = camera.size.x;
+
+        const scrollThreshold = 0.05;
 
         if (cameraWidth && playerPosition && cameraWidth * scrollThreshold < Math.abs(playerPosition - this.gameObject.transform.relativePosition.x)) {
             if (playerPosition - this.gameObject.transform.relativePosition.x < 0)

@@ -53,7 +53,7 @@ export class Camera extends Component {
                 this.context.filter = frame.filter;
 
                 try {
-                    this.context.drawImage(frame.sprite.canvasImageSource, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                    this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
                 } catch { }
 
                 this.context.filter = 'none';

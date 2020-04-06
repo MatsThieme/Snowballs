@@ -1,3 +1,5 @@
+import { Settings } from './Settings.js';
+
 /**
  * 
  * Clamps a number between min and max.
@@ -20,6 +22,13 @@ export const asyncTimeout = (ms: number): Promise<void> => new Promise(resolve =
  *
  */
 export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
+
+/**
+ * 
+ * examplepath/bla.png -> /assetPath/Assets/examplepath/bla.png
+ * 
+ */
+export const normalizeAssetPath = (path: string): string => path.substr(0, 'http://'.length) === 'http://' || path.substr(0, 'https://'.length) === 'https://' ? path : Settings.assetPath + path;
 
 /**
  * 

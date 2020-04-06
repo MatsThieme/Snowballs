@@ -1,7 +1,7 @@
-import { AABB, UIFontSize, UIMenu, UIText, Vector2 } from '../../SnowballEngine/Scene.js';
+import { AABB, UIFontSize, UIMenu, UIText, Vector2, ClientInfo } from '../../SnowballEngine/Scene.js';
 
 export function DebugOverlayPrefab(menu: UIMenu): void {
-    menu.aabb = new AABB(new Vector2(1920, 1080), new Vector2());
+    menu.aabb = new AABB(ClientInfo.resolution, new Vector2());
     menu.active = true;
     menu.pauseScene = false;
     menu.addUIElement(UIText, (text, scene) => {

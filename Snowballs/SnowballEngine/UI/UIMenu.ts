@@ -43,7 +43,7 @@ export class UIMenu {
         this.pauseScene = true;
         this.drawPriority = 0;
         this.uiElements = new Map();
-        this.aabb = new AABB(new Vector2(1920, 1080), new Vector2(0, 0));
+        this.aabb = new AABB(new Vector2(innerWidth, innerHeight), new Vector2(0, 0));
         this.input = input;
         this.scene = scene;
 
@@ -93,7 +93,7 @@ export class UIMenu {
         this.canvas.width = this.aabb.size.x;
         this.canvas.height = this.aabb.size.y;
 
-        if (this.background) this.context.drawImage(this.background.canvasImageSource, 0, 0, this.background.canvasImageSource.width, this.background.canvasImageSource.height);
+        if (this.background) this.context.drawImage(this.background.canvasImageSource, 0, 0, this.canvas.width, this.canvas.height);
         else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         for (const uiElement of [...this.uiElements.values()]) {

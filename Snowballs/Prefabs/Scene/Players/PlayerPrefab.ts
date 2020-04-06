@@ -1,4 +1,3 @@
-import { PlayerMovementBehaviour } from '../../../Behaviours/PlayerMovementBehaviour.js';
 import { GameObject, PhysicsMaterial, PolygonCollider, PolygonRenderer } from '../../../SnowballEngine/Scene.js';
 
 export function PlayerPrefab(gameObject: GameObject) {
@@ -7,10 +6,6 @@ export function PlayerPrefab(gameObject: GameObject) {
         polygonCollider.density = 0.5;
     });
     gameObject.addComponent(PolygonRenderer);
-    gameObject.addComponent(PlayerMovementBehaviour);
-
-    gameObject.transform.relativePosition.y = 9;
-    gameObject.transform.relativePosition.x = 2;
 
     gameObject.transform.relativeScale.y = 2;
 

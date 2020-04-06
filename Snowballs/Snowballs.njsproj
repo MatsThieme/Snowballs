@@ -60,7 +60,8 @@
     <TypeScriptCompile Include="Behaviours\FreezeFarAwayObjects.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\PlayerMovementBehaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Player2MovementBehaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Player1MovementBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\TileMapBackgroundBehaviour.ts">
@@ -122,6 +123,9 @@
     <TypeScriptCompile Include="SnowballEngine\Input\InputMouse.ts" />
     <TypeScriptCompile Include="SnowballEngine\Input\InputType.ts" />
     <TypeScriptCompile Include="SnowballEngine\Line.ts" />
+    <TypeScriptCompile Include="SnowballEngine\LoadAssets.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="SnowballEngine\Noise.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
