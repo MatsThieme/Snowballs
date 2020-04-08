@@ -45,13 +45,10 @@ export class ClientInfo {
             ClientInfo.resolution.x = innerWidth;
             ClientInfo.resolution.y = innerHeight;
 
-            const a = ClientInfo.resolution.clone.setLength(new Vector2(16, 9).magnitude);
-            ClientInfo.aspectRatio.x = a.x
-            ClientInfo.aspectRatio.y = a.y;
+            ClientInfo.aspectRatio.copy(ClientInfo.resolution.clone.setLength(new Vector2(16, 9).magnitude));
         });
 
-        const fps = await ClientInfo.measureMonitorRefreshRate(1000);
-        ClientInfo.monitorRefreshRate = fps;
+        ClientInfo.monitorRefreshRate = await ClientInfo.measureMonitorRefreshRate(1000);
     }
 }
 

@@ -1,8 +1,14 @@
-import { Settings } from './Settings.js';
-import { Vector2 } from './Vector2.js';
 import { normalizeAssetPath } from './Helpers.js';
+import { Vector2 } from './Vector2.js';
 
 export class Sprite {
+    /**
+     * 
+     * Size of the canvas image source in px. 
+     * 
+     */
+    public size: Vector2;
+
     /**
      * 
      * Relative position on the canvasImageSource in px.
@@ -26,10 +32,11 @@ export class Sprite {
     public constructor(src: string | HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | ((context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas) => void)) {
         if (typeof src === 'string') {
             this.canvasImageSource = new Image();
-            this.canvasImageSource.onload = () => {
+            this.canvasImageSource.addEventListener('load', () => {
                 this.subPosition = new Vector2();
                 this.subSize = new Vector2(this.canvasImageSource.width, this.canvasImageSource.height);
-            };
+                this.size = new Vector2(this.canvasImageSource.width, this.canvasImageSource.height);
+            });
             this.canvasImageSource.src = normalizeAssetPath(src);
         } else if (src instanceof HTMLCanvasElement || (OffscreenCanvas && src instanceof OffscreenCanvas)) {
             this.canvasImageSource = src;
@@ -46,5 +53,6 @@ export class Sprite {
 
         this.subPosition = new Vector2();
         this.subSize = new Vector2(this.canvasImageSource.width, this.canvasImageSource.height);
+        this.size = new Vector2(this.canvasImageSource.width, this.canvasImageSource.height);
     }
 }

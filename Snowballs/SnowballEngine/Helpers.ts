@@ -32,6 +32,13 @@ export const normalizeAssetPath = (path: string): string => path.substr(0, 'http
 
 /**
  * 
+ * Calculate the average of numbers.
+ * 
+ */
+export const average = (...numbers: number[]): number => numbers.reduce((t, c) => { t += c; return t; }) / numbers.length;
+
+/**
+ * 
  * Execute code that may only be executed in a user event triggered context, e.g. fullscreen api or pointerlock api.
  * 
  * @param cb Call on user event.

@@ -74,6 +74,7 @@ export abstract class UIElement {
         this.down = trigger.down && this.aabb.intersectsPoint(pointerPosition);
         this.click = trigger.click && this.aabb.intersectsPoint(pointerPosition);
 
+        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
         if (!this.sprite) this.draw();
     }
 

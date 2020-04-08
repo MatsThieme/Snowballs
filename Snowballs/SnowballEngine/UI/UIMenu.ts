@@ -43,7 +43,7 @@ export class UIMenu {
         this.pauseScene = true;
         this.drawPriority = 0;
         this.uiElements = new Map();
-        this.aabb = new AABB(new Vector2(innerWidth, innerHeight), new Vector2(0, 0));
+        this.aabb = new AABB(new Vector2(innerWidth, innerHeight), new Vector2());
         this.input = input;
         this.scene = scene;
 

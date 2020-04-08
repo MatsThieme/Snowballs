@@ -45,8 +45,9 @@ export class UIFont {
         el.style.visibility = 'hidden';
         document.body.appendChild(el);
 
-        const width = el.offsetWidth;
-        const height = el.offsetHeight;
+        const cS = getComputedStyle(el);
+        const width = parseInt(cS.width);
+        const height = parseInt(cS.height);
 
         el.remove();
 

@@ -11,7 +11,7 @@ import { ComponentType } from './ComponentType.js';
 export class Texture extends Component implements Drawable, Alignable {
     public relativePosition: Vector2;
     public size: Vector2;
-    public sprite: Sprite | undefined;
+    public sprite?: Sprite;
     public alignH: AlignH;
     public alignV: AlignV;
     public constructor(gameObject: GameObject, relativePosition: Vector2 = new Vector2(), size: Vector2 = new Vector2(1, 1), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {

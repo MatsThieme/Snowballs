@@ -44,7 +44,7 @@ export class Scene {
 
     /**
      * 
-     * @returns GameObject if present in Scene.
+     * Returns GameObject if present in Scene.
      * 
      */
     public find(name: string): GameObject | undefined {
@@ -53,13 +53,17 @@ export class Scene {
 
     /**
      * 
-     * Create new GameObject with name and execute callbacks.
+     * Creates new GameObject with name and executes callbacks.
      * 
      */
-    public newGameObject(name: string, ...cb: ((gameObject: GameObject) => any)[]): GameObject {
+    public async newGameObject(name: string, ...cb: ((gameObject: GameObject) => any)[]): Promise<GameObject> {
         const gameObject = new GameObject(name, this);
         this.gameObjects.set(gameObject.name, gameObject);
-        if (cb) cb.forEach(cb => cb(gameObject));
+        if (cb) {
+            for (const c of cb) {
+                await c(gameObject);
+            }
+        }
 
         return gameObject;
     }
@@ -94,19 +98,15 @@ export class Scene {
             const idPairs: any = [];
             const collisionPromises: Promise<Collision>[] = [];
 
+
             const gOs = gameObjects.filter(gO => gO.active && gO.hasCollider && !gO.parent);
-
-
-            //let total = 0;
 
             for (const gO1 of gOs) {
                 for (const gO2 of gOs) {
                     const id = gO1.id > gO2.id ? (gO1.id << 16) + gO2.id : (gO2.id << 16) + gO1.id;
 
                     if (gO1.id !== gO2.id && !idPairs[id]) {
-                        const start = performance.now();
                         const collisions = Physics.collision(gO1, gO2);
-                        //total += performance.now() - start;
                         collisionPromises.push(...collisions);
                         idPairs[id] = 1;
                     }
@@ -115,19 +115,15 @@ export class Scene {
 
 
 
-            //console.log(total);
-
             const collisions: Collision[] = [];
-
-            //console.time('s');
 
             for (const c of await awaitPromises(...collisionPromises)) {
                 collisions.push(c);
             }
 
-            //console.timeEnd('s');
 
-            gameObjects.forEach(gO => gO.rigidbody.update(this.gameTime, collisions));
+            gOs.forEach(gO => gO.rigidbody.update(this.gameTime, collisions));
+
 
             await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
 
@@ -207,7 +203,6 @@ export class Scene {
  * 
  * to fix:
  * collision response
- * menu aabb
  * 
  * 
  * to test:
@@ -217,20 +212,19 @@ export class Scene {
  * to do:
  * camera rotation
  * TilemapCollision contact points
- * cut tilemap backgrounds
- * preload assets
  * 
  * 
  * optional optimisations:
  * polygon intersection: support points
  * replace line intersection with face clipping in collisionPolygon
+ * store things computed multiple times, e.g. vector2 magnitude
  * 
  * 
  * optional features:
  * continuous collision
  * joints
  * extend particlesystem
- * tilemap 2d paralax background
+ * tilemap vertical paralax background
  * 
  * 
  * to review:

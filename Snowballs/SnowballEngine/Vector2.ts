@@ -3,7 +3,6 @@ import { Angle } from './Angle.js';
 export class Vector2 {
     public x: number;
     public y: number;
-    private _magnitude: number = 0;
     public constructor(x: number = 0, y: number = 0) {
         this.x = x;
         this.y = y;
@@ -26,10 +25,11 @@ export class Vector2 {
      *
      */
     public add(...vectors: Vector2[]): Vector2 {
-        const v = Vector2.add(this, ...vectors);
-        this.x = v.x;
-        this.y = v.y;
-        this._magnitude = 0;
+        for (const v of vectors) {
+            this.x += v.x;
+            this.y += v.y;
+        }
+
 
         return this;
     }
@@ -52,10 +52,10 @@ export class Vector2 {
      *
      */
     public sub(...vectors: Vector2[]): Vector2 {
-        const v = Vector2.sub(this, ...vectors);
-        this.x = v.x;
-        this.y = v.y;
-        this._magnitude = 0;
+        for (const v of vectors) {
+            this.x -= v.x;
+            this.y -= v.y;
+        }
 
         return this;
     }
@@ -181,8 +181,7 @@ export class Vector2 {
      * 
      */
     public get magnitude() {
-        if (this._magnitude === 0) this._magnitude = Math.sqrt(this.magnitudeSquared);
-        return this._magnitude;
+        return Math.sqrt(this.magnitudeSquared);
     }
 
     /**
@@ -195,6 +194,7 @@ export class Vector2 {
     public scale(scalar: number | Vector2): Vector2 {
         this.x *= typeof scalar === 'number' ? scalar : scalar.x;
         this.y *= typeof scalar === 'number' ? scalar : scalar.y;
+
         return this;
     }
 
@@ -228,10 +228,10 @@ export class Vector2 {
      *
      */
     public setLength(length: number): Vector2 {
-        if (this.x !== 0) this.x /= this.magnitude;
-        if (this.y !== 0) this.y /= this.magnitude;
+        const mag = this.magnitude;
+        if (this.x !== 0) this.x /= mag;
+        if (this.y !== 0) this.y /= mag;
         this.scale(length);
-        this._magnitude = length;
 
         return this;
     }
@@ -380,5 +380,19 @@ export class Vector2 {
         const second = (this.x - p2.x) ** 2 + (this.y - p2.y) ** 2;
 
         return first === second ? 0 : first < second ? -1 : 1;
+    }
+
+    /**
+     * 
+     * Set copy others components values to this.
+     * 
+     * Returns this for chainability.
+     *
+     */
+    public copy(other: Vector2): Vector2 {
+        this.x = other.x;
+        this.y = other.y;
+
+        return this;
     }
 }

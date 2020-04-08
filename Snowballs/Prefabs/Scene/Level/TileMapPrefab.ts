@@ -6,7 +6,7 @@ export function TileMapPrefab(gameObject: GameObject) {
         const map: string[][] = [];
         const noise = new Noise(100);
         const maxGroundHeight = 5;
-        const size = new Vector2(50, 9);
+        const size = new Vector2(1000, 9);
 
         for (let y = 0; y < size.y; y++) {
             map[y] = [];
@@ -57,20 +57,23 @@ export function TileMapPrefab(gameObject: GameObject) {
 
         tileMap.tileMap = map;
         tileMap.material = new PhysicsMaterial(0, 1, 1);
-        tileMap.backgroundLayers = [
-            { distance: 1000, sprite: new Sprite('Images/Snow/Background/sky.png') },
-            { distance: 800, sprite: new Sprite('Images/Snow/Background/mountains.png') },
-            { distance: 820, sprite: new Sprite('Images/Snow/Background/clouds_mountains.png') },
-            { distance: 725, sprite: new Sprite('Images/Snow/Background/clouds.png') },
-            { distance: 400, sprite: new Sprite('Images/Snow/Background/snowhill.png') }];
-
-
         //tileMap.backgroundLayers = [
-        //    { distance: 1000, sprite: new Sprite('Images/Fire/Background/sky.png') },
-        //    { distance: 800, sprite: new Sprite('Images/Fire/Background/clouds_back.png') },
-        //    { distance: 820, sprite: new Sprite('Images/Fire/Background/hill_back.png') },
-        //    { distance: 725, sprite: new Sprite('Images/Fire/Background/clouds.png') },
-        //    { distance: 625, sprite: new Sprite('Images/Fire/Background/hill_mid.png') }];
+        //    { distance: 1000, sprite: new Sprite('Images/Snow/Background/sky.png') },
+        //    { distance: 800, sprite: new Sprite('Images/Snow/Background/mountains.png') },
+        //    { distance: 820, sprite: new Sprite('Images/Snow/Background/clouds_mountains.png') },
+        //    { distance: 725, sprite: new Sprite('Images/Snow/Background/clouds.png') },
+        //    { distance: 400, sprite: new Sprite('Images/Snow/Background/snowhill.png') }];
+
+
+        tileMap.backgroundLayers = [
+            { distance: 1000, sprite: new Sprite('Images/Fire/Background/sky.png') },
+            { distance: 850, sprite: new Sprite('Images/Fire/Background/hill_back.png') },
+            { distance: 849, sprite: new Sprite('Images/Fire/Background/lightning.png') },
+            { distance: 800, sprite: new Sprite('Images/Fire/Background/clouds_back.png') },
+            { distance: 725, sprite: new Sprite('Images/Fire/Background/clouds.png') },
+            { distance: 625, sprite: new Sprite('Images/Fire/Background/hill_mid.png') },   
+            { distance: 550, sprite: new Sprite('Images/Fire/Background/lightning_mid.png') },
+            { distance: 525, sprite: new Sprite('Images/Fire/Background/hill_front.png') }];
     });
 
     gameObject.drawPriority = -1;

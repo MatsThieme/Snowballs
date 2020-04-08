@@ -57,11 +57,17 @@
     <TypeScriptCompile Include="Behaviours\CameraFollowPlayers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\EntityStats.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\FreezeFarAwayObjects.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Player2MovementBehaviour.ts" />
-    <TypeScriptCompile Include="Behaviours\Player1MovementBehaviour.ts">
+    <TypeScriptCompile Include="Behaviours\StatusbarBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Player2Behaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Player1Behaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\TileMapBackgroundBehaviour.ts">
@@ -74,10 +80,14 @@
     <TypeScriptCompile Include="Prefabs\Scene\Level\TileMapPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerPrefab.ts">
+    <TypeScriptCompile Include="Prefabs\Scene\Players\Player2Prefab.ts" />
+    <TypeScriptCompile Include="Prefabs\Scene\Players\Player1Prefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerStatsPrefab.ts">
+    <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerHealthbarPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\UI\DebugOverlayPrefab.ts" />

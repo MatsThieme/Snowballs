@@ -7,7 +7,7 @@ export class SpriteAnimation {
     private timer: number;
     public constructor(sprites: Sprite[], swapTime: number) {
         this.sprites = sprites;
-        this.swapTime = swapTime;
+        this.swapTime = swapTime || 1;
         this.timer = 0;
     }
 

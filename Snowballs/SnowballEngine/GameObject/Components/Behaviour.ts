@@ -9,22 +9,18 @@ import { ComponentType } from './ComponentType.js';
 export abstract class Behaviour extends Component {
     protected input: Input;
     protected readonly scene: Scene;
-    public readonly name: string;
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.Behaviour);
         this.input = gameObject.scene.input;
         this.scene = this.gameObject.scene;
-        this.name = this.constructor.name;
-        this.awake();
-        if (this.gameObject.scene.isRunning) this.start();
     }
 
     /**
      * 
-     * Called by the constructor.
+     * Called after the behavior has been added to the game object.
      * 
      */
-    protected awake(): void { }
+    public async awake(): Promise<void> { }
 
     /**
      * 

@@ -85,7 +85,12 @@ export class AsyncWorker {
 }
 
 
-/** @internal */
+/**
+ *
+ * @internal
+ *
+ */
+
 declare interface Worker extends EventTarget, AbstractWorker {
     isBusy: boolean;
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;

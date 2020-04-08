@@ -1,18 +1,25 @@
+import { average } from './Helpers.js';
+
 export class GameTime {
     private _lastTime: number;
     private _deltaTime: number;
-    public readonly start: number;
+    private t: number[];
+    private _clampDeltatime: number;
+
     /**
      * 
-     * 0 to turn off, else time in ms.
+     * Clamp the delta time at peak values.
      * 
      */
-    public clampDeltatime: number;
+    public clampDeltatime: boolean;
+    public readonly start: number;
     public constructor() {
         this._lastTime = this.now;
         this._deltaTime = 0;
         this.start = this.now;
-        this.clampDeltatime = 30;
+        this._clampDeltatime = 10;
+        this.clampDeltatime = true;
+        this.t = [];
     }
 
     /**
@@ -30,8 +37,13 @@ export class GameTime {
      * 
      */
     public update(): void {
-        if (this._lastTime) this._deltaTime = this.clampDeltatime === 0 ? this.now - this._lastTime : Math.min(this.now - this._lastTime, this.clampDeltatime);
+        if (this._lastTime) {
+            this._deltaTime = this.clampDeltatime ? Math.min(this.now - this._lastTime, this._clampDeltatime) : this.now - this._lastTime;
+            this.t.unshift(this.now - this._lastTime);
+        }
         this._lastTime = this.now;
+        if (this.t.length >= 2500) this.t = this.t.splice(0, 2500);
+        this._clampDeltatime = average(...this.t) * 1.3;
     }
 
     /**

@@ -6,7 +6,6 @@ import { Scene } from '../Scene.js';
 import { AnimatedSprite } from './Components/AnimatedSprite.js';
 import { AudioListener } from './Components/AudioListener.js';
 import { Behaviour } from './Components/Behaviour.js';
-import { Camera } from './Components/Camera.js';
 import { Collider } from './Components/Collider.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
@@ -66,7 +65,12 @@ export class GameObject {
      *
      */
     public get rigidbody(): RigidBody {
-        return this.getComponent<RigidBody>(ComponentType.RigidBody) || this.getComponentInChildren<RigidBody>(ComponentType.RigidBody) || this.parent?.getComponent<RigidBody>(ComponentType.RigidBody) || this.addComponent(RigidBody);
+        const rb = this.getComponent<RigidBody>(ComponentType.RigidBody) || this.getComponentInChildren<RigidBody>(ComponentType.RigidBody) || this.parent?.getComponent<RigidBody>(ComponentType.RigidBody);
+        if (!rb) {
+            this.components.push(new RigidBody(this))
+            return this.rigidbody;
+        }
+        return rb;
     }
 
     /**
@@ -83,7 +87,7 @@ export class GameObject {
      * @param cb Callbacks are executed after component creation.
      * 
      */
-    public addComponent<T extends Component>(type: new (gameObject: GameObject) => T, cb?: (component: T) => any): T {
+    public async addComponent<T extends Component>(type: new (gameObject: GameObject) => T, ...cb: ((component: T) => void | Promise<void>)[]): Promise<T> {
         const component = new type(this);
 
         if (component.type !== ComponentType.Camera && component.type !== ComponentType.Transform && component.type !== ComponentType.RigidBody && component.type !== ComponentType.AudioListener && component.type !== ComponentType.TileMap ||
@@ -102,7 +106,16 @@ export class GameObject {
 
         if (component.type === ComponentType.Camera) this.scene.cameraManager.mainCameraIndex = this.scene.cameraManager.cameras.push(<any>component) - 1;
 
-        if (cb) cb(component);
+        if (cb) {
+            for (const c of cb) {
+                await c(component);
+            }
+        }
+
+        if (component instanceof Behaviour) {
+            await component.awake();
+            if (this.scene.isRunning) await component.start();
+        }
 
         return component;
     }
@@ -125,10 +138,12 @@ export class GameObject {
     public getComponents<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T[] {
         return <T[]>this.components.filter((c: Component) => {
             if (typeof type === 'number') {
-                return c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider || c.type === ComponentType.TileMap);
+                return c.type === type ||
+                    type === ComponentType.Component ||
+                    type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider || c.type === ComponentType.TileMap)
             }
 
-            return c instanceof <any>type;
+            return c instanceof type;
         });
     }
 
@@ -140,11 +155,13 @@ export class GameObject {
     public getComponent<T extends Component>(type: (new (gameObject: GameObject) => T) | ComponentType): T | undefined {
         for (const c of this.components) {
             if (typeof type === 'number') {
-                if (c.type === type || type === ComponentType.Component || type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider || c.type === ComponentType.TileMap)) return <T>c;
+                if (c.type === type ||
+                    type === ComponentType.Component ||
+                    type === ComponentType.Collider && (c.type === ComponentType.CircleCollider || c.type === ComponentType.PolygonCollider || c.type === ComponentType.TileMap)) return <T>c;
                 continue;
             }
 
-            if (c instanceof <any>type) return <T>c;
+            if (c instanceof type) return c;
         }
 
         return;
