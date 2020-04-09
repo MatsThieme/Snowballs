@@ -247,12 +247,6 @@ namespace CollisionWorker {
         maxY = Math.min(Math.max(Math.ceil(maxY / tileSize.y), 0), tileMap.length);
         minY = Math.min(Math.max(Math.floor(minY / tileSize.y), 0), tileMap.length);
 
-        ////////////////////////////////////////
-        maxX = tileMap[0].length;
-        minX = 0;
-        maxY = tileMap.length;
-        minY = 0;
-
 
         let penetrationDepth = -Infinity;
         let normal!: { x: number, y: number };

@@ -18,9 +18,9 @@ export class TileMap extends Component implements Drawable {
     private backgroundFrames: Frame[];
     private _tileMap: (1 | 0)[][];
     public material: PhysicsMaterial;
-    public backgroundLayers: { distance: number, sprite: Sprite }[];
+    public backgroundLayers: Map<number, { distance: number, sprite: Sprite }[]>;
     public backgroundMaxDistance: number;
-    public constructor(gameObject: GameObject, tileSize: Vector2 = new Vector2(1, 1), relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), tileMap: string[][] = [], backgroundLayers: { distance: number, sprite: Sprite }[] = [], backgroundMaxDistance: number = 1000) {
+    public constructor(gameObject: GameObject, tileSize: Vector2 = new Vector2(1, 1), relativePosition: Vector2 = new Vector2(), material: PhysicsMaterial = new PhysicsMaterial(), tileMap: string[][] = [], backgroundLayers: Map<number, { distance: number, sprite: Sprite }[]> = new Map(), backgroundMaxDistance: number = 1000) {
         super(gameObject, ComponentType.TileMap);
 
         this.tileSize = tileSize;
@@ -33,8 +33,6 @@ export class TileMap extends Component implements Drawable {
 
         this.backgroundLayers = backgroundLayers;
         this.backgroundMaxDistance = backgroundMaxDistance;
-
-        backgroundLayers.forEach(b => console.log(b.distance / this.backgroundMaxDistance * 50));
     }
     public get currentFrame(): Frame[] {
         return [...this.tileFrames, ...this.backgroundFrames];
@@ -72,34 +70,41 @@ export class TileMap extends Component implements Drawable {
      * Calculates positioning of backgrounds for camera.
      * 
      */
-    public calculateBackgroundForCamera(camera: Camera) {
+    public calculateBackgroundForCamera(camera: Camera): void {
         this.backgroundFrames = [];
 
         const point = camera.gameObject.transform.position;
-        this.backgroundLayers.sort((a, b) => b.distance - a.distance);
 
-        for (const b of this.backgroundLayers) {
-            const spriteSizeWorld = new Vector2(this.scaledSize.y * b.sprite.canvasImageSource.width / b.sprite.canvasImageSource.height, this.scaledSize.y);
+        const entries = [...this.backgroundLayers.entries()];
 
-            for (let x = this.position.x + (point.x - this.position.x) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - 100; x < point.x + camera.size.x / 2 && x < this.position.x + this.scaledSize.x; x += spriteSizeWorld.x) {
-                const sprite = new Sprite(b.sprite.canvasImageSource);
-                let xScalar = 1;
-                let xPosition = 0;
+        for (let i = 0; i < this.backgroundLayers.size; i++) {
+            entries[i][1].sort((a, b) => b.distance - a.distance);
 
+            const left = entries[i][0] + this.position.x;
+            const right = Math.min(point.x + camera.size.x / 2, (i + 1 < entries.length ? left + entries[i + 1][0] : this.scaledSize.x) + this.position.x);
 
-                // cut background right
-                if (x + spriteSizeWorld.x > this.position.x + this.scaledSize.x) {
-                    xScalar = ((this.position.x + this.scaledSize.x) - x) / spriteSizeWorld.x;
-                    sprite.subSize = new Vector2(sprite.canvasImageSource.width * xScalar, sprite.canvasImageSource.height).round();
+            for (const b of entries[i][1]) {
+                const spriteSizeWorld = new Vector2(this.scaledSize.y * b.sprite.canvasImageSource.width / b.sprite.canvasImageSource.height, this.scaledSize.y);
+
+                for (let x = left + (point.x - left) * (clamp(0, this.backgroundMaxDistance, b.distance) / this.backgroundMaxDistance) - camera.size.x; x < right; x += spriteSizeWorld.x) {
+                    const sprite = new Sprite(b.sprite.canvasImageSource);
+                    let xScalar = 1;
+                    let xPosition = 0;
+
+                    // cut background right
+                    if (x + spriteSizeWorld.x > right) {
+                        xScalar = (right - x) / spriteSizeWorld.x;
+                        sprite.subSize = new Vector2(sprite.canvasImageSource.width * xScalar, sprite.canvasImageSource.height);
+                    }
+
+                    // cut background left
+                    if (x < left ) {
+                        xPosition = left - x;
+                        sprite.subPosition = new Vector2(xPosition / spriteSizeWorld.x * b.sprite.canvasImageSource.width, 0);
+                    }
+
+                    this.backgroundFrames.push(new Frame(new Vector2(x + xPosition, this.position.y), spriteSizeWorld.clone.scale(new Vector2(xScalar, 1)), sprite, new Angle(), this.gameObject.drawPriority, 1));
                 }
-
-                // cut background left
-                if (x < this.position.x && spriteSizeWorld.x - (this.position.x - x) > 0) {
-                    xPosition = this.position.x - x;
-                    sprite.subPosition = new Vector2(xPosition / spriteSizeWorld.x * b.sprite.canvasImageSource.width, 0);
-                }
-
-                this.backgroundFrames.push(new Frame(new Vector2(x + xPosition, this.position.y), spriteSizeWorld.clone.scale(new Vector2(xScalar, 1)), sprite, new Angle(), this.gameObject.drawPriority, 1));
             }
         }
     }
@@ -112,11 +117,9 @@ export class TileMap extends Component implements Drawable {
     public get collisionMap(): (1 | 0)[][] {
         return this._tileMap;
     }
-
     public get scaledSize(): Vector2 {
         return new Vector2(this._tileMap.length > 0 ? this._tileMap[0].length : 0, this._tileMap.length).scale(this.tileSize).scale(this.gameObject.transform.relativeScale);
     }
-
     public get position() {
         return Vector2.add(this.relativePosition, this.gameObject.transform.position);
     }

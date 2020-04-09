@@ -77,7 +77,7 @@
     <TypeScriptCompile Include="Prefabs\Scene\Cameras\MainCameraPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefabs\Scene\Level\TileMapPrefab.ts">
+    <TypeScriptCompile Include="Prefabs\Scene\Level\LevelPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\Scene\Players\Player2Prefab.ts" />

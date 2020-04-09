@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { LoadingScreenPrefab } from './Prefabs/LoadingScreenPrefab.js';
 import { MainCameraPrefab } from './Prefabs/Scene/Cameras/MainCameraPrefab.js';
-import { TileMapPrefab } from './Prefabs/Scene/Level/TileMapPrefab.js';
+import { LevelPrefab } from './Prefabs/Scene/Level/LevelPrefab.js';
 import { Player1Prefab } from './Prefabs/Scene/Players/Player1Prefab.js';
 import { Player2Prefab } from './Prefabs/Scene/Players/Player2Prefab.js';
 import { PlayerPrefab } from './Prefabs/Scene/Players/PlayerPrefab.js';
@@ -29,7 +29,7 @@ class Game {
             yield PreloadAssets('AssetList.json');
             yield FontLoader.load('Font/JosefinSlab-Regular.ttf', Settings.mainFont);
             yield scene.newGameObject('Camera', MainCameraPrefab);
-            yield scene.newGameObject('TileMap', TileMapPrefab);
+            yield scene.newGameObject('Level', LevelPrefab);
             yield scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
             yield scene.newGameObject('Player2', PlayerPrefab, Player2Prefab);
             scene.ui.addMenu('Main Menu', MainMenuPrefab);

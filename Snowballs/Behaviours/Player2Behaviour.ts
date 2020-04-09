@@ -14,7 +14,7 @@ export class Player2Behaviour extends Behaviour {
         await this.scene.newGameObject('Healthbar Player2', PlayerHealthbarPrefab, gameObject => {
             this.gameObject.addChild(gameObject);
             this.statusbarBehaviour = <StatusbarBehaviour>gameObject.getComponent(StatusbarBehaviour);
-            gameObject.transform.relativePosition.y = (this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite)?.scaledSize.y || 0) * 0.3;
+            gameObject.transform.relativePosition.y = (this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite)?.scaledSize.y || 0) / 2;
         });
     }
     async update(gameTime: GameTime) {
@@ -45,8 +45,8 @@ export class Player2Behaviour extends Behaviour {
     }
     run(x: number) {
         this.gameObject.rigidbody.force.add(new Vector2(x, 0));
-        if (this.gameObject.rigidbody.velocity.x > 0) this.animatedSprite.activeAnimation = 'run right';
-        else if (this.gameObject.rigidbody.velocity.x < 0) this.animatedSprite.activeAnimation = 'run left';
+        if (this.gameObject.rigidbody.velocity.x > 0 && this.animatedSprite.activeAnimation !== 'run right') this.animatedSprite.activeAnimation = 'run right';
+        else if (this.gameObject.rigidbody.velocity.x < 0 && this.animatedSprite.activeAnimation !== 'run left') this.animatedSprite.activeAnimation = 'run left';
     }
     jump() {
         this.gameObject.rigidbody.applyImpulse(new Vector2(0, 5));
@@ -54,6 +54,6 @@ export class Player2Behaviour extends Behaviour {
     }
     idle() {
         this.gameObject.rigidbody.velocity.x *= this.gameTime.deltaTime / 50;
-        this.animatedSprite.activeAnimation = 'idle';
+        if (this.animatedSprite.activeAnimation !== 'idle') this.animatedSprite.activeAnimation = 'idle';
     }
 }

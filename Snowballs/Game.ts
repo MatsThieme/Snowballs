@@ -1,6 +1,6 @@
 import { LoadingScreenPrefab } from './Prefabs/LoadingScreenPrefab.js';
 import { MainCameraPrefab } from './Prefabs/Scene/Cameras/MainCameraPrefab.js';
-import { TileMapPrefab } from './Prefabs/Scene/Level/TileMapPrefab.js';
+import { LevelPrefab } from './Prefabs/Scene/Level/LevelPrefab.js';
 import { Player1Prefab } from './Prefabs/Scene/Players/Player1Prefab.js';
 import { Player2Prefab } from './Prefabs/Scene/Players/Player2Prefab.js';
 import { PlayerPrefab } from './Prefabs/Scene/Players/PlayerPrefab.js';
@@ -27,7 +27,8 @@ class Game {
 
         await scene.newGameObject('Camera', MainCameraPrefab);
 
-        await scene.newGameObject('TileMap', TileMapPrefab);
+
+        await scene.newGameObject('Level', LevelPrefab);
 
 
         await scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
