@@ -4,7 +4,6 @@ import { awaitPromises, normalizeAssetPath } from './Helpers.js';
  * 
  * Loads all assets listed in a json file under url.
  * 
- * 
  */
 export async function PreloadAssets(url: string): Promise<void> {
     const r = await fetch(normalizeAssetPath(url));

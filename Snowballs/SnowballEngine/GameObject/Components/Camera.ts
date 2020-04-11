@@ -16,8 +16,9 @@ export class Camera extends Component {
         this.size = size;
         this.canvas = new OffscreenCanvas(this.resolution.x, this.resolution.y);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
+        this.context.imageSmoothingEnabled = false;
     }
-    public get currentFrame(): CanvasImageSource {
+    public get currentFrame(): OffscreenCanvas {
         return this.canvas;
     }
 
@@ -38,7 +39,7 @@ export class Camera extends Component {
                 const framePos = this.worldToScreenPoint(frame.worldCordinates).sub(new Vector2(0, frameSize.y));
                 let rotationPoint;
                 if (frame.rotationPoint) rotationPoint = this.worldToScreenPoint(frame.rotationPoint);
-                if (!rotationPoint) rotationPoint = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
+                else rotationPoint = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
 
                 this.context.save();
 
@@ -53,7 +54,9 @@ export class Camera extends Component {
                 this.context.filter = frame.filter;
 
                 try {
-                    this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                    //this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                    if ((<any>window).chrome) this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                    else this.context.drawImage(frame.sprite.canvasImageSource, Math.round(frame.sprite.subPosition.x), Math.round(frame.sprite.subPosition.y), Math.round(frame.sprite.subSize.x), Math.round(frame.sprite.subSize.y), Math.round(framePos.x), Math.round(framePos.y), Math.round(frameSize.x), Math.round(frameSize.y));
                 } catch { }
 
                 this.context.filter = 'none';

@@ -14,11 +14,14 @@ export class CameraManager {
     private context: CanvasRenderingContext2D;
     public cameras: Camera[];
     public mainCameraIndex: number;
+    private cleared: boolean;
     public constructor(domElement: HTMLCanvasElement) {
         this.cameras = [];
         this.mainCameraIndex = 0;
         this.context = <CanvasRenderingContext2D>domElement.getContext('2d');
         this.context.imageSmoothingQuality = 'high';
+        this.context.imageSmoothingEnabled = true;
+        this.cleared = false;
     }
     public get mainCamera(): Camera {
         return this.cameras[this.mainCameraIndex % this.cameras.length];
@@ -44,13 +47,17 @@ export class CameraManager {
         this.cameras.forEach(camera => camera.update(<Frame[]>frames));
 
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+        this.cleared = true;
 
-        this.context.drawImage(this.cameras[this.mainCameraIndex].currentFrame, 0, 0);
+        this.context.drawImage(this.mainCamera.currentFrame, 0, 0);
     }
     public drawUI(ui: UIFrame) {
         if (this.context.canvas.width !== this.mainCamera.resolution.x) this.context.canvas.width = this.mainCamera.resolution.x;
         if (this.context.canvas.height !== this.mainCamera.resolution.y) this.context.canvas.height = this.mainCamera.resolution.y;
 
+        if (!this.cleared) this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+
         this.context.drawImage(ui.sprite.canvasImageSource, ui.aabb.position.x, ui.aabb.position.y, ui.aabb.size.x, ui.aabb.size.y);
+        this.cleared = false;
     }
 }

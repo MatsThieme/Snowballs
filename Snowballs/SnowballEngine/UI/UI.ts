@@ -1,3 +1,4 @@
+import { ClientInfo } from '../ClientInfo.js';
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';
@@ -8,19 +9,28 @@ import { UIFrame } from './UIFrame.js';
 import { UIMenu } from './UIMenu.js';
 
 export class UI {
-    private menus: Map<string, UIMenu>;
+    public menus: { [key: string]: UIMenu };
+    /**
+     * 
+     * Array of functions to execute every frame.
+     * 
+     */
+    public updates: ((gameTime: GameTime) => void | Promise<void>)[];
     private input: Input;
     private canvas: OffscreenCanvas;
     private context: OffscreenCanvasRenderingContext2D;
-    public aabb: AABB;
     private scene: Scene;
+    public navigationHistory: string[];
+    private lastMenusState: boolean[];
     public constructor(input: Input, scene: Scene) {
-        this.menus = new Map();
+        this.menus = {};
         this.input = input;
-        this.aabb = new AABB(new Vector2(), new Vector2());
         this.canvas = new OffscreenCanvas(scene.domElement.width, scene.domElement.height);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
         this.scene = scene;
+        this.updates = [];
+        this.navigationHistory = [];
+        this.lastMenusState = [];
     }
 
     /**
@@ -28,17 +38,21 @@ export class UI {
      * Add a new menu to the ui.
      * 
      */
-    public addMenu(name: string, ...cb: ((menu: UIMenu, scene: Scene) => any)[]): UIMenu {
-        if (this.menus.has(name)) {
-            const menu = <UIMenu>this.menus.get(name);
+    public async addMenu(name: string, ...cb: ((menu: UIMenu, scene: Scene) => void | Promise<void>)[]): Promise<UIMenu> {
+        if (this.menus[name]) {
+            const menu = this.menus[name];
             if (cb) cb.forEach(cb => cb(menu, this.scene));
             return menu;
         }
 
         const menu = new UIMenu(this.input, this.scene);
-        this.menus.set(name, menu);
+        this.menus[name] = menu;
 
-        if (cb) cb.forEach(cb => cb(menu, this.scene));
+        if (cb) {
+            for (const c of cb) {
+                await c(menu, this.scene);
+            }
+        }
 
         return menu;
     }
@@ -48,20 +62,40 @@ export class UI {
      * Draw this.menus to canvas.
      *
      */
-    public update(gameTime: GameTime): void {
+    public async update(gameTime: GameTime): Promise<void> {
         this.canvas.width = this.scene.domElement.width;
         this.canvas.height = this.scene.domElement.height;
-        this.aabb = new AABB(new Vector2(this.canvas.width, this.canvas.height), new Vector2());
 
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        for (const menu of this.menus.values()) {
+        for (const u of this.updates) {
+            await u(gameTime);
+        }
+
+        for (const menu of Object.values(this.menus)) {
             if (menu.active) {
                 menu.update(gameTime);
-
+                //this.context.strokeRect(menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
                 this.context.drawImage(menu.currentFrame.sprite.canvasImageSource, menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
             }
         }
+
+        let l;
+        if (this.lastMenusState.length > 0) {
+            l = Object.entries(this.menus);
+
+            for (let i = 0; i < l.length; i++) {
+                if (l[i][1].active && l[i][1].active !== this.lastMenusState[i] && (this.navigationHistory[0] || '') !== l[i][0]) {
+                    this.navigationHistory.unshift(l[i][0]);
+                }
+            }
+
+            if (this.navigationHistory.length > 100) this.navigationHistory.splice(100);
+
+            l = l.map(e => e[1].active);
+        }
+
+        this.lastMenusState = l || Object.entries(this.menus).map(e => e[1].active);
     }
 
     /**
@@ -70,7 +104,7 @@ export class UI {
      * 
      */
     public get currentFrame(): UIFrame {
-        return new UIFrame(this.aabb, new Sprite(this.canvas));
+        return new UIFrame(new AABB(ClientInfo.resolution, new Vector2()), new Sprite(this.canvas));
     }
 
     /**
@@ -79,6 +113,6 @@ export class UI {
      * 
      */
     public get pauseScene(): boolean {
-        return [...this.menus.values()].findIndex(m => m.active && m.pauseScene) !== -1;
+        return [...Object.values(this.menus)].findIndex(m => m.active && m.pauseScene) !== -1;
     }
 }

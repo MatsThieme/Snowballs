@@ -5,6 +5,7 @@ import { GameObject } from '../GameObject.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
 import { PolygonCollider } from './PolygonCollider.js';
+import { interval } from '../../Helpers.js';
 
 export class PolygonRenderer extends Component {
     private canvas: OffscreenCanvas;
@@ -30,7 +31,7 @@ export class PolygonRenderer extends Component {
         this.size = this.polygonCollider.scaledSize;
         this._position = new Vector2();
 
-        const interval = setInterval(() => {
+        interval(clear => {
             if (!this.gameObject.scene.isRunning || this.gameObject.scene.ui.pauseScene) return;
 
             this.polygonCollider = <PolygonCollider>this.gameObject.getComponent<PolygonCollider>(ComponentType.PolygonCollider);
@@ -64,8 +65,7 @@ export class PolygonRenderer extends Component {
             this.size = this.polygonCollider.scaledSize;
             this._position = new Vector2(topLeft.x, topLeft.y - this.polygonCollider.scaledSize.y).sub(this.gameObject.transform.position).sub(this.polygonCollider.align);
 
-
-            clearInterval(interval);
+            clear();
         }, 100);
     }
     private get position(): Vector2 {

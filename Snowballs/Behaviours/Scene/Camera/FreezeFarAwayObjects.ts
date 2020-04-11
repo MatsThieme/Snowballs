@@ -1,4 +1,4 @@
-import { Behaviour, Vector2 } from '../SnowballEngine/Scene.js';
+import { Behaviour, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export class FreezeFarAwayObjects extends Behaviour {
     async update() {

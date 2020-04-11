@@ -1,5 +1,5 @@
-import { CameraFollowPlayers } from '../../../Behaviours/CameraFollowPlayers.js';
-import { FreezeFarAwayObjects } from '../../../Behaviours/FreezeFarAwayObjects.js';
+import { CameraFollowPlayers } from '../../../Behaviours/Scene/Camera/CameraFollowPlayers.js';
+import { FreezeFarAwayObjects } from '../../../Behaviours/Scene/Camera/FreezeFarAwayObjects.js';
 import { AudioListener, Camera, ClientInfo, GameObject, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export function MainCameraPrefab(gameObject: GameObject) {

@@ -1,4 +1,4 @@
-import { Behaviour, Camera, ComponentType, average } from '../SnowballEngine/Scene.js';
+import { average, Behaviour, Camera, clamp, ComponentType, TileMap } from '../../../SnowballEngine/Scene.js';
 
 export class CameraFollowPlayers extends Behaviour {
     async update() {
@@ -17,5 +17,10 @@ export class CameraFollowPlayers extends Behaviour {
             if (playerPosition - this.gameObject.transform.relativePosition.x < 0) this.gameObject.transform.relativePosition.x += ((playerPosition - this.gameObject.transform.relativePosition.x) + cameraWidth * scrollThreshold) / 10;
             else this.gameObject.transform.relativePosition.x += ((playerPosition - this.gameObject.transform.relativePosition.x) - cameraWidth * scrollThreshold) / 10;
         }
+
+        const tileMap = this.scene.find('Level')?.getComponent<TileMap>(ComponentType.TileMap);
+
+        if (tileMap)
+            this.gameObject.transform.relativePosition.x = clamp(tileMap.position.x + camera.size.x / 2, tileMap.position.x + tileMap.scaledSize.x - camera.size.x / 2, this.gameObject.transform.relativePosition.x);
     }
-}
+} 

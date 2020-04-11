@@ -4,6 +4,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>Snowballs</Name>
     <RootNamespace>Snowballs</RootNamespace>
+    <SaveNodeJsSettingsInProjectFile>False</SaveNodeJsSettingsInProjectFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -20,7 +21,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <EnableTypeScript>true</EnableTypeScript>
-    <StartWebBrowser>false</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,13 +36,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Behaviours\" />
+    <Folder Include="Behaviours\Scene\Camera\" />
+    <Folder Include="Behaviours\Scene\Enemies\" />
+    <Folder Include="Behaviours\Scene\Items\" />
+    <Folder Include="Behaviours\Scene\" />
+    <Folder Include="Behaviours\Scene\Players\" />
+    <Folder Include="Behaviours\Scene\Level\" />
     <Folder Include="Prefabs\" />
     <Folder Include="Prefabs\Scene\Cameras\" />
     <Folder Include="Prefabs\Scene\Level\" />
+    <Folder Include="Prefabs\Scene\Enemies\" />
+    <Folder Include="Prefabs\Scene\Items\" />
     <Folder Include="Prefabs\Scene\Players\" />
     <Folder Include="Prefabs\UI\" />
     <Folder Include="Prefabs\Scene\" />
-    <Folder Include="Prefabs\UI\MainMenu\" />
     <Folder Include="Prefabs\UI\HUD\" />
     <Folder Include="SnowballEngine\" />
     <Folder Include="SnowballEngine\Camera\" />
@@ -54,27 +62,50 @@
     <Folder Include="SnowballEngine\Worker\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Behaviours\CameraFollowPlayers.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Camera\CameraFollowPlayers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\EntityStats.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Enemies\EnemyBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\FreezeFarAwayObjects.ts">
+    <TypeScriptCompile Include="Behaviours\EntityStatsBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Camera\FreezeFarAwayObjects.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Items\EnergyBoostBehaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Items\HealthBoostBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Items\LevelUpBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\StatusbarBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Player2Behaviour.ts" />
-    <TypeScriptCompile Include="Behaviours\Player1Behaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Players\Player2Behaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Players\Player1Behaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\TileMapBackgroundBehaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Level\TileMapBackgroundBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\LoadingScreenPrefab.ts" />
     <TypeScriptCompile Include="Prefabs\Scene\Cameras\MainCameraPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Enemies\FireWeakEnemyPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Enemies\WeakEnemyPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Items\EnergyBoostPrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\Scene\Items\HealthBoostPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Items\LevelUpPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\Scene\Level\LevelPrefab.ts">
@@ -90,8 +121,15 @@
     <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\UI\SettingsMenuPrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\UI\CreditsMenuPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\UI\DebugOverlayPrefab.ts" />
-    <TypeScriptCompile Include="Prefabs\UI\MainMenu\MainMenuPrefab.ts">
+    <TypeScriptCompile Include="Prefabs\UI\MainMenuPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\UI\PauseMenuPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SnowballEngine\Angle.ts" />
@@ -133,7 +171,7 @@
     <TypeScriptCompile Include="SnowballEngine\Input\InputMouse.ts" />
     <TypeScriptCompile Include="SnowballEngine\Input\InputType.ts" />
     <TypeScriptCompile Include="SnowballEngine\Line.ts" />
-    <TypeScriptCompile Include="SnowballEngine\LoadAssets.ts">
+    <TypeScriptCompile Include="SnowballEngine\PreloadAssets.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="SnowballEngine\Noise.ts">

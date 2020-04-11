@@ -1,4 +1,4 @@
-import { normalizeAssetPath } from './Helpers.js';
+import { normalizeAssetPath, interval } from './Helpers.js';
 
 export class FontLoader {
     /**
@@ -15,20 +15,21 @@ export class FontLoader {
             document.head.appendChild(e);
 
             const p = document.createElement('span');
-            p.textContent = 'IWM'.repeat(10);
+            p.textContent = 'IWML'.repeat(10);
             p.style.fontFamily = 'serif';
             p.style.visibility = 'hidden';
+            p.style.fontSize = '1000px';
             document.body.appendChild(p);
 
-            const initialWidth = p.offsetWidth;
+            const initialSize = p.offsetWidth << 16 + p.offsetHeight;
 
             p.style.fontFamily = name;
 
-            const i = setInterval(() => {
-                if (p.offsetWidth !== initialWidth) {
+            interval(clear => {
+                if (p.offsetWidth << 16 + p.offsetHeight !== initialSize) {
                     resolve();
+                    clear();
                     p.remove();
-                    clearInterval(i);
                 }
             }, 1);
         });

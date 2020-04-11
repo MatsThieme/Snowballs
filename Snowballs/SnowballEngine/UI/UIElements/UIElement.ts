@@ -71,10 +71,10 @@ export abstract class UIElement {
         const trigger = this.input.getButton(InputType.Trigger);
         const pointerPosition = new Vector2(this.input.getAxis(InputType.PointerPositionHorizontal).value, this.input.getAxis(InputType.PointerPositionVertical).value);
 
-        this.down = trigger.down && this.aabb.intersectsPoint(pointerPosition);
-        this.click = trigger.click && this.aabb.intersectsPoint(pointerPosition);
+        this.down = trigger.down && this.absoluteAABB.intersectsPoint(pointerPosition);
+        this.click = trigger.click && this.absoluteAABB.intersectsPoint(pointerPosition);
 
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         if (!this.sprite) this.draw();
     }
 
@@ -83,7 +83,7 @@ export abstract class UIElement {
      * Adjusts the AABB of this to fit the contents.
      * 
      */
-    public fitText(paddingScalar: number): void {
+    public fitContent(paddingScalar: number): void {
         this.lastPaddingScalar = paddingScalar;
         if (this.type === UIElementType.Dropdown) {
             if ((<any>this).values.length === 0) return;
@@ -122,6 +122,12 @@ export abstract class UIElement {
         this.draw();
     }
 
+    private get absoluteAABB(): AABB {
+        const aabb = this.aabb;
+        aabb.position.add(this.menu.aabb.position);
+        return aabb;
+    }
+
     /**
      *
      * The currently drawn label.
@@ -132,7 +138,7 @@ export abstract class UIElement {
     }
     public set label(val: string) {
         this._label = val;
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         else this.draw();
     }
 
@@ -146,7 +152,7 @@ export abstract class UIElement {
     }
     public set background(val: Sprite | undefined) {
         this._background = val;
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         else this.draw();
     }
     public get fontSize(): UIFontSize {
@@ -154,7 +160,7 @@ export abstract class UIElement {
     }
     public set fontSize(val: UIFontSize) {
         this._fontSize = val;
-        if (this.lastPaddingScalar !== -1) this.fitText(this.lastPaddingScalar);
+        if (this.lastPaddingScalar !== -1) this.fitContent(this.lastPaddingScalar);
         else this.draw();
     }
 

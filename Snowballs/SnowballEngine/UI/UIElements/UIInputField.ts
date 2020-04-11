@@ -7,12 +7,14 @@ import { UIElementType } from '../UIElementType.js';
 import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
+import { clamp } from '../../Helpers.js';
 
 export abstract class UIInputField extends UIElement {
     public focused: boolean;
     protected domElement: HTMLInputElement;
     public abstract value: number | string;
     public max: number;
+    public min: number;
     public constructor(menu: UIMenu, input: Input, type: UIElementType.NumberInputField | UIElementType.TextInputField) {
         super(menu, input, type);
 
@@ -23,7 +25,9 @@ export abstract class UIInputField extends UIElement {
         this.domElement.style.display = 'block';
         this.domElement.type = type === UIElementType.TextInputField ? 'text' : UIElementType.NumberInputField ? 'number' : '';
         document.body.appendChild(this.domElement);
+        this.domElement.step = '0.1';
 
+        this.min = 0;
         this.max = 999;
         this.focused = false;
     }
@@ -40,11 +44,15 @@ export abstract class UIInputField extends UIElement {
 
             if (this.label !== this.domElement.value) {
                 if (this.type === UIElementType.NumberInputField && typeof this.value === 'number') {
-                    this.value = parseFloat(this.domElement.value) || 0;
+                    const x = parseFloat(this.domElement.value);
 
-                    if (this.value > this.max) this.value = this.max;
+                    if (x) {
+                        this.value = x;
 
-                    this.domElement.value = this.label = this.value.toString();
+                        this.value = clamp(this.min, this.max, this.value);
+
+                        this.domElement.value = this.label = this.value.toString();
+                    } else this.label = '0';
                 } else if (this.type === UIElementType.TextInputField && typeof this.value === 'string') {
                     this.value = this.domElement.value;
 

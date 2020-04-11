@@ -87,3 +87,12 @@ export function awaitPromises<T>(...promises: Promise<T>[]): Promise<T[]> {
         promises.forEach(p => p.then((t: T) => ret.push(t) === promises.length ? resolve(ret) : undefined).catch(reject));
     });
 }
+
+/**
+ * 
+ * Simplified version of setInterval, the interval can be cleared by calling cb's parameter clear.
+ * 
+ */
+export function interval(cb: (clear: () => void) => void, ms: number): void {
+    const i = window.setInterval(() => cb(() => window.clearInterval(i)), ms);
+}

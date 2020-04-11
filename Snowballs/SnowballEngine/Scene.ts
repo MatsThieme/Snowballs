@@ -5,7 +5,7 @@ import { Collider } from './GameObject/Components/Collider.js';
 import { ComponentType } from './GameObject/Components/ComponentType.js';
 import { GameObject } from './GameObject/GameObject.js';
 import { GameTime } from './GameTime.js';
-import { awaitPromises } from './Helpers.js';
+import { awaitPromises, interval } from './Helpers.js';
 import { Input } from './Input/Input.js';
 import { Collision } from './Physics/Collision.js';
 import { Physics } from './Physics/Physics.js';
@@ -21,7 +21,7 @@ export class Scene {
     private requestAnimationFrameHandle?: number;
     public framedata: Framedata;
     public loadingScreen?: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any;
-    private loadingScreenInterval?: number;
+    private loadingScreenActive?: boolean;
     public hasAudioListener: boolean;
     public constructor() {
         this.domElement = document.createElement('canvas');
@@ -126,12 +126,12 @@ export class Scene {
 
 
             await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
-
-
-            this.cameraManager.update(this.getAllGameObjects());
         }
 
-        this.ui.update(this.gameTime);
+
+        this.cameraManager.update(this.getAllGameObjects());
+
+        await this.ui.update(this.gameTime);
 
         this.cameraManager.drawUI(this.ui.currentFrame);
 
@@ -154,9 +154,15 @@ export class Scene {
      * 
      */
     public async start(): Promise<void> {
-        for (const gameObject of this.getAllGameObjects()) {
-            await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
-        }
+        interval(async clear => {
+            if (!this.ui.pauseScene) {
+                for (const gameObject of this.getAllGameObjects()) {
+                    await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
+                }
+
+                clear();
+            }
+        }, 10);
 
         this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
@@ -170,13 +176,13 @@ export class Scene {
         if (this.requestAnimationFrameHandle) cancelAnimationFrame(this.requestAnimationFrameHandle);
         this.requestAnimationFrameHandle = undefined;
 
-        if (!this.loadingScreenInterval) this.loadingScreenInterval = setInterval(<TimerHandler>(() => {
-            if (this.loadingScreen && !this.isRunning) this.loadingScreen(<CanvasRenderingContext2D>(<any>this.cameraManager).context, <HTMLCanvasElement>(<any>this.cameraManager).context.canvas);
-            else if (this.isRunning && this.loadingScreenInterval) {
-                clearInterval(this.loadingScreenInterval);
-                this.loadingScreenInterval = undefined;
-            }
-        }), 100);
+        if (!this.loadingScreenActive) {
+            this.loadingScreenActive = true;
+            interval(clear => {
+                if (this.loadingScreen && !this.isRunning) this.loadingScreen(<CanvasRenderingContext2D>(<any>this.cameraManager).context, <HTMLCanvasElement>(<any>this.cameraManager).context.canvas);
+                else if (this.isRunning && this.loadingScreenActive) this.loadingScreenActive = <any>clear();
+            }, 100);
+        }
     }
 
     /**
@@ -202,7 +208,7 @@ export class Scene {
  * 
  * 
  * to fix:
- * collision response
+ * collision response rotation
  * 
  * 
  * to test:
@@ -218,19 +224,22 @@ export class Scene {
  * polygon intersection: support points
  * replace line intersection with face clipping in collisionPolygon
  * store things computed multiple times, e.g. vector2 magnitude
+ * ui vw and vh instead of pixel
  * 
  * 
  * optional features:
  * continuous collision
  * joints
- * extend particlesystem
+ * extend particlesystem(e.g. rotation direction)
  * tilemap vertical paralax background
+ * fitContent for UIMenu
  * 
  * 
  * to review:
  * coordinate system, scale, rotation, position
  * polygoncollider aabb topleft???
  * gameObject.active
+ * assetloader
  * 
  * 
  */
@@ -277,6 +286,7 @@ export * from './Physics/AABB.js';
 export * from './Physics/Collision.js';
 export * from './Physics/Physics.js';
 export * from './Physics/PhysicsMaterial.js';
+export * from './PreloadAssets.js';
 export * from './Projection.js';
 export * from './Settings.js';
 export * from './Sprite.js';

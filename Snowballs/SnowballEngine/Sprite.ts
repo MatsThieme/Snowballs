@@ -55,7 +55,7 @@ export class Sprite {
         } else if (typeof src === 'function') {
             const canvas = new OffscreenCanvas(100, 100);
             const context = <OffscreenCanvasRenderingContext2D>canvas.getContext('2d');
-
+            context.imageSmoothingEnabled = false;
             src(context, canvas);
 
             this._canvasImageSource = canvas;
@@ -79,9 +79,10 @@ export class Sprite {
 
         const c = new OffscreenCanvas(this._canvasImageSource.width, this._canvasImageSource.height);
         const ctx = c.getContext('2d');
-        ctx?.translate(c.width, 0);
-        ctx?.scale(-1, 1);
-        ctx?.drawImage(this._canvasImageSource, 0, 0);
+        ctx!.translate(c.width, 0);
+        ctx!.scale(-1, 1);
+        ctx!.imageSmoothingEnabled = false;
+        ctx!.drawImage(this._canvasImageSource, 0, 0);
         this._canvasImageSource = c;
 
         return this;
@@ -100,9 +101,10 @@ export class Sprite {
 
         const c = new OffscreenCanvas(this._canvasImageSource.width, this._canvasImageSource.height);
         const ctx = c.getContext('2d');
-        ctx?.translate(0, c.height);
-        ctx?.scale(1, -1);
-        ctx?.drawImage(this._canvasImageSource, 0, 0);
+        ctx!.translate(0, c.height);
+        ctx!.scale(1, -1);
+        ctx!.imageSmoothingEnabled = false;
+        ctx!.drawImage(this._canvasImageSource, 0, 0);
         this._canvasImageSource = c;
 
         return this;

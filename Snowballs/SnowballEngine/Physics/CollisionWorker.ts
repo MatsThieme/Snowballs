@@ -398,18 +398,13 @@ namespace CollisionWorker {
         public constructor(v1: { x: number, y: number }, v2: { x: number, y: number }) {
             this.v1 = v1;
             this.v2 = v2;
-            this.normal = normalizeVec({ x: -(v1.y - v2.y), y: v1.x - v2.x }); /* v1.clone.sub(v2).perpendicularCounterClockwise.normalize();*/
+            this.normal = normalizeVec({ x: -(v1.y - v2.y), y: v1.x - v2.x });
         }
     }
 
-
-    function cross(a: { x: number, y: number }, b: { x: number, y: number }): number {
-        return a.x * b.y - a.y * b.x;
-    }
     function dot(a: { x: number, y: number }, b: { x: number, y: number }): number {
         return a.x * b.x + a.y * b.y;
     }
-
 
     //https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1968345#1968345
     function getLineIntersection(p0_x: number, p0_y: number, p1_x: number, p1_y: number, p2_x: number, p2_y: number, p3_x: number, p3_y: number): { x: number, y: number } | undefined {

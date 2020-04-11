@@ -1,4 +1,4 @@
-import { Behaviour, ComponentType, TileMap, Camera } from '../SnowballEngine/Scene.js';
+import { Behaviour, ComponentType, TileMap, Camera } from '../../../SnowballEngine/Scene.js';
 
 export class TileMapBackgroundBehaviour extends Behaviour {
     async update() {

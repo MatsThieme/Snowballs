@@ -1,4 +1,4 @@
-import { TileMapBackgroundBehaviour } from '../../../Behaviours/TileMapBackgroundBehaviour.js';
+import { TileMapBackgroundBehaviour } from '../../../Behaviours/Scene/Level/TileMapBackgroundBehaviour.js';
 import { GameObject, Noise, PhysicsMaterial, Sprite, TileMap, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export function LevelPrefab(gameObject: GameObject) {
