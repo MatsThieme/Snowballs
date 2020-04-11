@@ -1,11 +1,11 @@
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
 import { Settings } from '../../Settings.js';
-import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
-import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
+import { AABB } from '../../Physics/AABB.js';
+import { Vector2 } from '../../Vector2.js';
 
 export class UICheckbox extends UIElement {
     public checked: boolean;
@@ -26,18 +26,21 @@ export class UICheckbox extends UIElement {
     protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
         const labelSize = this.menu.font.measureText(this.label, this.menu.font.getFont(Settings.mainFont, this.fontSize));
 
-        canvas.height = Math.min(this.aabb.size.x, this.aabb.size.y);
-        canvas.width = ~~(canvas.height * 1.2 + labelSize.x);
-        this._aabb.size.x = canvas.width;
-        this._aabb.size.y = canvas.height;
+        canvas.height = Math.min(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height));
+        canvas.width = canvas.height * 1.2 + labelSize.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
+
+        const x = canvas.width / (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
+        const y = canvas.height / (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height);
+        debugger;
+        if (this._aabb.size.x !== x || this._aabb.size.y !== y) this.aabb = new AABB(new Vector2(x, y), this._aabb.position);
 
         context.save();
 
-        if (this.background) context.drawImage(this.background.canvasImageSource, 0, 0, canvas.height, canvas.height);
+        if (this.background) context.drawImage(this.background.canvasImageSource, 0, 0, canvas.height, canvas.width);
 
         context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
 
-        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 750);
+        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 40);
         if (this.stroke) context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.height - context.lineWidth, canvas.height - context.lineWidth);
 
         // checkmark
@@ -55,7 +58,7 @@ export class UICheckbox extends UIElement {
 
         context.font = this.menu.font.getFont(Settings.mainFont, this.fontSize);
 
-        if (this.textShadow !== 0) {
+        if (this.textShadow > 0) {
             context.shadowBlur = context.lineWidth * 1.5 * this.textShadow;
             context.shadowOffsetX = context.lineWidth * this.textShadow;
             context.shadowOffsetY = -context.lineWidth * this.textShadow;

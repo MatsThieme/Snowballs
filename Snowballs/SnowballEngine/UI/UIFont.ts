@@ -1,6 +1,6 @@
-import { UIMenu } from './UIMenu.js';
-import { UIFontSize } from './UIFontSize.js';
 import { Vector2 } from '../Vector2.js';
+import { UIFontSize } from './UIFontSize.js';
+import { UIMenu } from './UIMenu.js';
 
 export class UIFont {
     private menu: UIMenu;
@@ -8,7 +8,7 @@ export class UIFont {
         this.menu = menu;
     }
     private get fontMultiplier() {
-        return this.menu.aabb.size.magnitude / 50;
+        return this.menu.aabb.size.magnitude / 3;
     }
 
     /**
@@ -31,7 +31,7 @@ export class UIFont {
 
     /**
      * 
-     * Returns the width and height of the text using the font string.
+     * Calculates the width and height in % relative to this.menu of the text using the font string.
      * 
      */
     public measureText(text: string, font: string): Vector2 {
@@ -51,19 +51,21 @@ export class UIFont {
 
         el.remove();
 
-        return new Vector2(width, height);
+        return new Vector2(width / (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width) * 100, height / (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height) * 100);
     }
 
     /**
      * 
-     * Returns the modified font string whichs px is scaled to fit the given size.
+     * Returns the modified font string whose px is scaled to fit the given size. (not tested)
      * 
      */
     public fit(text: string, font: string, size: Vector2): string {
         const { px, bold, name } = this.parseFontString(font);
         const { x, y } = this.measureText(text, font);
 
-        const scale = Math.min(size.x / x, size.y / y);
+        const s = new Vector2(size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width), size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height));
+
+        const scale = Math.min(s.x / x, s.y / y);
 
         return (bold ? 'bold ' : '') + ~~(px * scale) + 'px ' + name;
     }

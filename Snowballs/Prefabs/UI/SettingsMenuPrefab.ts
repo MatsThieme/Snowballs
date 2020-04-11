@@ -19,7 +19,7 @@ export function SettingsMenuPrefab(menu: UIMenu) {
 
         button.fontSize = UIFontSize.Small;
 
-        button.fitContent(1.3);
+        button.fitContent(1.5);
     });
 
 
@@ -29,7 +29,7 @@ export function SettingsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Top;
 
-        text.fontSize = UIFontSize.Large;
+        text.fontSize = UIFontSize.ExtraLarge;
 
         text.label = 'Settings';
 

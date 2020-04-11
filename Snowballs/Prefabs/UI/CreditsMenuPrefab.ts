@@ -19,7 +19,7 @@ export function CreditsMenuPrefab(menu: UIMenu) {
 
         button.fontSize = UIFontSize.Small;
 
-        button.fitContent(1.3);
+        button.fitContent(1.5);
     });
 
 
@@ -29,11 +29,13 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Top;
 
-        text.fontSize = UIFontSize.Large;
+        text.fontSize = UIFontSize.ExtraLarge;
 
         text.label = 'Credits';
 
-        text.fitContent(1.4);
+        text.fitContent(1.2);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 3));
     });
 
     menu.addUIElement(UIText, text => {
@@ -42,10 +44,11 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Graphics design:';
-        text.fitContent(1);
+        text.label = 'Graphic design:';
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 200));
+        text.fitContent(1.2);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 20));
     });
 
     menu.addUIElement(UIText, text => {
@@ -54,10 +57,11 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = '...';
-        text.fitContent(1);
+        text.label = 'Misakiih';
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 250));
+        text.fitContent(1.2);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 27));
     });
 
     menu.addUIElement(UIText, text => {
@@ -67,9 +71,10 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         text.localAlignV = AlignV.Center;
 
         text.label = 'Programming:';
-        text.fitContent(1);
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 350));
+        text.fitContent(1.2);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 45));
     });
 
     menu.addUIElement(UIText, text => {
@@ -79,8 +84,9 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         text.localAlignV = AlignV.Center;
 
         text.label = 'Mats Thieme';
-        text.fitContent(1);
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 400));
+        text.fitContent(1.2);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 52));
     });
 }

@@ -68,15 +68,15 @@ export abstract class UIInputField extends UIElement {
         } else this.domElement.blur();
     }
     protected drawCb(context: OffscreenCanvasRenderingContext2D, canvas: OffscreenCanvas): void {
-        canvas.width = this.aabb.size.x;
-        canvas.height = this.aabb.size.y;
+        canvas.width = this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
+        canvas.height = this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height);
         context.save();
 
         if (this.background) context.drawImage(this.background.canvasImageSource, 0, 0, canvas.width, canvas.height);
 
         context.strokeStyle = context.fillStyle = context.shadowColor = this.color;
 
-        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 750);
+        context.lineWidth = ~~(this.menu.aabb.size.magnitude / 40);
         if (this.stroke) context.strokeRect(context.lineWidth / 2, context.lineWidth / 2, canvas.width - context.lineWidth, canvas.height - context.lineWidth);
 
         context.textAlign = 'center';

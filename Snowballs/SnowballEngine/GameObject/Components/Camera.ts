@@ -34,30 +34,33 @@ export class Camera extends Component {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         for (const frame of frames) {
-            if (this.AABBInCamera(new AABB(frame.size, frame.worldCordinates))) {
+            if (frame.sprite.canvasImageSource && frame.sprite.canvasImageSource.width > 0 && frame.sprite.canvasImageSource.height > 0 && this.AABBInCamera(new AABB(frame.size, frame.worldCordinates))) {
                 const frameSize = this.worldToScreen(frame.size);
                 const framePos = this.worldToScreenPoint(frame.worldCordinates).sub(new Vector2(0, frameSize.y));
-                let rotationPoint;
-                if (frame.rotationPoint) rotationPoint = this.worldToScreenPoint(frame.rotationPoint);
-                else rotationPoint = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
 
                 this.context.save();
 
-                this.context.translate(rotationPoint.x, rotationPoint.y);
+                if (frame.rotation.radian !== 0) {
+                    let rotationPoint;
+                    if (frame.rotationPoint) rotationPoint = this.worldToScreenPoint(frame.rotationPoint);
+                    else rotationPoint = new Vector2(framePos.x + frameSize.x / 2, framePos.y + frameSize.y / 2);
 
-                this.context.rotate(frame.rotation.radian);
+                    this.context.translate(rotationPoint.x, rotationPoint.y);
 
-                this.context.translate(-rotationPoint.x, -rotationPoint.y);
+                    this.context.rotate(frame.rotation.radian);
+
+                    this.context.translate(-rotationPoint.x, -rotationPoint.y);
+                }
 
                 this.context.globalAlpha = frame.alpha;
 
                 this.context.filter = frame.filter;
 
-                try {
-                    //this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
-                    if ((<any>window).chrome) this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
-                    else this.context.drawImage(frame.sprite.canvasImageSource, Math.round(frame.sprite.subPosition.x), Math.round(frame.sprite.subPosition.y), Math.round(frame.sprite.subSize.x), Math.round(frame.sprite.subSize.y), Math.round(framePos.x), Math.round(framePos.y), Math.round(frameSize.x), Math.round(frameSize.y));
-                } catch { }
+
+                //this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                if ((<any>window).chrome) this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                else this.context.drawImage(frame.sprite.canvasImageSource, Math.round(frame.sprite.subPosition.x), Math.round(frame.sprite.subPosition.y), Math.round(frame.sprite.subSize.x), Math.round(frame.sprite.subSize.y), Math.round(framePos.x), Math.round(framePos.y), Math.round(frameSize.x), Math.round(frameSize.y));
+
 
                 this.context.filter = 'none';
 

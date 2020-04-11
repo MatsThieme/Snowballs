@@ -51,7 +51,7 @@ export class UIMenu {
         this.pauseScene = true;
         this.drawPriority = 0;
         this.uiElements = new Map();
-        this._aabb = new AABB(ClientInfo.resolution, new Vector2());
+        this._aabb = new AABB(new Vector2(100, 100), new Vector2());
         this.input = input;
         this.scene = scene;
         this.ui = this.scene.ui;
@@ -61,7 +61,7 @@ export class UIMenu {
         this.alignH = AlignH.Left;
         this.alignV = AlignV.Top;
 
-        this.canvas = new OffscreenCanvas(this._aabb.size.x, this._aabb.size.y);
+        this.canvas = new OffscreenCanvas(this.scene.domElement.width, this.scene.domElement.height);
         this.context = <OffscreenCanvasRenderingContext2D>this.canvas.getContext('2d');
 
         this.font = new UIFont(this);
@@ -104,8 +104,8 @@ export class UIMenu {
      * 
      */
     public update(gameTime: GameTime): void {
-        this.canvas.width = this._aabb.size.x;
-        this.canvas.height = this._aabb.size.y;
+        this.canvas.width = this.aabb.size.x / 100 * this.scene.domElement.width;
+        this.canvas.height = this.aabb.size.y / 100 * this.scene.domElement.height;
 
         if (this.background) this.context.drawImage(this.background.canvasImageSource, 0, 0, this.canvas.width, this.canvas.height);
         else this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -114,17 +114,16 @@ export class UIMenu {
             uiElement.update(gameTime);
 
             const { sprite, aabb } = uiElement.currentFrame;
-            this.context.drawImage(sprite.canvasImageSource, aabb.position.x, aabb.position.y, aabb.size.x, aabb.size.y);
+            if (sprite.canvasImageSource.width > 0 && sprite.canvasImageSource.height > 0)  this.context.drawImage(sprite.canvasImageSource, Math.round(aabb.position.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.position.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)), Math.round(aabb.size.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.size.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)));
         }
 
-        this.frame = new UIFrame(this._aabb, new Sprite(this.canvas));
+        this.frame = new UIFrame(new AABB(this._aabb.size.clone.scale(new Vector2(this.scene.domElement.width, this.scene.domElement.height)).scale(0.01), this._aabb.position), new Sprite(this.canvas));
     }
-
     public get aabb(): AABB {
         const localAlign = new Vector2(this.localAlignH === AlignH.Left ? 0 : this.localAlignH === AlignH.Center ? - this._aabb.size.x / 2 : - this._aabb.size.x, this.localAlignV === AlignV.Top ? 0 : this.localAlignV === AlignV.Center ? - this._aabb.size.y / 2 : - this._aabb.size.y);
-        const globalAlign = new Vector2(this.alignH === AlignH.Left ? 0 : this.alignH === AlignH.Center ? this.ui.aabb.size.x / 2 : this.ui.aabb.size.x, this.alignV === AlignV.Top ? 0 : this.alignV === AlignV.Center ? this.ui.aabb.size.y / 2 : this.ui.aabb.size.y);
+        const globalAlign = new Vector2(this.alignH === AlignH.Left ? 0 : this.alignH === AlignH.Center ? 50 : 100, this.alignV === AlignV.Top ? 0 : this.alignV === AlignV.Center ? 50 : 100);
 
-        return new AABB(this._aabb.size, this._aabb.position.clone.add(globalAlign).add(localAlign).round());
+        return new AABB(this._aabb.size, this._aabb.position.clone.add(globalAlign).add(localAlign));
     }
     public set aabb(val: AABB) {
         this._aabb = val;

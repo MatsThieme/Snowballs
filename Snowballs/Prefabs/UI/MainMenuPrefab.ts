@@ -1,4 +1,4 @@
-import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2 } from '../../SnowballEngine/Scene.js';
+import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2, UIDropdown, UICheckbox } from '../../SnowballEngine/Scene.js';
 
 export function MainMenuPrefab(menu: UIMenu) {
     menu.active = true;
@@ -22,7 +22,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.label = 'Play';
         button.fontSize = UIFontSize.Large;
 
-        button.fitContent(1.3);
+        button.fitContent(1.5);
     });
 
     menu.addUIElement(UIButton, button => {
@@ -31,7 +31,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.alignH = AlignH.Center;
         button.alignV = AlignV.Center;
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 100));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 10));
 
         button.cbOnInput = b => {
             menu.active = false;
@@ -41,7 +41,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.label = 'Settings';
         button.fontSize = UIFontSize.Small;
 
-        button.fitContent(1.3);
+        button.fitContent(1.5);
     });
 
     menu.addUIElement(UIButton, button => {
@@ -50,7 +50,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.alignH = AlignH.Center;
         button.alignV = AlignV.Center;
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 170));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 20));
 
         button.cbOnInput = b => {
             menu.active = false;
@@ -60,6 +60,19 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.label = 'Credits';
         button.fontSize = UIFontSize.Small;
 
-        button.fitContent(1.3);
+        button.fitContent(1.5);
+    });
+
+
+
+    menu.addUIElement(UICheckbox, x => {
+
+        x.label = 'check';
+
+        x.fitContent(1.2);
+
+        x.alignH = AlignH.Center;
+        x.alignV = AlignV.Center;
+        //x.aabb = new AABB(new Vector2(),new Vector2());
     });
 }

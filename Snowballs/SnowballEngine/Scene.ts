@@ -224,7 +224,7 @@ export class Scene {
  * polygon intersection: support points
  * replace line intersection with face clipping in collisionPolygon
  * store things computed multiple times, e.g. vector2 magnitude
- * ui vw and vh instead of pixel
+ * clean up ui elements
  * 
  * 
  * optional features:

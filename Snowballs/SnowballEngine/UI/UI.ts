@@ -76,7 +76,7 @@ export class UI {
             if (menu.active) {
                 menu.update(gameTime);
                 //this.context.strokeRect(menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
-                this.context.drawImage(menu.currentFrame.sprite.canvasImageSource, menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
+                if (menu.currentFrame.sprite.canvasImageSource.width > 0 && menu.currentFrame.sprite.canvasImageSource.height > 0) this.context.drawImage(menu.currentFrame.sprite.canvasImageSource, Math.round(menu.aabb.position.x * this.scene.domElement.width / 100), Math.round(menu.aabb.position.y * this.scene.domElement.height / 100), Math.round(menu.aabb.size.x * this.scene.domElement.width / 100), Math.round(menu.aabb.size.y * this.scene.domElement.height / 100));
             }
         }
 
@@ -104,7 +104,7 @@ export class UI {
      * 
      */
     public get currentFrame(): UIFrame {
-        return new UIFrame(new AABB(ClientInfo.resolution, new Vector2()), new Sprite(this.canvas));
+        return new UIFrame(new AABB(new Vector2(this.scene.domElement.width, this.scene.domElement.height), new Vector2()), new Sprite(this.canvas));
     }
 
     /**
