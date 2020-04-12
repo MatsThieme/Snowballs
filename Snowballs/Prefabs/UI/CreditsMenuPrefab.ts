@@ -57,7 +57,7 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Misakiih';
+        text.label = 'Jacquelyn Wright';
 
         text.fitContent(1.2);
 

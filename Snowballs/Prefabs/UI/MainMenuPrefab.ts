@@ -1,4 +1,4 @@
-import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2, UIDropdown, UICheckbox } from '../../SnowballEngine/Scene.js';
+import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2, UIDropdown, UICheckbox, InputType } from '../../SnowballEngine/Scene.js';
 
 export function MainMenuPrefab(menu: UIMenu) {
     menu.active = true;
@@ -61,18 +61,5 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.fontSize = UIFontSize.Small;
 
         button.fitContent(1.5);
-    });
-
-
-
-    menu.addUIElement(UICheckbox, x => {
-
-        x.label = 'check';
-
-        x.fitContent(1.2);
-
-        x.alignH = AlignH.Center;
-        x.alignV = AlignV.Center;
-        //x.aabb = new AABB(new Vector2(),new Vector2());
     });
 }

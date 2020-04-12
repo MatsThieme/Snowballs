@@ -8,7 +8,7 @@ export class UIFont {
         this.menu = menu;
     }
     private get fontMultiplier() {
-        return this.menu.aabb.size.magnitude / 3;
+        return new Vector2(this.menu.scene.domElement.width, this.menu.scene.domElement.height).magnitude / this.menu.aabb.size.magnitude * 3;
     }
 
     /**

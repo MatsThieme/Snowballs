@@ -96,14 +96,12 @@ export abstract class UIElement {
                 if (m.y > size.y) size.y = m.y;
             }
 
-            this.aabb = new AABB(new Vector2(~~Math.max(size.x * paddingScalar, 1), ~~Math.max(size.y * paddingScalar * ((<any>this).values.length + 1), 1)), this._aabb.position);
+            this.aabb = new AABB(new Vector2(Math.max(size.x * paddingScalar, 1), Math.max(size.y * paddingScalar * ((<any>this).values.length + 1), 1)), this._aabb.position);
         } else {
             if (this.label.length === 0) return;
 
             const m = this.menu.font.measureText(this.label, this.menu.font.getFont(Settings.mainFont, this.fontSize));
-            const size = new Vector2(~~Math.max(m.x * paddingScalar, 1), ~~Math.max(m.y * paddingScalar, 1));
-            this.aabb = new AABB(size.clone, this._aabb.position);
-            if (this.label === 'check') debugger;
+            this.aabb = new AABB(new Vector2(Math.max(m.x * paddingScalar, 1), Math.max(m.y * paddingScalar, 1)), this._aabb.position);
         }
 
         this.draw();
@@ -118,7 +116,7 @@ export abstract class UIElement {
         const localAlign = new Vector2(this.localAlignH === AlignH.Left ? 0 : this.localAlignH === AlignH.Center ? -this._aabb.size.x / 2 : -this._aabb.size.x, this.localAlignV === AlignV.Top ? 0 : this.localAlignV === AlignV.Center ? -this._aabb.size.y / 2 : -this._aabb.size.y);
         const globalAlign = new Vector2(this.alignH === AlignH.Left ? 0 : this.alignH === AlignH.Center ? 50 : 100, this.alignV === AlignV.Top ? 0 : this.alignV === AlignV.Center ? 50 : 100);
 
-        return new AABB(this._aabb.size, this._aabb.position.clone.add(globalAlign).add(localAlign).round());
+        return new AABB(this._aabb.size, this._aabb.position.clone.add(globalAlign).add(localAlign));
     }
     public set aabb(val: AABB) {
         if (val.size.equal(this._aabb.size) && val.position.equal(this._aabb.position)) return;

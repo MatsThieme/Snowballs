@@ -29,10 +29,10 @@ export class UICheckbox extends UIElement {
         canvas.height = Math.min(this._aabb.size.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width), this._aabb.size.y / 100 * (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height));
         canvas.width = canvas.height * 1.2 + labelSize.x / 100 * (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
 
-        const x = canvas.width / (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width);
-        const y = canvas.height / (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height);
-        debugger;
-        if (this._aabb.size.x !== x || this._aabb.size.y !== y) this.aabb = new AABB(new Vector2(x, y), this._aabb.position);
+        const x = canvas.width / (this.menu.aabb.size.x / 100 * this.menu.scene.domElement.width) * 100;
+        const y = canvas.height / (this.menu.aabb.size.y / 100 * this.menu.scene.domElement.height) * 100;
+
+        this.aabb = new AABB(new Vector2(x, y), this._aabb.position);
 
         context.save();
 

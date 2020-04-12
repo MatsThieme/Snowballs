@@ -114,7 +114,9 @@ export class UIMenu {
             uiElement.update(gameTime);
 
             const { sprite, aabb } = uiElement.currentFrame;
-            if (sprite.canvasImageSource.width > 0 && sprite.canvasImageSource.height > 0)  this.context.drawImage(sprite.canvasImageSource, Math.round(aabb.position.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.position.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)), Math.round(aabb.size.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.size.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)));
+            if (sprite.canvasImageSource.width > 0 && sprite.canvasImageSource.height > 0) this.context.drawImage(sprite.canvasImageSource, Math.round(aabb.position.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.position.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)), Math.round(aabb.size.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.size.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)));
+            this.context.strokeStyle = '#f00';
+            this.context.strokeRect(Math.round(aabb.position.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.position.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)), Math.round(aabb.size.x / 100 * (this.aabb.size.x / 100 * this.scene.domElement.width)), Math.round(aabb.size.y / 100 * (this.aabb.size.y / 100 * this.scene.domElement.height)));
         }
 
         this.frame = new UIFrame(new AABB(this._aabb.size.clone.scale(new Vector2(this.scene.domElement.width, this.scene.domElement.height)).scale(0.01), this._aabb.position), new Sprite(this.canvas));
