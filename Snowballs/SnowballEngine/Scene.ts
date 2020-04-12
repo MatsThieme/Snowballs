@@ -209,6 +209,8 @@ export class Scene {
  * 
  * to fix:
  * collision response rotation
+ * tilemap paralax background at different aspect ratios
+ * ui aabbs
  * 
  * 
  * to test:

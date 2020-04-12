@@ -14,7 +14,8 @@ export class Player2Behaviour extends Behaviour {
         await this.scene.newGameObject('Healthbar Player2', PlayerHealthbarPrefab, gameObject => {
             this.gameObject.addChild(gameObject);
             this.statusbarBehaviour = <StatusbarBehaviour>gameObject.getComponent(StatusbarBehaviour);
-            gameObject.transform.relativePosition.y = (this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite)?.scaledSize.y || 0) / 2;
+            const aS = this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
+            gameObject.transform.relativePosition.y = ((aS!.scaledSize.y || 0) / 2 + aS!.relativePosition.y) * 1.1;
         });
     }
     async start() {

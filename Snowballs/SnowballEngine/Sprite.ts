@@ -85,6 +85,8 @@ export class Sprite {
         ctx!.drawImage(this._canvasImageSource, 0, 0);
         this._canvasImageSource = c;
 
+        this.mX = false;
+
         return this;
     }
 
@@ -106,6 +108,8 @@ export class Sprite {
         ctx!.imageSmoothingEnabled = false;
         ctx!.drawImage(this._canvasImageSource, 0, 0);
         this._canvasImageSource = c;
+
+        this.mY = false;
 
         return this;
     }

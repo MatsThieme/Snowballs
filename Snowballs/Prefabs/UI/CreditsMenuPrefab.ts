@@ -22,7 +22,6 @@ export function CreditsMenuPrefab(menu: UIMenu) {
         button.fitContent(1.5);
     });
 
-
     menu.addUIElement(UIText, text => {
         text.alignH = AlignH.Center;
         text.alignV = AlignV.Top;
@@ -48,7 +47,7 @@ export function CreditsMenuPrefab(menu: UIMenu) {
 
         text.fitContent(1.2);
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 20));
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 25));
     });
 
     menu.addUIElement(UIText, text => {
@@ -61,7 +60,7 @@ export function CreditsMenuPrefab(menu: UIMenu) {
 
         text.fitContent(1.2);
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 27));
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 32));
     });
 
     menu.addUIElement(UIText, text => {

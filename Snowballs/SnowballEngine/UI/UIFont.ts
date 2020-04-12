@@ -17,7 +17,7 @@ export class UIFont {
      * 
      */
     public getFont(name: string, size: UIFontSize = UIFontSize.Medium, bold: boolean = false) {
-        return `${bold ? 'bold' : ''} ${~~(this.fontMultiplier * size)}px ${name}`;
+        return `${bold ? 'bold' : ''} ${Math.round(this.fontMultiplier * size)}px ${name}`;
     }
 
     /**
@@ -67,6 +67,6 @@ export class UIFont {
 
         const scale = Math.min(s.x / x, s.y / y);
 
-        return (bold ? 'bold ' : '') + ~~(px * scale) + 'px ' + name;
+        return (bold ? 'bold ' : '') + Math.round(px * scale) + 'px ' + name;
     }
 }

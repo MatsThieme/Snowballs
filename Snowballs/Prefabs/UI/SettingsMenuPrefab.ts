@@ -45,7 +45,7 @@ export function SettingsMenuPrefab(menu: UIMenu) {
         text.label = 'Volume:';
         text.fitContent(1);
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0, 200));
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 25));
     });
 
     menu.addUIElement(UINumberInputField, numberInputField => {
@@ -54,13 +54,12 @@ export function SettingsMenuPrefab(menu: UIMenu) {
         numberInputField.localAlignH = AlignH.Center;
         numberInputField.localAlignV = AlignV.Center;
 
-        //numberInputField.fitContent(1.2);
         numberInputField.max = 5;
 
         numberInputField.value = 1;
 
         numberInputField.cbOnInput = numberInputField => Settings.volume = numberInputField.value;
 
-        numberInputField.aabb = new AABB(new Vector2(100, 50), new Vector2(0, 250));
+        numberInputField.aabb = new AABB(new Vector2(5, 7), new Vector2(0, 33));
     });
 }

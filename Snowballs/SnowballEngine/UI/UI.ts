@@ -75,7 +75,6 @@ export class UI {
         for (const menu of Object.values(this.menus)) {
             if (menu.active) {
                 menu.update(gameTime);
-                //this.context.strokeRect(menu.aabb.position.x, menu.aabb.position.y, menu.aabb.size.x, menu.aabb.size.y);
                 if (menu.currentFrame.sprite.canvasImageSource.width > 0 && menu.currentFrame.sprite.canvasImageSource.height > 0) this.context.drawImage(menu.currentFrame.sprite.canvasImageSource, Math.round(menu.aabb.position.x * this.scene.domElement.width / 100), Math.round(menu.aabb.position.y * this.scene.domElement.height / 100), Math.round(menu.aabb.size.x * this.scene.domElement.width / 100), Math.round(menu.aabb.size.y * this.scene.domElement.height / 100));
             }
         }

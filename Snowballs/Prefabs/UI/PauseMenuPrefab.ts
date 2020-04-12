@@ -22,7 +22,7 @@ export function PauseMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Top;
 
-        text.fontSize = UIFontSize.ExtraLarge;
+        text.fontSize = UIFontSize.Large;
 
         text.label = 'Pause';
 
@@ -37,11 +37,11 @@ export function PauseMenuPrefab(menu: UIMenu) {
         button.localAlignH = AlignH.Center;
         button.localAlignV = AlignV.Center;
 
-        button.fontSize = UIFontSize.Large;
+        button.fontSize = UIFontSize.Small;
 
         button.label = 'Settings';
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 30));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 35));
 
         button.fitContent(1.4);
 
@@ -59,11 +59,11 @@ export function PauseMenuPrefab(menu: UIMenu) {
         button.localAlignH = AlignH.Center;
         button.localAlignV = AlignV.Center;
 
-        button.fontSize = UIFontSize.Large;
+        button.fontSize = UIFontSize.Small;
 
         button.label = 'Back to title';
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 50));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 55));
 
         button.fitContent(1.4);
 
@@ -81,11 +81,11 @@ export function PauseMenuPrefab(menu: UIMenu) {
         button.localAlignH = AlignH.Center;
         button.localAlignV = AlignV.Center;
 
-        button.fontSize = UIFontSize.Large;
+        button.fontSize = UIFontSize.Small;
 
         button.label = 'Resume';
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 70));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 75));
 
         button.fitContent(1.4);
 

@@ -1,4 +1,4 @@
-import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2, UIDropdown, UICheckbox, InputType } from '../../SnowballEngine/Scene.js';
+import { AABB, AlignH, AlignV, ClientInfo, Sprite, UIButton, UIFontSize, UIMenu, Vector2, UIDropdown, UICheckbox, InputType, UIText } from '../../SnowballEngine/Scene.js';
 
 export function MainMenuPrefab(menu: UIMenu) {
     menu.active = true;
@@ -9,6 +9,22 @@ export function MainMenuPrefab(menu: UIMenu) {
 
         context.fillStyle = '#fff';
         context.fillRect(0, 0, menu.aabb.size.x, menu.aabb.size.y);
+    });
+
+    menu.addUIElement(UIText, text => {
+        text.localAlignH = AlignH.Center;
+        text.localAlignV = AlignV.Top;
+        text.alignH = AlignH.Center;
+        text.alignV = AlignV.Top;
+
+        text.cbOnInput = b => menu.active = false;
+
+        text.label = 'Snowballs';
+        text.fontSize = UIFontSize.ExtraLarge;
+
+        text.fitContent(1.5);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0,5));
     });
 
     menu.addUIElement(UIButton, button => {
@@ -31,7 +47,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.alignH = AlignH.Center;
         button.alignV = AlignV.Center;
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 10));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 14));
 
         button.cbOnInput = b => {
             menu.active = false;
