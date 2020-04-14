@@ -10,6 +10,8 @@
 <body>
     <script>
 
+        if (!window.chrome) alert('Please use chrome for a better experience.');
+
         if (!window.OffscreenCanvas) window.OffscreenCanvas = function (width, height) { const canvas = document.createElement('canvas'); canvas.width = width, canvas.height = height; return canvas; } // polyfill OffscreenCanvas
 
     </script>

@@ -17,6 +17,8 @@ export abstract class PlayerBehaviour extends EntityBehaviour {
     private animatedSprite: AnimatedSprite = <AnimatedSprite>this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
 
     async update(gameTime: GameTime) {
+        await super.update(gameTime);
+
         this.colliding = false;
         this.gameTime = gameTime;
 
@@ -35,18 +37,21 @@ export abstract class PlayerBehaviour extends EntityBehaviour {
         else if (this.gameObject.rigidbody.velocity.x < 0 && this.animatedSprite.activeAnimation !== 'run left') this.animatedSprite.activeAnimation = 'run left';
     }
     jump() {
-        this.gameObject.rigidbody.applyImpulse(new Vector2(0, 5));
-        //this.animatedSprite.activeAnimation = 'jump';
+        if (this.animatedSprite.activeAnimation !== 'jump left' && this.gameObject.rigidbody.velocity.x < 0) this.animatedSprite.activeAnimation = 'jump left';
+        else if (this.animatedSprite.activeAnimation !== 'jump right' && this.gameObject.rigidbody.velocity.x >= 0) this.animatedSprite.activeAnimation = 'jump right';
     }
     idle() {
         this.gameObject.rigidbody.velocity.x *= this.gameTime.deltaTime / 50;
-        if (this.animatedSprite.activeAnimation !== 'idle') this.animatedSprite.activeAnimation = 'idle';
+        if (this.animatedSprite.activeAnimation !== 'idle left' && this.gameObject.rigidbody.velocity.x < 0) this.animatedSprite.activeAnimation = 'idle left';
+        else if (this.animatedSprite.activeAnimation !== 'idle right' && this.gameObject.rigidbody.velocity.x >= 0) this.animatedSprite.activeAnimation = 'idle right';
     }
     async attack(direction: Vector2) {
         await super.attack(direction);
         if (this.animatedSprite.activeAnimation !== 'attack') this.animatedSprite.activeAnimation = 'attack';
     }
     async die() {
-        console.log('dead');
+        if (confirm(`${this.gameObject.name} died`)) {
+            location.reload();
+        }
     }
 }

@@ -73,6 +73,6 @@ export abstract class EnemyBehaviour extends EntityBehaviour {
         this.gameObject.rigidbody.velocity.x *= dt / 50;
     }
     async die() {
-        await this.scene.newGameObject('LevelUp', LevelUpPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
+
     }
 }

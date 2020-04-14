@@ -66,24 +66,23 @@ export abstract class EntityBehaviour extends Behaviour {
     }
 
     async update(gameTime: GameTime) {
+        if (this.health === 0) {
+            this.die();
+            this.gameObject.destroy();
+            return;
+        }
+
         if (this._health < 100) this._health += this.healthRegeneration * gameTime.deltaTime;
         this._health = clamp(0, this.maxHealth, this._health);
 
         this.healtbar.max = this.maxHealth;
         this.healtbar.value = this.health;
 
-
         if (this._energy < 100) this._energy += this.energyRegeneration * gameTime.deltaTime;
         this._energy = clamp(0, this.maxEnergy, this._energy);
 
         this.energybar.max = this.maxEnergy;
         this.energybar.value = this.energy;
-
-
-        if (this.health === 0) {
-            this.die();
-            this.gameObject.destroy();
-        }
     }
 
     get health(): number {
@@ -108,16 +107,15 @@ export abstract class EntityBehaviour extends Behaviour {
     }
     async attack(direction: Vector2) {
         const e = this.energy;
-        if (this.energy === 0) return;
+        if (this.energy < this.damage / 2) return;
 
-        this.energy -= this.damage;
+        this.energy -= this.damage / 2;
 
-        let dmg = this.damage;
-        if (this.energy === 0) dmg = e;
+        console.log(this.damage, this.energy);
 
-        if (this.attackType === 'beat') await this.beatAttack(direction, dmg);
-        else if (this.attackType === 'snowball') await this.snowballAttack(direction, dmg);
-        else if (this.attackType === 'fireball') await this.fireballAttack(direction, dmg);
+        if (this.attackType === 'beat') await this.beatAttack(direction, this.damage);
+        else if (this.attackType === 'snowball') await this.snowballAttack(direction, this.damage);
+        else if (this.attackType === 'fireball') await this.fireballAttack(direction, this.damage);
     }
     async fireballAttack(direction: Vector2, damage: number) {
         await this.scene.newGameObject('Fireball', async gameObject => {
@@ -161,14 +159,15 @@ export abstract class EntityBehaviour extends Behaviour {
             });
 
             gameObject.rigidbody.useAutoMass = true;
-            console.log(direction.clone.setLength(3).add(this.gameObject.rigidbody.velocity));
-            gameObject.rigidbody.applyImpulse(direction.clone.setLength(3).add(this.gameObject.rigidbody.velocity));
+
+            gameObject.rigidbody.applyImpulse(direction.clone.setLength(3.5));
 
             gameObject.transform.relativePosition = this.gameObject.transform.position;
         });
     }
     async beatAttack(direction: Vector2, damage: number) {
         await this.scene.newGameObject('beat trigger', async gameObject => {
+            this.gameObject.addChild(gameObject);
             gameObject.transform.relativeScale = new Vector2(0.1, this.attackRadius);
             gameObject.transform.relativeRotation = Vector2.up.angleTo(new Vector2(), direction);
             gameObject.transform.relativePosition = this.gameObject.transform.position;

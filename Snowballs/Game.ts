@@ -40,12 +40,13 @@ class Game {
 
 
         await scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
-
         await scene.newGameObject('Player2', PlayerPrefab, Player2Prefab);
 
         await scene.newGameObject('Enemy Fire Weak Test', WeakEnemyPrefab, FireWeakEnemyPrefab, gO => {
             gO.transform.relativePosition = new Vector2(10, 10);
         });
+
+
 
         await scene.ui.addMenu('Main Menu', MainMenuPrefab);
 

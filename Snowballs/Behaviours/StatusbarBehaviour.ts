@@ -10,10 +10,10 @@ export class StatusbarBehaviour extends Behaviour {
 
     public set color(val: string) {
         this._color = val;
-        this.texture.sprite = new Sprite((context, canvas) => {
-            context.fillStyle = this._color;
-            context.fillRect(0, 0, canvas.width, canvas.height);
-        });
+        const c = (<OffscreenCanvas>this.texture.sprite?.canvasImageSource);
+        const ctx = <OffscreenCanvasRenderingContext2D>c.getContext('2d');
+        ctx.fillStyle = this._color;
+        ctx.fillRect(0, 0, c.width, c.height);
     }
 
     async start() {
@@ -26,6 +26,7 @@ export class StatusbarBehaviour extends Behaviour {
             texture.size = bar.size.clone;
 
             texture.sprite = new Sprite((context, canvas) => {
+                console.log('creating bar background');
                 context.fillStyle = this._color;
                 context.fillRect(0, 0, canvas.width, canvas.height);
             });
