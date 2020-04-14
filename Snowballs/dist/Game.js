@@ -29,6 +29,10 @@ class Game {
     initialize(scene) {
         return __awaiter(this, void 0, void 0, function* () {
             document.body.appendChild(scene.domElement);
+            scene.domElement.style.position = 'absolute';
+            scene.domElement.style.left = '0px';
+            scene.domElement.style.top = '0px';
+            scene.domElement.style.overflow = 'hidden';
             scene.loadingScreen = LoadingScreenPrefab;
             yield PreloadAssets('AssetList.json');
             yield FontLoader.load('Font/JosefinSlab-Regular.ttf', Settings.mainFont);

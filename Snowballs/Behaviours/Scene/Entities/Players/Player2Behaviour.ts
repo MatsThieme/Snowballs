@@ -1,13 +1,13 @@
-import { PlayerHealthbarPrefab } from '../../../Prefabs/Scene/Players/PlayerHealthbarPrefab.js';
-import { AnimatedSprite, Behaviour, Camera, clamp, ComponentType, GameTime, InputType, PolygonCollider, Vector2 } from '../../../SnowballEngine/Scene.js';
-import { EntityStatsBehaviour } from '../../EntityStatsBehaviour.js';
-import { StatusbarBehaviour } from '../../StatusbarBehaviour.js';
+import { PlayerHealthbarPrefab } from '../../../../Prefabs/Scene/Players/PlayerHealthbarPrefab.js';
+import { AnimatedSprite, Behaviour, Camera, clamp, ComponentType, GameTime, InputType, PolygonCollider, Vector2 } from '../../../../SnowballEngine/Scene.js';
+import { StatusbarBehaviour } from '../../../StatusbarBehaviour.js';
+import { EntityBehaviour } from '../EntityBehaviour.js';
 
 export class Player2Behaviour extends Behaviour {
     private colliding: boolean = false;
     private gameTime!: GameTime;
     private animatedSprite: AnimatedSprite = <AnimatedSprite>this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
-    private stats!: EntityStatsBehaviour;
+    private stats!: EntityBehaviour;
     private statusbarBehaviour!: StatusbarBehaviour;
 
     async awake() {
@@ -19,7 +19,7 @@ export class Player2Behaviour extends Behaviour {
         });
     }
     async start() {
-        this.stats = <EntityStatsBehaviour>this.gameObject.getComponent(EntityStatsBehaviour);
+        this.stats = <EntityBehaviour>this.gameObject.getComponent(EntityBehaviour);
     }
     async update(gameTime: GameTime) {
         this.colliding = false;
@@ -56,5 +56,10 @@ export class Player2Behaviour extends Behaviour {
     idle() {
         this.gameObject.rigidbody.velocity.x *= this.gameTime.deltaTime / 50;
         if (this.animatedSprite.activeAnimation !== 'idle') this.animatedSprite.activeAnimation = 'idle';
+    }
+    attack() {
+
+
+        if (this.animatedSprite.activeAnimation !== 'attack') this.animatedSprite.activeAnimation = 'attack';
     }
 }

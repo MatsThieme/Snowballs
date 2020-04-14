@@ -1,14 +1,16 @@
-import { PlayerHealthbarPrefab } from '../../../Prefabs/Scene/Players/PlayerHealthbarPrefab.js';
-import { AnimatedSprite, Behaviour, Camera, clamp, ComponentType, GameTime, InputType, PolygonCollider, Vector2 } from '../../../SnowballEngine/Scene.js';
-import { EntityStatsBehaviour } from '../../EntityStatsBehaviour.js';
-import { StatusbarBehaviour } from '../../StatusbarBehaviour.js';
+import { PlayerHealthbarPrefab } from '../../../../Prefabs/Scene/Players/PlayerHealthbarPrefab.js';
+import { AnimatedSprite, Behaviour, Camera, clamp, ComponentType, GameTime, InputType, PolygonCollider, Vector2 } from '../../../../SnowballEngine/Scene.js';
+import { StatusbarBehaviour } from '../../../StatusbarBehaviour.js';
+import { EntityBehaviour } from '../EntityBehaviour.js';
+import { ThrowAttackBehaviour } from '../ThrowAttackBehaviour.js';
 
 export class Player1Behaviour extends Behaviour {
     private colliding: boolean = false;
     private gameTime!: GameTime;
     private animatedSprite: AnimatedSprite = <AnimatedSprite>this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
-    private stats!: EntityStatsBehaviour;
+    private stats!: EntityBehaviour;
     private statusbarBehaviour!: StatusbarBehaviour;
+    private attackBehaviour!: ThrowAttackBehaviour;
 
     async awake() {
         await this.scene.newGameObject('Healthbar Player1', PlayerHealthbarPrefab, gameObject => {
@@ -19,7 +21,8 @@ export class Player1Behaviour extends Behaviour {
         });
     }
     async start() {
-        this.stats = <EntityStatsBehaviour>this.gameObject.getComponent(EntityStatsBehaviour);
+        this.stats = <EntityBehaviour>this.gameObject.getComponent(EntityBehaviour);
+        this.attackBehaviour = await this.gameObject.addComponent(ThrowAttackBehaviour);
     }
     async update(gameTime: GameTime) {
         this.colliding = false;
@@ -37,10 +40,17 @@ export class Player1Behaviour extends Behaviour {
     }
     onColliding() {
         if (!this.colliding) {
+
             this.gameObject.rigidbody.velocity.x = clamp(-3, 3, this.gameObject.rigidbody.velocity.x);
+
             this.run(this.input.getAxis(InputType.MoveHorizontal).value * 0.1);
+
             if (this.input.getButton(InputType.Jump).click) this.jump();
-            if (Math.abs(this.input.getAxis(InputType.MoveHorizontal).value) < 0.01) this.idle();
+
+            if (this.input.getButton(InputType.Attack).click) this.attack();
+            else if (Math.abs(this.input.getAxis(InputType.MoveHorizontal).value) < 0.01) this.idle();
+
+
             this.colliding = true;
         }
     }
@@ -56,5 +66,10 @@ export class Player1Behaviour extends Behaviour {
     idle() {
         this.gameObject.rigidbody.velocity.x *= this.gameTime.deltaTime / 50;
         if (this.animatedSprite.activeAnimation !== 'idle') this.animatedSprite.activeAnimation = 'idle';
+    }
+    attack() {
+        this.attackBehaviour.attack(Vector2.up);
+
+        if (this.animatedSprite.activeAnimation !== 'attack') this.animatedSprite.activeAnimation = 'attack';
     }
 }

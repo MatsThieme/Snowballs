@@ -8,8 +8,9 @@ export class StatusbarBehaviour extends Behaviour {
     private texture!: Texture;
     private size!: Vector2;
 
-    async awake() {
+    async start() {
         const bar = <Texture>this.gameObject.getComponent<Texture>(ComponentType.Texture);
+
         this.size = bar.size.clone;
 
         this.texture = await this.gameObject.addComponent(Texture, texture => {
@@ -29,6 +30,7 @@ export class StatusbarBehaviour extends Behaviour {
             const scale = this.value / (this.max - this.min);
 
             this.texture.size.x = this.size.x * scale;
+            console.log(this.value);
         }
     }
 }

@@ -98,7 +98,7 @@ export class TileMap extends Component implements Drawable {
                     }
 
                     // cut background left
-                    if (x < left ) {
+                    if (x < left) {
                         xPosition = left - x;
                         sprite.subPosition = new Vector2(xPosition / spriteSizeWorld.x * b.sprite.canvasImageSource.width, 0);
                     }
@@ -127,4 +127,11 @@ export class TileMap extends Component implements Drawable {
         return new AABB(this.scaledSize, this.position);
     }
     public update() { }
+    public pointToTilemapSpace(pos: Vector2) {
+        return new Vector2(Math.floor((pos.x - this.position.x) / this.tileSize.x), (this.collisionMap.length - 1) - Math.floor((pos.y - this.position.y) / this.tileSize.y));
+    }
+    public toTilemapSpace(vec: Vector2) {
+        return new Vector2(Math.floor(vec.x / this.tileSize.x), Math.floor(vec.y / this.tileSize.y));
+    }
+
 }

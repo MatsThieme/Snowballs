@@ -37,10 +37,11 @@
   <ItemGroup>
     <Folder Include="Behaviours\" />
     <Folder Include="Behaviours\Scene\Camera\" />
-    <Folder Include="Behaviours\Scene\Enemies\" />
+    <Folder Include="Behaviours\Scene\Entities\Enemies\" />
     <Folder Include="Behaviours\Scene\Items\" />
     <Folder Include="Behaviours\Scene\" />
-    <Folder Include="Behaviours\Scene\Players\" />
+    <Folder Include="Behaviours\Scene\Entities\" />
+    <Folder Include="Behaviours\Scene\Entities\Players\" />
     <Folder Include="Behaviours\Scene\Level\" />
     <Folder Include="Prefabs\" />
     <Folder Include="Prefabs\Scene\Cameras\" />
@@ -62,13 +63,20 @@
     <Folder Include="SnowballEngine\Worker\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Behaviours\Scene\BeatColliderBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Camera\CameraFollowPlayers.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Scene\Enemies\EnemyBehaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\ThrowAttackBehaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\BeatAttackBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\EntityStatsBehaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\EnemyBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\EntityBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Camera\FreezeFarAwayObjects.ts">
@@ -81,11 +89,14 @@
     <TypeScriptCompile Include="Behaviours\Scene\Items\LevelUpBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\ThrowableBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\StatusbarBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Scene\Players\Player2Behaviour.ts" />
-    <TypeScriptCompile Include="Behaviours\Scene\Players\Player1Behaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Players\Player2Behaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Players\Player1Behaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Level\TileMapBackgroundBehaviour.ts">
@@ -115,6 +126,7 @@
     <TypeScriptCompile Include="Prefabs\Scene\Players\Player1Prefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Enemies\EnemyHealthbarPrefab.ts" />
     <TypeScriptCompile Include="Prefabs\Scene\Players\PlayerHealthbarPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -25,10 +25,6 @@ export class Scene {
     public hasAudioListener: boolean;
     public constructor() {
         this.domElement = document.createElement('canvas');
-        this.domElement.style.position = 'absolute';
-        this.domElement.style.left = '0px';
-        this.domElement.style.top = '0px';
-        this.domElement.style.overflow = 'hidden';
 
         this.gameObjects = new Map();
         this.cameraManager = new CameraManager(this.domElement);
@@ -227,6 +223,7 @@ export class Scene {
  * replace line intersection with face clipping in collisionPolygon
  * store things computed multiple times, e.g. vector2 magnitude
  * clean up ui elements
+ * use webgl instead of 2d context
  * 
  * 
  * optional features:

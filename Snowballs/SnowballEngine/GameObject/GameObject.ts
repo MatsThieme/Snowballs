@@ -228,6 +228,7 @@ export class GameObject {
      * 
      */
     public destroy(): void {
+        this.children.forEach(c => c.destroy());
         this.scene.destroyGameObject(this.name);
     }
 }

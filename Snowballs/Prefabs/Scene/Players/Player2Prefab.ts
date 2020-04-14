@@ -1,5 +1,5 @@
-import { EntityStatsBehaviour } from '../../../Behaviours/EntityStatsBehaviour.js';
-import { Player2Behaviour } from '../../../Behaviours/Scene/Players/Player2Behaviour.js';
+import { EntityBehaviour } from '../../../Behaviours/Scene/Entities/EntityBehaviour.js';
+import { Player2Behaviour } from '../../../Behaviours/Scene/Entities/Players/Player2Behaviour.js';
 import { AnimatedSprite, GameObject, Sprite, SpriteAnimation, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export function Player2Prefab(gameObject: GameObject) {
@@ -13,5 +13,5 @@ export function Player2Prefab(gameObject: GameObject) {
     });
 
     gameObject.addComponent(Player2Behaviour);
-    gameObject.addComponent(EntityStatsBehaviour);
+    gameObject.addComponent(EntityBehaviour);
 }

@@ -1,13 +1,13 @@
-import { Behaviour, clamp, GameTime } from '../SnowballEngine/Scene.js';
+import { Behaviour, clamp, GameObject, GameTime } from '../../../SnowballEngine/Scene.js';
 
-export class EntityStatsBehaviour extends Behaviour {
-    public level: number = 1;
-    private maxHealth: number = 100;
-    private _health: number = 100;
-    private healthRegeneration: number = 0.0001; // per ms
-    private maxEnergy: number = 100;
-    private _energy: number = 100;
-    private energyRegeneration: number = 0.0001; // per ms
+export class EntityBehaviour extends Behaviour {
+    level: number = 1;
+    maxHealth: number = 100;
+    _health: number = 100;
+    healthRegeneration: number = 0.0001; // per ms
+    maxEnergy: number = 100;
+    _energy: number = 100;
+    energyRegeneration: number = 0.0001; // per ms
 
     async update(gameTime: GameTime) {
         if (this._health < 100) this._health += this.healthRegeneration * gameTime.deltaTime;
@@ -27,5 +27,13 @@ export class EntityStatsBehaviour extends Behaviour {
     }
     set energy(val: number) {
         this._energy = val / ~~this.level;
+    }
+
+    onAttack(attacker: GameObject, damage: number) {
+        console.log('autsch', damage, this.health);
+        this.health -= damage;
+    }
+    attack(damage: number) {
+        this.energy -= damage;
     }
 }

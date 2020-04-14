@@ -22,6 +22,10 @@ class Game {
     }
     private async initialize(scene: Scene): Promise<void> {
         document.body.appendChild(scene.domElement);
+        scene.domElement.style.position = 'absolute';
+        scene.domElement.style.left = '0px';
+        scene.domElement.style.top = '0px';
+        scene.domElement.style.overflow = 'hidden';
 
         scene.loadingScreen = LoadingScreenPrefab;
 

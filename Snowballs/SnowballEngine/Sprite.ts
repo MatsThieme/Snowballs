@@ -32,6 +32,13 @@ export class Sprite {
 
     /**
      * 
+     * Resolves on image load. undefined if canvasImageSource is not an image.
+     * 
+     */
+    public load?: Promise<Sprite>;
+
+    /**
+     * 
      * Used to load, store or create a canvas image source.
      * 
      */
@@ -40,13 +47,17 @@ export class Sprite {
 
         if (typeof src === 'string') {
             this._canvasImageSource = new Image();
-            this._canvasImageSource.addEventListener('load', () => {
-                this.subPosition = new Vector2();
-                this.subSize = new Vector2(this._canvasImageSource.width, this._canvasImageSource.height);
-                this.size = new Vector2(this._canvasImageSource.width, this._canvasImageSource.height);
-                if (this.mX) this.mirrorX();
-                if (this.mY) this.mirrorY();
+            this.load = new Promise((resolve, reject) => {
+                this._canvasImageSource.addEventListener('load', () => {
+                    this.subPosition = new Vector2();
+                    this.subSize = new Vector2(this._canvasImageSource.width, this._canvasImageSource.height);
+                    this.size = new Vector2(this._canvasImageSource.width, this._canvasImageSource.height);
+                    if (this.mX) this.mirrorX();
+                    if (this.mY) this.mirrorY();
+                    resolve(this);
+                });
             });
+
             this._canvasImageSource.src = normalizeAssetPath(src);
         } else if (src instanceof HTMLCanvasElement || (OffscreenCanvas && src instanceof OffscreenCanvas)) {
             this._canvasImageSource = src;

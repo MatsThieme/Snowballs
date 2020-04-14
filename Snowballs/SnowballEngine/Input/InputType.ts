@@ -13,5 +13,8 @@ export enum InputType {
     MoveHorizontal1,
     MoveVertical1,
 
-    Jump1
+    Jump1, 
+
+    Attack,
+    Attack1
 };
