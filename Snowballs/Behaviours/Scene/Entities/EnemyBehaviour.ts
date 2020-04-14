@@ -1,40 +1,30 @@
-import { LevelUpPrefab } from '../../../../Prefabs/Scene/Items/LevelUpPrefab.js';
-import { Behaviour, clamp, Collision, ComponentType, GameObject, GameTime, TileMap, Vector2, AnimatedSprite } from '../../../../SnowballEngine/Scene.js';
-import { StatusbarBehaviour } from '../../../StatusbarBehaviour.js';
-import { EntityBehaviour } from '../EntityBehaviour.js';
-import { EnemyHealthbarPrefab } from '../../../../Prefabs/Scene/Enemies/EnemyHealthbarPrefab.js';
+import { LevelUpPrefab } from '../../../Prefabs/Scene/Items/LevelUpPrefab.js';
+import { clamp, Collision, ComponentType, GameTime, TileMap, Vector2 } from '../../../SnowballEngine/Scene.js';
+import { EntityBehaviour } from './EntityBehaviour.js';
 
-export class EnemyBehaviour extends Behaviour {
-    private stats!: EntityBehaviour;
-    private attackRadius: number = 1.3;
+export abstract class EnemyBehaviour extends EntityBehaviour {
+    protected abstract attackType: 'fireball' | 'snowball' | 'beat';
+    abstract maxHealth: number;
+    healthRegeneration: number = 0.0001;
+    abstract maxEnergy: number;
+    energyRegeneration: number = 0.0001;
+    abstract attackDuration: number;
+    abstract attackRadius: number;
+    abstract damage: number;
+
+    isPlayer: boolean = false;
     private canSeePlayer: number = 7;
     private tileMap!: TileMap;
     private grounded: boolean = false;
     private colliderSize!: Vector2;
-    private readonly attackDuration: number = 1000;
-    private attackStart: number = 0;
-    private statusbarBehaviour!: StatusbarBehaviour;
 
     async start() {
-        this.stats = <EntityBehaviour>this.gameObject.getComponent(EntityBehaviour);
+        await super.start();
         this.tileMap = <TileMap>this.scene.find('Level')!.getComponent<TileMap>(ComponentType.TileMap);
         this.colliderSize = this.gameObject.collider[0].AABB.size;
-
-        await this.scene.newGameObject('Healthbar Enemy', EnemyHealthbarPrefab, gameObject => {
-            this.gameObject.addChild(gameObject);
-            this.statusbarBehaviour = <StatusbarBehaviour>gameObject.getComponent(StatusbarBehaviour);
-            const aS = this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
-            gameObject.transform.relativePosition.y = ((aS!.scaledSize.y || 0) / 2 + aS!.relativePosition.y) * 1.1;
-        });
     }
     async update(gameTime: GameTime) {
-        if (this.stats.health < (<any>this.stats).healthRegeneration * gameTime.deltaTime * 1.00000001) {
-            this.scene.newGameObject('LevelUp', LevelUpPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
-
-            this.gameObject.destroy();
-            return;
-        }
-
+        await super.update(gameTime);
 
         const p1 = this.scene.find('Player1');
         const p2 = this.scene.find('Player2');
@@ -45,17 +35,14 @@ export class EnemyBehaviour extends Behaviour {
         const p2Dist = this.gameObject.transform.position.distance(p2.transform.position.sub(new Vector2(0, p2.collider[0].AABB.size.y / 2)));
 
         if (p1Dist < this.attackRadius * this.colliderSize.y && p1Dist <= p2Dist && !this.isAttacking) {
-            this.attack(p1);
+            await this.attack(this.gameObject.transform.position.sub(p1.transform.position));
         } else if (p2Dist < this.attackRadius * this.colliderSize.y && p2Dist < p1Dist && !this.isAttacking) {
-            this.attack(p2);
+            await this.attack(this.gameObject.transform.position.sub(p2.transform.position));
         } else if (p1Dist < this.canSeePlayer * this.colliderSize.y && p1Dist <= p2Dist && !this.isAttacking) {
             this.walkTowards(p1.transform.position, gameTime.deltaTime);
         } else if (p2Dist < this.canSeePlayer * this.colliderSize.y && p2Dist < p1Dist && !this.isAttacking) {
             this.walkTowards(p2.transform.position, gameTime.deltaTime);
         } else if (!this.isAttacking) this.idle(gameTime.deltaTime);
-
-        this.statusbarBehaviour.max = this.stats.maxHealth;
-        this.statusbarBehaviour.value = this.stats.health;
     }
     onColliding(collision: Collision) {
         this.grounded = true;
@@ -85,11 +72,7 @@ export class EnemyBehaviour extends Behaviour {
     idle(dt: number) {
         this.gameObject.rigidbody.velocity.x *= dt / 50;
     }
-    attack(gO: GameObject) {
-        this.attackStart = performance.now();
-        console.log('attack');
-    }
-    get isAttacking() {
-        return this.attackStart + this.attackDuration > performance.now();
+    async die() {
+        await this.scene.newGameObject('LevelUp', LevelUpPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
     }
 }

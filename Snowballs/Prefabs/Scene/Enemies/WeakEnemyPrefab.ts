@@ -1,6 +1,5 @@
-import { EnemyBehaviour } from '../../../Behaviours/Scene/Entities/Enemies/EnemyBehaviour.js';
-import { EntityBehaviour } from '../../../Behaviours/Scene/Entities/EntityBehaviour.js';
 import { CircleCollider, GameObject, PhysicsMaterial, Vector2 } from '../../../SnowballEngine/Scene.js';
+import { WeakEnemyBehaviour } from '../../../Behaviours/Scene/Entities/Enemies/WeakEnemyBehaviour.js';
 
 export async function WeakEnemyPrefab(gameObject: GameObject) {
     await gameObject.addComponent(CircleCollider, circleCollider => {
@@ -9,10 +8,9 @@ export async function WeakEnemyPrefab(gameObject: GameObject) {
         circleCollider.radius = 0.5;
     });
 
-    const eb = await gameObject.addComponent(EntityBehaviour);
-    eb.maxHealth = 30;
+    const weakEnemyBehaviour = await gameObject.addComponent(WeakEnemyBehaviour);
+    weakEnemyBehaviour.maxHealth = 30;
 
-    await gameObject.addComponent(EnemyBehaviour);
 
     gameObject.transform.relativeScale = new Vector2(0.8, 0.8);
 

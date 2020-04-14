@@ -1,4 +1,3 @@
-import { ClientInfo } from '../ClientInfo.js';
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
 import { AABB } from '../Physics/AABB.js';

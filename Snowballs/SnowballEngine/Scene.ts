@@ -90,6 +90,25 @@ export class Scene {
 
             gameObjects.forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));
 
+            console.time('t');
+
+            //const idPairs: Map<number, 1 | undefined> = new Map();
+            //const collisionPromises: Promise<Collision>[] = [];
+
+
+            //const gOs = gameObjects.filter(gO => gO.active && gO.hasCollider && !gO.parent);
+
+            //for (const gO1 of gOs) {
+            //    for (const gO2 of gOs) {
+            //        const id = gO1.id > gO2.id ? (gO1.id << 16) + gO2.id : (gO2.id << 16) + gO1.id;
+
+            //        if (gO1.id !== gO2.id && !idPairs.get(id)) {
+            //            const collisions = Physics.collision(gO1, gO2);
+            //            collisionPromises.push(...collisions);
+            //            idPairs.set(id, 1);
+            //        }
+            //    }
+            //}
 
             const idPairs: any = [];
             const collisionPromises: Promise<Collision>[] = [];
@@ -108,6 +127,10 @@ export class Scene {
                     }
                 }
             }
+
+            console.timeEnd('t');
+
+
 
 
 
@@ -152,10 +175,7 @@ export class Scene {
     public async start(): Promise<void> {
         interval(async clear => {
             if (!this.ui.pauseScene) {
-                for (const gameObject of this.getAllGameObjects()) {
-                    await awaitPromises(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
-                }
-
+                await awaitPromises(...this.getAllGameObjects().map(gameObject => [...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start())]).reduce((t, c) => { t.push(...c); return t; }, []));
                 clear();
             }
         }, 10);

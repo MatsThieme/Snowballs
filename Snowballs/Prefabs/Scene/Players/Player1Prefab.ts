@@ -1,10 +1,9 @@
-import { EntityBehaviour } from '../../../Behaviours/Scene/Entities/EntityBehaviour.js';
 import { Player1Behaviour } from '../../../Behaviours/Scene/Entities/Players/Player1Behaviour.js';
 import { AnimatedSprite, GameObject, Sprite, SpriteAnimation, Vector2 } from '../../../SnowballEngine/Scene.js';
 
-export function Player1Prefab(gameObject: GameObject) {
+export async function Player1Prefab(gameObject: GameObject) {
     gameObject.transform.relativePosition = new Vector2(5, 10);
-    gameObject.addComponent(AnimatedSprite, animatedSprite => {
+    await gameObject.addComponent(AnimatedSprite, animatedSprite => {
         animatedSprite.size = new Vector2(260, 573).setLength(2.5);
         animatedSprite.relativePosition = new Vector2(0.08, 0.35);
         animatedSprite.spriteAnimations['idle'] = new SpriteAnimation([new Sprite('Images/Characters/PlayerSnow/idle0.png')], 0);
@@ -13,6 +12,5 @@ export function Player1Prefab(gameObject: GameObject) {
         animatedSprite.activeAnimation = 'idle';
     });
 
-    gameObject.addComponent(Player1Behaviour);
-    gameObject.addComponent(EntityBehaviour);
+    await gameObject.addComponent(Player1Behaviour);
 }

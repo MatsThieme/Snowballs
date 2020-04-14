@@ -4,9 +4,17 @@ export class StatusbarBehaviour extends Behaviour {
     public min: number = 0;
     public max: number = 100;
     public value: number = 100;
-    public color: string = '#00f';
+    private _color: string = '#00f';
     private texture!: Texture;
     private size!: Vector2;
+
+    public set color(val: string) {
+        this._color = val;
+        this.texture.sprite = new Sprite((context, canvas) => {
+            context.fillStyle = this._color;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        });
+    }
 
     async start() {
         const bar = <Texture>this.gameObject.getComponent<Texture>(ComponentType.Texture);
@@ -18,7 +26,7 @@ export class StatusbarBehaviour extends Behaviour {
             texture.size = bar.size.clone;
 
             texture.sprite = new Sprite((context, canvas) => {
-                context.fillStyle = this.color;
+                context.fillStyle = this._color;
                 context.fillRect(0, 0, canvas.width, canvas.height);
             });
         });
@@ -30,7 +38,6 @@ export class StatusbarBehaviour extends Behaviour {
             const scale = this.value / (this.max - this.min);
 
             this.texture.size.x = this.size.x * scale;
-            console.log(this.value);
         }
     }
 }

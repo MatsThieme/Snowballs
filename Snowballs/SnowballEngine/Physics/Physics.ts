@@ -13,11 +13,11 @@ export class Physics {
     public static gravity: Vector2 = new Vector2(0, -0.00981);
     public static timeScale: number = 1;
     private static worker: AsyncWorker = new AsyncWorker(Settings.appPath + '/SnowballEngine/Physics/CollisionWorker.js', navigator.hardwareConcurrency);
-    private static ignoreCollisions: { [key: number]: 1 | undefined } = {};
+    private static ignoreCollisions: Map<number, 1 | undefined> = new Map();
     public static ignoreCollision(gameObject1: GameObject, gameObject2: GameObject, collide: boolean = false): void {
         const id = gameObject1.id > gameObject2.id ? (gameObject1.id << 16) + gameObject2.id : (gameObject2.id << 16) + gameObject1.id;
-        if (collide) delete Physics.ignoreCollisions[id];
-        else Physics.ignoreCollisions[id] = 1;
+        if (collide) Physics.ignoreCollisions.delete(id);
+        else Physics.ignoreCollisions.set(id, 1);
     }
 
     /**
@@ -26,7 +26,7 @@ export class Physics {
      * 
      */
     public static collision(first: GameObject, second: GameObject): Promise<Collision>[] {
-        if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions[first.id > second.id ? (first.id << 16) + second.id : (second.id << 16) + first.id]) return [];
+        if (!first.active || !second.active || first.id === second.id || first.rigidbody.mass === 0 && second.rigidbody.mass === 0 || Physics.ignoreCollisions.get(first.id > second.id ? (first.id << 16) + second.id : (second.id << 16) + first.id)) return [];
 
         const promises: Promise<Collision>[] = [];
 

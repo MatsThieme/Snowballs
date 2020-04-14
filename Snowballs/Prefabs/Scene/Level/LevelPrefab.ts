@@ -1,7 +1,7 @@
 import { TileMapBackgroundBehaviour } from '../../../Behaviours/Scene/Level/TileMapBackgroundBehaviour.js';
 import { GameObject, Noise, PhysicsMaterial, Sprite, TileMap, Vector2 } from '../../../SnowballEngine/Scene.js';
 
-export function LevelPrefab(gameObject: GameObject) {
+export async function LevelPrefab(gameObject: GameObject) {
     const tiles: string[][] = [
         [
             'Images/Snow/Tiles/left_top_corner.png',
@@ -68,7 +68,7 @@ export function LevelPrefab(gameObject: GameObject) {
     ];
 
     const noise = new Noise(1000);
-    const levelSize = new Vector2(20, 9);
+    const levelSize = new Vector2(500, 9);
     const flatnessScalar = 0.17;
     const levels = 2;
     const maxGroundHeight = 5;
@@ -85,7 +85,7 @@ export function LevelPrefab(gameObject: GameObject) {
     }
 
 
-    gameObject.addComponent(TileMap, tileMap => {
+    await gameObject.addComponent(TileMap, tileMap => {
         for (let level = 1; level <= levels; level++) {
             const size = levelSize.clone.scale(new Vector2(level, 1));
 
@@ -137,5 +137,5 @@ export function LevelPrefab(gameObject: GameObject) {
     });
 
     gameObject.drawPriority = -1;
-    gameObject.addComponent(TileMapBackgroundBehaviour);
+    await gameObject.addComponent(TileMapBackgroundBehaviour);
 }
