@@ -1,9 +1,9 @@
-import { Behaviour, ComponentType, GameTime, Sprite, Texture, Vector2 } from '../SnowballEngine/Scene.js';
+import { Behaviour, ComponentType, GameTime, Sprite, Texture, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export class StatusbarBehaviour extends Behaviour {
-    public min: number = 0;
-    public max: number = 100;
-    public value: number = 100;
+    min: number = 0;
+    max: number = 100;
+    value: number = 100;
     private _color: string = '#00f';
     private texture!: Texture;
     private size!: Vector2;
@@ -33,7 +33,7 @@ export class StatusbarBehaviour extends Behaviour {
         }
     }
 
-    public set color(val: string) {
+    set color(val: string) {
         this._color = val;
         if (!this.texture) return;
         const c = (<OffscreenCanvas>this.texture.sprite?.canvasImageSource);

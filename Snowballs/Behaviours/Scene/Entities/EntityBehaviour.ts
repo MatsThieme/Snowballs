@@ -1,5 +1,5 @@
 import { AnimatedSprite, Behaviour, CircleCollider, clamp, ComponentType, GameObject, GameTime, PolygonCollider, PolygonRenderer, Sprite, Texture, Vector2 } from '../../../SnowballEngine/Scene.js';
-import { StatusbarBehaviour } from '../../StatusbarBehaviour.js';
+import { StatusbarBehaviour } from './StatusbarBehaviour.js';
 import { AttackBehaviour } from './AttackBehaviour.js';
 
 export abstract class EntityBehaviour extends Behaviour {
@@ -104,7 +104,7 @@ export abstract class EntityBehaviour extends Behaviour {
         return performance.now() < this.attackStart + this.attackDuration;
     }
 
-    onAttack(attacker: GameObject, damage: number) {
+    onAttack(damage: number) {
         this.health -= damage;
     }
     async attack(direction: Vector2) {

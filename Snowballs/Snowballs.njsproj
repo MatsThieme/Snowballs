@@ -95,7 +95,7 @@
     <TypeScriptCompile Include="Behaviours\Scene\Items\LevelUpBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\StatusbarBehaviour.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\StatusbarBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Level\TileMapBackgroundBehaviour.ts">

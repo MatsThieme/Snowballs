@@ -112,7 +112,7 @@ export class GameObject {
             await (<any>component).awake();
             if (this.scene.isRunning) {
                 await (<any>component).start();
-                (<any>component)._initialized = true;
+                (<any>component).__initialized = true;
             }
         }
 

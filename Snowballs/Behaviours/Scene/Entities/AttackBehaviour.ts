@@ -20,7 +20,7 @@ export class AttackBehaviour extends Behaviour {
 
         if (!eb && this.gameObject.name.includes('Beat Trigger')) return;
 
-        eb?.onAttack(this.gameObject, this.damage);
+        eb?.onAttack(this.damage);
         this.gameObject.destroy();
     }
 }

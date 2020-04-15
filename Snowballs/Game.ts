@@ -12,7 +12,7 @@ import { DebugOverlayPrefab } from './Prefabs/UI/DebugOverlayPrefab.js';
 import { MainMenuPrefab } from './Prefabs/UI/MainMenuPrefab.js';
 import { PauseMenuPrefab } from './Prefabs/UI/PauseMenuPrefab.js';
 import { SettingsMenuPrefab } from './Prefabs/UI/SettingsMenuPrefab.js';
-import { FontLoader, PreloadAssets, Scene, Settings, Vector2, Camera, Texture, Sprite } from './SnowballEngine/Scene.js';
+import { FontLoader, PreloadAssets, Scene, Settings, Vector2 } from './SnowballEngine/Scene.js';
 
 class Game {
     private scene: Scene;
