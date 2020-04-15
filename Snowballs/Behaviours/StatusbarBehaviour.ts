@@ -8,14 +8,6 @@ export class StatusbarBehaviour extends Behaviour {
     private texture!: Texture;
     private size!: Vector2;
 
-    public set color(val: string) {
-        this._color = val;
-        const c = (<OffscreenCanvas>this.texture.sprite?.canvasImageSource);
-        const ctx = <OffscreenCanvasRenderingContext2D>c.getContext('2d');
-        ctx.fillStyle = this._color;
-        ctx.fillRect(0, 0, c.width, c.height);
-    }
-
     async start() {
         const bar = <Texture>this.gameObject.getComponent<Texture>(ComponentType.Texture);
 
@@ -26,7 +18,6 @@ export class StatusbarBehaviour extends Behaviour {
             texture.size = bar.size.clone;
 
             texture.sprite = new Sprite((context, canvas) => {
-                console.log('creating bar background');
                 context.fillStyle = this._color;
                 context.fillRect(0, 0, canvas.width, canvas.height);
             });
@@ -40,5 +31,14 @@ export class StatusbarBehaviour extends Behaviour {
 
             this.texture.size.x = this.size.x * scale;
         }
+    }
+
+    public set color(val: string) {
+        this._color = val;
+        if (!this.texture) return;
+        const c = (<OffscreenCanvas>this.texture.sprite?.canvasImageSource);
+        const ctx = <OffscreenCanvasRenderingContext2D>c.getContext('2d');
+        ctx.fillStyle = this._color;
+        ctx.fillRect(0, 0, c.width, c.height);
     }
 }

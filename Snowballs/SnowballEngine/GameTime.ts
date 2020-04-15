@@ -3,7 +3,7 @@ import { average } from './Helpers.js';
 export class GameTime {
     private _lastTime: number;
     private _deltaTime: number;
-    private t: number[];
+    private readonly t: number[];
     private _clampDeltatime: number;
 
     /**
@@ -42,8 +42,8 @@ export class GameTime {
             this.t.unshift(this.now - this._lastTime);
         }
         this._lastTime = this.now;
-        if (this.t.length >= 2500) this.t = this.t.splice(0, 2500);
-        this._clampDeltatime = average(...this.t) * 1.3;
+        if (this.t.length >= 500) this.t.splice(500);
+        this._clampDeltatime = average(...this.t) * 1.25;
     }
 
     /**

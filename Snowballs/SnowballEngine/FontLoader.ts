@@ -1,4 +1,4 @@
-import { normalizeAssetPath, interval } from './Helpers.js';
+import { interval, normalizeAssetPath } from './Helpers.js';
 
 export class FontLoader {
     /**
@@ -27,8 +27,8 @@ export class FontLoader {
 
             interval(clear => {
                 if (p.offsetWidth << 16 + p.offsetHeight !== initialSize) {
-                    resolve();
                     clear();
+                    resolve();
                     p.remove();
                 }
             }, 1);

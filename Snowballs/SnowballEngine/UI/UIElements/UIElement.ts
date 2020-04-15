@@ -10,7 +10,6 @@ import { UIElementType } from '../UIElementType.js';
 import { UIFontSize } from '../UIFontSize.js';
 import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
-import { interval } from '../../Helpers.js';
 
 export abstract class UIElement {
     private static nextID: number = 0;

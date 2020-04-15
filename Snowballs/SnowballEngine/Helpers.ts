@@ -82,9 +82,15 @@ export function triggerOnUserInputEvent<T>(cb: (...[]) => T, params: any[] = [])
  */
 export function awaitPromises<T>(...promises: Promise<T>[]): Promise<T[]> {
     return new Promise((resolve, reject) => {
-        if (promises.length === 0) return resolve([]);
         const ret: T[] = [];
-        promises.forEach(p => p.then((t: T) => ret.push(t) === promises.length ? resolve(ret) : undefined).catch(reject));
+
+        if (promises.length === 0) return resolve(ret);
+
+        for (const p of promises) {
+            p.then((t: T) => {
+                if (ret.push(t) === promises.length) resolve(ret);
+            });
+        }
     });
 }
 

@@ -7,11 +7,9 @@ export abstract class PlayerBehaviour extends EntityBehaviour {
     maxEnergy: number = 100;
     energyRegeneration: number = 0.0001;
     damage: number = 10;
-    abstract attackDuration: number;
     attackRadius: number = 2;
     isPlayer: boolean = true;
 
-    protected abstract attackType: 'fireball' | 'snowball' | 'beat';
     protected colliding: boolean = false;
     private gameTime!: GameTime;
     private animatedSprite: AnimatedSprite = <AnimatedSprite>this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);

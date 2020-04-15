@@ -1,14 +1,14 @@
 import { GameTime } from '../../GameTime.js';
 import { AABB } from '../../Physics/AABB.js';
+import { Collision } from '../../Physics/Collision.js';
 import { PhysicsMaterial } from '../../Physics/PhysicsMaterial.js';
 import { Vector2 } from '../../Vector2.js';
 import { AlignH, AlignV } from '../Align.js';
 import { Alignable } from '../Alignable.js';
 import { GameObject } from '../GameObject.js';
+import { Behaviour } from './Behaviour.js';
 import { Component } from './Component.js';
 import { ComponentType } from './ComponentType.js';
-import { Behaviour } from './Behaviour.js';
-import { Collision } from '../../Physics/Collision.js';
 
 export abstract class Collider extends Component implements Alignable {
     private static nextID: number = 0;

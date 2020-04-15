@@ -34,7 +34,6 @@ export class Scene {
         this.framedata = new Framedata();
         this.hasAudioListener = false;
 
-
         this.stop();
     }
 
@@ -85,9 +84,9 @@ export class Scene {
 
         this.framedata.update();
 
-        if (!this.ui.pauseScene) {
-            const gameObjects = this.getAllGameObjects();
+        const gameObjects = this.getAllGameObjects();
 
+        if (!this.ui.pauseScene) {
             gameObjects.forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));
 
             const idPairs: any = [];
@@ -114,20 +113,14 @@ export class Scene {
                 collisions.push(c);
             }
 
-
-            gOs.forEach(gO => gO.rigidbody.update(this.gameTime, collisions));
-
-
             await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
         }
 
-
-        this.cameraManager.update(this.getAllGameObjects());
+        this.cameraManager.update(gameObjects);
 
         await this.ui.update(this.gameTime);
 
         this.cameraManager.drawUI(this.ui.currentFrame);
-
 
         if (this.requestAnimationFrameHandle) this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
@@ -149,17 +142,20 @@ export class Scene {
     public async start(): Promise<void> {
         interval(async clear => {
             if (!this.ui.pauseScene) {
-                const promises = [];
+                clear();
+
+                this.requestAnimationFrameHandle = 0; // set isRunning true
 
                 for (const gameObject of this.getAllGameObjects()) {
-                    promises.push(...gameObject.getComponents<Behaviour>(ComponentType.Behaviour).map(b => b.start()));
+                    for (const c of gameObject.getComponents<Behaviour>(ComponentType.Behaviour)) {
+                        await c.start();
+                        (<any>c).__initialized = true;
+                    }
                 }
 
-                clear();
+                this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
             }
         }, 10);
-
-        this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
 
     /**

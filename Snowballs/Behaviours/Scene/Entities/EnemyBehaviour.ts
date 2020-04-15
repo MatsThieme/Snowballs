@@ -3,14 +3,8 @@ import { clamp, Collision, ComponentType, GameTime, TileMap, Vector2 } from '../
 import { EntityBehaviour } from './EntityBehaviour.js';
 
 export abstract class EnemyBehaviour extends EntityBehaviour {
-    protected abstract attackType: 'fireball' | 'snowball' | 'beat';
-    abstract maxHealth: number;
     healthRegeneration: number = 0.0001;
-    abstract maxEnergy: number;
     energyRegeneration: number = 0.0001;
-    abstract attackDuration: number;
-    abstract attackRadius: number;
-    abstract damage: number;
 
     isPlayer: boolean = false;
     private canSeePlayer: number = 7;
@@ -35,9 +29,9 @@ export abstract class EnemyBehaviour extends EntityBehaviour {
         const p2Dist = this.gameObject.transform.position.distance(p2.transform.position.sub(new Vector2(0, p2.collider[0].AABB.size.y / 2)));
 
         if (p1Dist < this.attackRadius * this.colliderSize.y && p1Dist <= p2Dist && !this.isAttacking) {
-            await this.attack(this.gameObject.transform.position.sub(p1.transform.position));
+            await this.attack(p1.transform.position.sub(this.gameObject.transform.position));
         } else if (p2Dist < this.attackRadius * this.colliderSize.y && p2Dist < p1Dist && !this.isAttacking) {
-            await this.attack(this.gameObject.transform.position.sub(p2.transform.position));
+            await this.attack(p2.transform.position.sub(this.gameObject.transform.position));
         } else if (p1Dist < this.canSeePlayer * this.colliderSize.y && p1Dist <= p2Dist && !this.isAttacking) {
             this.walkTowards(p1.transform.position, gameTime.deltaTime);
         } else if (p2Dist < this.canSeePlayer * this.colliderSize.y && p2Dist < p1Dist && !this.isAttacking) {

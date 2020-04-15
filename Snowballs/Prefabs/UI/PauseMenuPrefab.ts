@@ -47,7 +47,7 @@ export function PauseMenuPrefab(menu: UIMenu) {
 
         button.cbOnInput = b => {
             menu.active = false;
-            menu.ui.menus['Settings'].active = true;
+            menu.ui.menu('Settings')!.active = true;
         };
 
         button.color = color;
@@ -69,7 +69,7 @@ export function PauseMenuPrefab(menu: UIMenu) {
 
         button.cbOnInput = b => {
             menu.active = false;
-            menu.ui.menus['Main Menu'].active = true;
+            menu.ui.menu('Main Menu')!.active = true;
         };
 
         button.color = color;

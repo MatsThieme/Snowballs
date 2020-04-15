@@ -24,7 +24,7 @@ export function MainMenuPrefab(menu: UIMenu) {
 
         text.fitContent(1.5);
 
-        text.aabb = new AABB(new Vector2(), new Vector2(0,5));
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 5));
     });
 
     menu.addUIElement(UIButton, button => {
@@ -51,7 +51,7 @@ export function MainMenuPrefab(menu: UIMenu) {
 
         button.cbOnInput = b => {
             menu.active = false;
-            menu.ui.menus['Settings'].active = true;
+            menu.ui.menu('Settings')!.active = true;
         };
 
         button.label = 'Settings';
@@ -70,7 +70,26 @@ export function MainMenuPrefab(menu: UIMenu) {
 
         button.cbOnInput = b => {
             menu.active = false;
-            menu.ui.menus['Credits'].active = true;
+            menu.ui.menu('Controls')!.active = true;
+        };
+
+        button.label = 'Controls';
+        button.fontSize = UIFontSize.Small;
+
+        button.fitContent(1.5);
+    });
+
+    menu.addUIElement(UIButton, button => {
+        button.localAlignH = AlignH.Center;
+        button.localAlignV = AlignV.Center;
+        button.alignH = AlignH.Center;
+        button.alignV = AlignV.Center;
+
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 26));
+
+        button.cbOnInput = b => {
+            menu.active = false;
+            menu.ui.menu('Credits')!.active = true;
         };
 
         button.label = 'Credits';

@@ -1,4 +1,3 @@
-import { ClientInfo } from '../ClientInfo.js';
 import { AlignH, AlignV } from '../GameObject/Align.js';
 import { GameTime } from '../GameTime.js';
 import { Input } from '../Input/Input.js';
@@ -6,10 +5,10 @@ import { AABB } from '../Physics/AABB.js';
 import { Scene } from '../Scene.js';
 import { Sprite } from '../Sprite.js';
 import { Vector2 } from '../Vector2.js';
+import { UI } from './UI.js';
 import { UIElement } from './UIElements/UIElement.js';
 import { UIFont } from './UIFont.js';
 import { UIFrame } from './UIFrame.js';
-import { UI } from './UI.js';
 
 export class UIMenu {
     /**

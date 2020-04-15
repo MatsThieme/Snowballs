@@ -1,11 +1,11 @@
 import { GameTime } from '../../GameTime.js';
 import { Input } from '../../Input/Input.js';
+import { AABB } from '../../Physics/AABB.js';
 import { Settings } from '../../Settings.js';
+import { Vector2 } from '../../Vector2.js';
 import { UIElementType } from '../UIElementType.js';
 import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
-import { AABB } from '../../Physics/AABB.js';
-import { Vector2 } from '../../Vector2.js';
 
 export class UICheckbox extends UIElement {
     public checked: boolean;

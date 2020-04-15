@@ -6,6 +6,7 @@ import { LevelPrefab } from './Prefabs/Scene/Level/LevelPrefab.js';
 import { Player1Prefab } from './Prefabs/Scene/Players/Player1Prefab.js';
 import { Player2Prefab } from './Prefabs/Scene/Players/Player2Prefab.js';
 import { PlayerPrefab } from './Prefabs/Scene/Players/PlayerPrefab.js';
+import { ControlsMenuPrefab } from './Prefabs/UI/ControlsMenuPrefab.js';
 import { CreditsMenuPrefab } from './Prefabs/UI/CreditsMenuPrefab.js';
 import { DebugOverlayPrefab } from './Prefabs/UI/DebugOverlayPrefab.js';
 import { MainMenuPrefab } from './Prefabs/UI/MainMenuPrefab.js';
@@ -42,10 +43,10 @@ class Game {
         await scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
         await scene.newGameObject('Player2', PlayerPrefab, Player2Prefab);
 
-        await scene.newGameObject('Enemy Fire Weak Test', WeakEnemyPrefab, FireWeakEnemyPrefab, gO => {
-            gO.transform.relativePosition = new Vector2(10, 10);
-        });
-
+        for (let i = 0; i < 20; i++)
+            await scene.newGameObject('Enemy Fire Weak Test', WeakEnemyPrefab, FireWeakEnemyPrefab, gO => {
+                gO.transform.relativePosition = new Vector2(50, 10);
+            });
 
 
         await scene.ui.addMenu('Main Menu', MainMenuPrefab);
@@ -55,6 +56,8 @@ class Game {
         await scene.ui.addMenu('Settings', SettingsMenuPrefab);
 
         await scene.ui.addMenu('Credits', CreditsMenuPrefab);
+
+        await scene.ui.addMenu('Controls', ControlsMenuPrefab);
 
         await scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
     }

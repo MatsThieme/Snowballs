@@ -124,4 +124,14 @@ export class Sprite {
 
         return this;
     }
+
+    public toCanvas(): Sprite {
+        const c = new OffscreenCanvas(this._canvasImageSource.width, this._canvasImageSource.height);
+        const ctx = c.getContext('2d');
+        ctx!.imageSmoothingEnabled = false;
+        ctx!.drawImage(this._canvasImageSource, 0, 0);
+        this._canvasImageSource = c;
+
+        return this;
+    }
 }

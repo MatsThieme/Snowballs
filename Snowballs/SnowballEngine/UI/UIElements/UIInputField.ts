@@ -1,13 +1,11 @@
 import { GameTime } from '../../GameTime.js';
+import { clamp } from '../../Helpers.js';
 import { Input } from '../../Input/Input.js';
 import { InputType } from '../../Input/InputType.js';
 import { Settings } from '../../Settings.js';
-import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
-import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
-import { clamp } from '../../Helpers.js';
 
 export abstract class UIInputField extends UIElement {
     public focused: boolean;

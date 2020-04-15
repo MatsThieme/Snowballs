@@ -9,10 +9,12 @@ import { ComponentType } from './ComponentType.js';
 export abstract class Behaviour extends Component {
     protected input: Input;
     protected readonly scene: Scene;
+    private __initialized: boolean;
     public constructor(gameObject: GameObject) {
         super(gameObject, ComponentType.Behaviour);
         this.input = gameObject.scene.input;
         this.scene = this.gameObject.scene;
+        this.__initialized = false;
     }
 
     /**

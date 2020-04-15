@@ -14,7 +14,7 @@ export function SettingsMenuPrefab(menu: UIMenu) {
 
         button.cbOnInput = b => {
             menu.active = false;
-            menu.ui.menus[menu.ui.navigationHistory[1] || 'Main Menu'].active = true;
+            menu.ui.menu(menu.ui.navigationHistory[1] || 'Main Menu')!.active = true;
         };
 
         button.fontSize = UIFontSize.Small;

@@ -1,15 +1,11 @@
 import { Transform } from '../GameObject/Components/Transform.js';
 import { GameTime } from '../GameTime.js';
-import { awaitPromises } from '../Helpers.js';
 import { Collision } from '../Physics/Collision.js';
 import { Scene } from '../Scene.js';
-import { AnimatedSprite } from './Components/AnimatedSprite.js';
-import { AudioListener } from './Components/AudioListener.js';
 import { Behaviour } from './Components/Behaviour.js';
 import { Collider } from './Components/Collider.js';
 import { Component } from './Components/Component.js';
 import { ComponentType } from './Components/ComponentType.js';
-import { ParticleSystem } from './Components/ParticleSystem.js';
 import { RigidBody } from './Components/RigidBody.js';
 
 export class GameObject {
@@ -112,9 +108,12 @@ export class GameObject {
             }
         }
 
-        if (component instanceof Behaviour) {
-            await component.awake();
-            if (this.scene.isRunning) await component.start();
+        if (component.type === ComponentType.Behaviour) {
+            await (<any>component).awake();
+            if (this.scene.isRunning) {
+                await (<any>component).start();
+                (<any>component)._initialized = true;
+            }
         }
 
         return component;
@@ -203,23 +202,26 @@ export class GameObject {
         gameObject.parent = this;
         return gameObject;
     }
+
     /**
      * 
      * Update children, behaviours, ParticleSystem, AnimatedSprite and AudioListener.
      * 
      */
     public async update(gameTime: GameTime, currentCollisions: Collision[]): Promise<void> {
-        const behaviours = this.getComponents<Behaviour>(ComponentType.Behaviour);
+        if (!this.parent && this.active && this.hasCollider) this.rigidbody.update(gameTime, currentCollisions);
 
-        await awaitPromises(...behaviours.map(c => c.update(gameTime)));
+        for (const b of this.getComponents<Behaviour>(ComponentType.Behaviour)) {
+            if ((<any>b).__initialized) await b.update(gameTime);
+        }
 
         if (!this.active) return;
 
         this.children.forEach(c => c.update(gameTime, currentCollisions));
 
-        this.getComponents<ParticleSystem>(ComponentType.ParticleSystem).forEach(p => p.update(gameTime));
-        this.getComponents<AnimatedSprite>(ComponentType.AnimatedSprite).forEach(c => c.update(gameTime));
-        this.getComponent<AudioListener>(ComponentType.AudioListener)?.update();
+        for (const c of this.components) {
+            if (c.type === ComponentType.ParticleSystem || c.type === ComponentType.AnimatedSprite || c.type === ComponentType.AudioListener) (<any>c).update(gameTime);
+        }
     }
 
     /**

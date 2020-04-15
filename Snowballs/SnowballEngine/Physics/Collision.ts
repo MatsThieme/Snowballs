@@ -1,7 +1,7 @@
 import { Collider } from '../GameObject/Components/Collider.js';
-import { Vector2 } from '../Vector2.js';
-import { TileMap } from '../GameObject/Components/TileMap.js';
 import { ComponentType } from '../GameObject/Components/ComponentType.js';
+import { TileMap } from '../GameObject/Components/TileMap.js';
+import { Vector2 } from '../Vector2.js';
 
 export class Collision {
     public readonly A: Collider | TileMap;

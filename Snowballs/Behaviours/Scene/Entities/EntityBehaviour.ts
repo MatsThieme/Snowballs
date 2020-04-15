@@ -26,6 +26,7 @@ export abstract class EntityBehaviour extends Behaviour {
 
     abstract async die(): Promise<void>;
 
+
     async start() {
         await this.gameObject.scene.newGameObject(`HealthBar${this.componentId}`, async gameObject => {
             this.gameObject.addChild(gameObject);
@@ -78,6 +79,7 @@ export abstract class EntityBehaviour extends Behaviour {
         this.healtbar.max = this.maxHealth;
         this.healtbar.value = this.health;
 
+
         if (this._energy < 100) this._energy += this.energyRegeneration * gameTime.deltaTime;
         this._energy = clamp(0, this.maxEnergy, this._energy);
 
@@ -106,23 +108,22 @@ export abstract class EntityBehaviour extends Behaviour {
         this.health -= damage;
     }
     async attack(direction: Vector2) {
-        const e = this.energy;
-        if (this.energy < this.damage / 2) return;
+        if (this.isAttacking || this.energy < this.damage / 2) return;
 
         this.energy -= this.damage / 2;
-
-        console.log(this.damage, this.energy);
 
         if (this.attackType === 'beat') await this.beatAttack(direction, this.damage);
         else if (this.attackType === 'snowball') await this.snowballAttack(direction, this.damage);
         else if (this.attackType === 'fireball') await this.fireballAttack(direction, this.damage);
+
+        this.attackStart = performance.now();
     }
     async fireballAttack(direction: Vector2, damage: number) {
         await this.scene.newGameObject('Fireball', async gameObject => {
             const circleCollider = await gameObject.addComponent(CircleCollider, circleCollider => {
                 circleCollider.radius = 0.15;
                 circleCollider.isTrigger = true;
-                circleCollider.density = 9;
+                circleCollider.density = 3;
             });
 
             await gameObject.addComponent(Texture, async texture => {
@@ -133,10 +134,11 @@ export abstract class EntityBehaviour extends Behaviour {
 
             await gameObject.addComponent(AttackBehaviour, attackBehaviour => {
                 attackBehaviour.damage = damage;
+                attackBehaviour.attackerID = this.gameObject.id;
             });
 
             gameObject.rigidbody.useAutoMass = true;
-            gameObject.rigidbody.applyImpulse(direction.clone.setLength(8));
+            gameObject.rigidbody.applyImpulse(direction.clone.setLength(3.5));
 
             gameObject.transform.relativePosition = this.gameObject.transform.position;
         });
@@ -156,6 +158,7 @@ export abstract class EntityBehaviour extends Behaviour {
 
             await gameObject.addComponent(AttackBehaviour, attackBehaviour => {
                 attackBehaviour.damage = damage;
+                attackBehaviour.attackerID = this.gameObject.id;
             });
 
             gameObject.rigidbody.useAutoMass = true;
@@ -166,14 +169,15 @@ export abstract class EntityBehaviour extends Behaviour {
         });
     }
     async beatAttack(direction: Vector2, damage: number) {
-        await this.scene.newGameObject('beat trigger', async gameObject => {
+        await this.scene.newGameObject('Beat Trigger', async gameObject => {
             this.gameObject.addChild(gameObject);
-            gameObject.transform.relativeScale = new Vector2(0.1, this.attackRadius);
+
             gameObject.transform.relativeRotation = Vector2.up.angleTo(new Vector2(), direction);
-            gameObject.transform.relativePosition = this.gameObject.transform.position;
+            gameObject.transform.relativePosition = Vector2.up.setLength(this.attackRadius).rotateAroundTo(new Vector2(), gameObject.transform.relativeRotation);
 
             await gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.isTrigger = true;
+                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(0, this.attackRadius), new Vector2(0.1, 0), new Vector2(0.1, this.attackRadius)];
             });
 
             await gameObject.addComponent(PolygonRenderer);
@@ -181,6 +185,7 @@ export abstract class EntityBehaviour extends Behaviour {
 
             await gameObject.addComponent(AttackBehaviour, attackBehaviour => {
                 attackBehaviour.damage = damage;
+                attackBehaviour.attackerID = this.gameObject.id;
             });
         });
     }

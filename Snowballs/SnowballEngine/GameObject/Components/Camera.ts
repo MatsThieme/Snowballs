@@ -56,14 +56,11 @@ export class Camera extends Component {
 
                 this.context.filter = frame.filter;
 
-                try {
-                    //this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
-                    if ((<any>window).chrome) this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
-                    else this.context.drawImage(frame.sprite.canvasImageSource, Math.round(frame.sprite.subPosition.x), Math.round(frame.sprite.subPosition.y), Math.round(frame.sprite.subSize.x), Math.round(frame.sprite.subSize.y), Math.round(framePos.x), Math.round(framePos.y), Math.round(frameSize.x), Math.round(frameSize.y));
-                }
-                catch{
-                    console.log(Math.round(frame.sprite.subPosition.x), Math.round(frame.sprite.subPosition.y), Math.round(frame.sprite.subSize.x), Math.round(frame.sprite.subSize.y), Math.round(framePos.x), Math.round(framePos.y), Math.round(frameSize.x), Math.round(frameSize.y));
-                }
+
+                //this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                if ((<any>window).chrome) this.context.drawImage(frame.sprite.canvasImageSource, frame.sprite.subPosition.x, frame.sprite.subPosition.y, frame.sprite.subSize.x, frame.sprite.subSize.y, framePos.x, framePos.y, frameSize.x, frameSize.y);
+                else this.context.drawImage(frame.sprite.canvasImageSource, Math.round(frame.sprite.subPosition.x), Math.round(frame.sprite.subPosition.y), Math.round(frame.sprite.subSize.x), Math.round(frame.sprite.subSize.y), Math.round(framePos.x), Math.round(framePos.y), Math.round(frameSize.x), Math.round(frameSize.y));
+
 
                 this.context.filter = 'none';
 

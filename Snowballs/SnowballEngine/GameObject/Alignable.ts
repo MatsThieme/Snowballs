@@ -1,5 +1,5 @@
-import { AlignH, AlignV } from './Align.js';
 import { Vector2 } from '../Vector2.js';
+import { AlignH, AlignV } from './Align.js';
 
 export interface Alignable {
     /**

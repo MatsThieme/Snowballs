@@ -1,8 +1,6 @@
 import { Input } from '../../Input/Input.js';
 import { Settings } from '../../Settings.js';
-import { Sprite } from '../../Sprite.js';
 import { UIElementType } from '../UIElementType.js';
-import { UIFrame } from '../UIFrame.js';
 import { UIMenu } from '../UIMenu.js';
 import { UIElement } from './UIElement.js';
 
