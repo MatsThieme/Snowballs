@@ -18,9 +18,9 @@ export class AttackBehaviour extends Behaviour {
 
         const eb = otherGO.getComponent<EntityBehaviour>(<any>EntityBehaviour);
 
-        if (!eb) return;
+        if (!eb && this.gameObject.name.includes('Beat Trigger')) return;
 
-        eb.onAttack(this.gameObject, this.damage);
+        eb?.onAttack(this.gameObject, this.damage);
         this.gameObject.destroy();
     }
 }
