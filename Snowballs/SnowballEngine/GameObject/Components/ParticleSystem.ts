@@ -25,6 +25,7 @@ export class ParticleSystem extends Component implements Drawable {
     public lifeTime: number;
     public fadeInDuration: number;
     public fadeOutDuration: number;
+    public maxParticles: number;
     public constructor(gameObject: GameObject, distance: number = 1, angle: Angle = new Angle(), sprites: (Sprite | SpriteAnimation)[] = [], emission: number = 100, speed: number = 0, rotationSpeed: number = 1, particleLifeTime: number = 500, fadeInDuration: number = 0, fadeOutDuration: number = 0, relativePosition: Vector2 = new Vector2(), size: Vector2 = new Vector2(1, 1), alignH: AlignH = AlignH.Center, alignV: AlignV = AlignV.Center) {
         super(gameObject, ComponentType.ParticleSystem);
         this.distance = distance;
@@ -36,6 +37,7 @@ export class ParticleSystem extends Component implements Drawable {
         this.speed = speed;
         this.rotationSpeed = rotationSpeed;
         this.lifeTime = particleLifeTime;
+        this.maxParticles = 100;
 
         this.particles = [];
         this.timer = 0;
@@ -55,14 +57,14 @@ export class ParticleSystem extends Component implements Drawable {
     public update(gameTime: GameTime) {
         this.timer += gameTime.deltaTime;
 
-        if (this.timer >= this.emission) {
-            this.particles.push(new Particle(this, this.sprites[~~(Math.random() * this.sprites.length)], new Angle(Math.random() * this.angle.radian + this.gameObject.transform.rotation.radian).toVector2().scale(this.speed)));
-            this.timer %= this.emission;
-        }
-
         for (let i = this.particles.length - 1; i >= 0; i--) {
             this.particles[i].update(gameTime);
             if (this.particles[i].startTime + this.lifeTime < gameTime.now) this.particles.splice(i, 1);
+        }
+
+        while (this.timer >= this.emission && this.particles.length < this.maxParticles) {
+            this.particles.push(new Particle(this, this.sprites[~~(Math.random() * this.sprites.length)], new Angle(Math.random() * this.angle.radian + this.gameObject.transform.rotation.radian).toVector2().setLength(this.speed)));
+            this.timer -= this.emission;
         }
     }
     public get scaledSize(): Vector2 {

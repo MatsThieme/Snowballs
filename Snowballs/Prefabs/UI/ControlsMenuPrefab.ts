@@ -84,7 +84,7 @@ export function ControlsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Jump: spacebar';
+        text.label = 'Jump: Spacebar';
 
         text.fontSize = UIFontSize.Small;
         text.fitContent(1.2);
@@ -125,7 +125,7 @@ export function ControlsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Move left: arrow left';
+        text.label = 'Move left: Arrow left';
 
         text.fontSize = UIFontSize.Small;
         text.fitContent(1.2);
@@ -139,7 +139,7 @@ export function ControlsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Move right: arrow right';
+        text.label = 'Move right: Arrow right';
 
         text.fontSize = UIFontSize.Small;
         text.fitContent(1.2);
@@ -153,7 +153,7 @@ export function ControlsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Jump: numpad 0';
+        text.label = 'Jump: Numpad 0';
 
         text.fontSize = UIFontSize.Small;
         text.fitContent(1.2);
@@ -167,7 +167,7 @@ export function ControlsMenuPrefab(menu: UIMenu) {
         text.localAlignH = AlignH.Center;
         text.localAlignV = AlignV.Center;
 
-        text.label = 'Attack: numpad 1';
+        text.label = 'Attack: Numpad 1';
 
         text.fontSize = UIFontSize.Small;
         text.fitContent(1.2);
@@ -175,4 +175,17 @@ export function ControlsMenuPrefab(menu: UIMenu) {
         text.aabb = new AABB(new Vector2(), new Vector2(0, 72));
     });
 
+    menu.addUIElement(UIText, text => {
+        text.alignH = AlignH.Center;
+        text.alignV = AlignV.Top;
+        text.localAlignH = AlignH.Center;
+        text.localAlignV = AlignV.Center;
+
+        text.label = 'Pause: Escape';
+
+        text.fontSize = UIFontSize.Small;
+        text.fitContent(1.2);
+
+        text.aabb = new AABB(new Vector2(), new Vector2(0, 85));
+    });
 }

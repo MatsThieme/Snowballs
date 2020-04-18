@@ -1,4 +1,4 @@
-import { GameObject, PhysicsMaterial, PolygonCollider, PolygonRenderer, Vector2 } from '../../../SnowballEngine/Scene.js';
+import { GameObject, PhysicsMaterial, PolygonCollider, Vector2 } from '../../../SnowballEngine/Scene.js';
 
 export async function PlayerPrefab(gameObject: GameObject) {
     await gameObject.addComponent(PolygonCollider, polygonCollider => {
@@ -6,8 +6,6 @@ export async function PlayerPrefab(gameObject: GameObject) {
         polygonCollider.density = 0.5;
         polygonCollider.vertices = [new Vector2(0.45), new Vector2(0, 2), new Vector2(0.9, 2), new Vector2(0, 0.2), new Vector2(0.9, 0.2), new Vector2(0.45, 2.2)];
     });
-
-    //await gameObject.addComponent(PolygonRenderer);
 
     gameObject.rigidbody.useAutoMass = true;
 }

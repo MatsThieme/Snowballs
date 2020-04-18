@@ -2,13 +2,15 @@ import { AnimatedSprite, Camera, ComponentType, GameTime, PolygonCollider, Vecto
 import { EntityBehaviour } from './EntityBehaviour.js';
 
 export abstract class PlayerBehaviour extends EntityBehaviour {
-    maxHealth: number = 100;
+    maxHealth: number = 1000;
     healthRegeneration: number = 0.0001;
-    maxEnergy: number = 100;
+    maxEnergy: number = 10000000;
     energyRegeneration: number = 0.0001;
-    damage: number = 10;
-    attackRadius: number = 2;
+    damage: number = 1000;
+    attackRadius: number = 1;
     isPlayer: boolean = true;
+
+    protected viewDirection: -1 | 1 = 1;
 
     protected colliding: boolean = false;
     private gameTime!: GameTime;
@@ -31,25 +33,26 @@ export abstract class PlayerBehaviour extends EntityBehaviour {
     }
     run(x: number) {
         this.gameObject.rigidbody.force.add(new Vector2(x, 0));
-        if (this.gameObject.rigidbody.velocity.x > 0 && this.animatedSprite.activeAnimation !== 'run right') this.animatedSprite.activeAnimation = 'run right';
-        else if (this.gameObject.rigidbody.velocity.x < 0 && this.animatedSprite.activeAnimation !== 'run left') this.animatedSprite.activeAnimation = 'run left';
+        if (this.viewDirection === 1 && this.animatedSprite.activeAnimation !== 'run right' && !this.isAttacking) this.animatedSprite.activeAnimation = 'run right';
+        else if (this.viewDirection === -1 && this.animatedSprite.activeAnimation !== 'run left' && !this.isAttacking) this.animatedSprite.activeAnimation = 'run left';
     }
     jump() {
-        if (this.animatedSprite.activeAnimation !== 'jump left' && this.gameObject.rigidbody.velocity.x < 0) this.animatedSprite.activeAnimation = 'jump left';
-        else if (this.animatedSprite.activeAnimation !== 'jump right' && this.gameObject.rigidbody.velocity.x >= 0) this.animatedSprite.activeAnimation = 'jump right';
+        if (this.animatedSprite.activeAnimation !== 'jump left' && this.viewDirection === -1 && !this.isAttacking) this.animatedSprite.activeAnimation = 'jump left';
+        else if (this.animatedSprite.activeAnimation !== 'jump right' && this.viewDirection === 1 && !this.isAttacking) this.animatedSprite.activeAnimation = 'jump right';
     }
     idle() {
         this.gameObject.rigidbody.velocity.x *= this.gameTime.deltaTime / 50;
-        if (this.animatedSprite.activeAnimation !== 'idle left' && this.gameObject.rigidbody.velocity.x < 0) this.animatedSprite.activeAnimation = 'idle left';
-        else if (this.animatedSprite.activeAnimation !== 'idle right' && this.gameObject.rigidbody.velocity.x >= 0) this.animatedSprite.activeAnimation = 'idle right';
+        if (this.animatedSprite.activeAnimation !== 'idle left' && this.viewDirection === -1 && !this.isAttacking) this.animatedSprite.activeAnimation = 'idle left';
+        else if (this.animatedSprite.activeAnimation !== 'idle right' && this.viewDirection === 1 && !this.isAttacking) this.animatedSprite.activeAnimation = 'idle right';
     }
     async attack(direction: Vector2) {
         await super.attack(direction);
-        if (this.animatedSprite.activeAnimation !== 'attack') this.animatedSprite.activeAnimation = 'attack';
+
+        if (this.animatedSprite.activeAnimation !== 'attack left' && this.viewDirection === -1 && this.isAttacking) this.animatedSprite.activeAnimation = 'attack left';
+        else if (this.animatedSprite.activeAnimation !== 'attack right' && this.viewDirection === 1 && this.isAttacking) this.animatedSprite.activeAnimation = 'attack right';
     }
     async die() {
-        if (confirm(`${this.gameObject.name} died`)) {
-            location.reload();
-        }
+        alert(`${this.gameObject.name} died`);
+        location.reload();
     }
 }

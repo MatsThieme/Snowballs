@@ -1,4 +1,4 @@
-import { UIMenu, AlignH, AlignV, AABB, Vector2, UIButton, UIText, InputType, UIFontSize, Sprite } from '../../SnowballEngine/Scene.js';
+import { AABB, AlignH, AlignV, InputType, Sprite, UIButton, UIFontSize, UIMenu, UIText, Vector2 } from '../../SnowballEngine/Scene.js';
 
 export function PauseMenuPrefab(menu: UIMenu) {
     menu.alignH = AlignH.Center;

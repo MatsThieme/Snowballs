@@ -1,7 +1,6 @@
-import { LoadingScreenPrefab } from './Prefabs/LoadingScreenPrefab.js';
+import { LoadingScreenPrefab } from './Prefabs/UI/LoadingScreenPrefab.js';
 import { MainCameraPrefab } from './Prefabs/Scene/Cameras/MainCameraPrefab.js';
 import { FireWeakEnemyPrefab } from './Prefabs/Scene/Enemies/FireWeakEnemyPrefab.js';
-import { WeakEnemyPrefab } from './Prefabs/Scene/Enemies/WeakEnemyPrefab.js';
 import { LevelPrefab } from './Prefabs/Scene/Level/LevelPrefab.js';
 import { Player1Prefab } from './Prefabs/Scene/Players/Player1Prefab.js';
 import { Player2Prefab } from './Prefabs/Scene/Players/Player2Prefab.js';
@@ -13,6 +12,8 @@ import { MainMenuPrefab } from './Prefabs/UI/MainMenuPrefab.js';
 import { PauseMenuPrefab } from './Prefabs/UI/PauseMenuPrefab.js';
 import { SettingsMenuPrefab } from './Prefabs/UI/SettingsMenuPrefab.js';
 import { FontLoader, PreloadAssets, Scene, Settings, Vector2 } from './SnowballEngine/Scene.js';
+import { EndMenuPrefab } from './Prefabs/UI/EndMenuPrefab.js';
+import { SnowWeakEnemyPrefab } from './Prefabs/Scene/Enemies/SnowWeakEnemyPrefab.js';
 
 class Game {
     private scene: Scene;
@@ -43,11 +44,6 @@ class Game {
         await scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
         await scene.newGameObject('Player2', PlayerPrefab, Player2Prefab);
 
-        for (let i = 0; i < 20; i++)
-            await scene.newGameObject('Enemy Fire Weak Test', WeakEnemyPrefab, FireWeakEnemyPrefab, gO => {
-                gO.transform.relativePosition = new Vector2(50, 10);
-            });
-
 
         await scene.ui.addMenu('Main Menu', MainMenuPrefab);
 
@@ -58,6 +54,8 @@ class Game {
         await scene.ui.addMenu('Credits', CreditsMenuPrefab);
 
         await scene.ui.addMenu('Controls', ControlsMenuPrefab);
+
+        await scene.ui.addMenu('End Menu', EndMenuPrefab);
 
         await scene.ui.addMenu('debug overlay', DebugOverlayPrefab);
     }

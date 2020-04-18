@@ -1,6 +1,6 @@
 import { average, Behaviour, Camera, clamp, ComponentType, TileMap } from '../../../SnowballEngine/Scene.js';
 
-export class CameraFollowPlayers extends Behaviour {
+export class CameraFollowPlayersBehaviour extends Behaviour {
     async update() {
         const player1 = this.scene.find('Player1');
         const player2 = this.scene.find('Player2');

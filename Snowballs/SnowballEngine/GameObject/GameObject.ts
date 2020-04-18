@@ -19,6 +19,7 @@ export class GameObject {
     public parent: GameObject | undefined;
     public drawPriority: number;
     public hasCollider?: boolean;
+    private destroyed: boolean;
     public constructor(name: string, scene: Scene) {
         this.id = GameObject.nextID++;
         this._name = `${name} (${this.id})`;
@@ -26,6 +27,7 @@ export class GameObject {
         this.children = [];
         this.scene = scene;
         this.drawPriority = 0;
+        this.destroyed = false;
     }
 
     /**
@@ -61,12 +63,18 @@ export class GameObject {
      *
      */
     public get rigidbody(): RigidBody {
-        const rb = this.getComponent<RigidBody>(ComponentType.RigidBody) || this.getComponentInChildren<RigidBody>(ComponentType.RigidBody) || this.parent?.getComponent<RigidBody>(ComponentType.RigidBody);
-        if (!rb) {
-            this.components.push(new RigidBody(this))
-            return this.rigidbody;
+        try {
+            const rb = this.getComponent<RigidBody>(ComponentType.RigidBody) || this.getComponentInChildren<RigidBody>(ComponentType.RigidBody) || this.parent?.getComponent<RigidBody>(ComponentType.RigidBody);
+            if (!rb) {
+                this.components.push(new RigidBody(this))
+                return this.rigidbody;
+            }
+            return rb;
+        } catch (e) {
+            console.log(e);
+            debugger;
         }
-        return rb;
+        return <RigidBody>{};
     }
 
     /**
@@ -220,17 +228,35 @@ export class GameObject {
         this.children.forEach(c => c.update(gameTime, currentCollisions));
 
         for (const c of this.components) {
-            if (c.type === ComponentType.ParticleSystem || c.type === ComponentType.AnimatedSprite || c.type === ComponentType.AudioListener) (<any>c).update(gameTime);
+            if (c.type === ComponentType.ParticleSystem || c.type === ComponentType.AnimatedSprite || c.type === ComponentType.AudioListener || c.type === ComponentType.PolygonRenderer) (<any>c).update(gameTime);
         }
     }
 
     /**
      * 
-     * Remove this from scene.
+     * Remove this from scene and delete all references.
      * 
      */
     public destroy(): void {
+        if (this.destroyed) return;
+        this.destroyed = true;
+
         this.children.forEach(c => c.destroy());
-        this.scene.destroyGameObject(this.name);
+        this.scene.destroyGameObject(this._name);
+
+        (<any>this.scene).toDestroy.push(() => {
+            const i = this.parent?.children.findIndex(v => v.name === this.name);
+            if (i && i !== -1) this.parent?.children.splice(i, 1);
+
+            this.components.forEach(c => c.destroy());
+
+
+            Object.setPrototypeOf(this, null);
+
+            for (const key of Object.keys(this)) {
+                if (key !== '_name')
+                    delete (<any>this)[key];
+            }
+        });
     }
 }

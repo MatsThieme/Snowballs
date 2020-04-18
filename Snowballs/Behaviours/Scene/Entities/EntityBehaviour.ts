@@ -1,6 +1,6 @@
-import { AnimatedSprite, Behaviour, CircleCollider, clamp, ComponentType, GameObject, GameTime, PolygonCollider, PolygonRenderer, Sprite, Texture, Vector2 } from '../../../SnowballEngine/Scene.js';
-import { StatusbarBehaviour } from './StatusbarBehaviour.js';
+import { AnimatedSprite, Behaviour, CircleCollider, clamp, ComponentType, GameTime, PolygonCollider, Sprite, Texture, Vector2, Collider, PolygonRenderer } from '../../../SnowballEngine/Scene.js';
 import { AttackBehaviour } from './AttackBehaviour.js';
+import { StatusbarBehaviour } from './StatusbarBehaviour.js';
 
 export abstract class EntityBehaviour extends Behaviour {
     level: number = 1;
@@ -25,7 +25,7 @@ export abstract class EntityBehaviour extends Behaviour {
     protected abstract attackType: 'fireball' | 'snowball' | 'beat';
 
     abstract async die(): Promise<void>;
-
+    dying: boolean = false;
 
     async start() {
         await this.gameObject.scene.newGameObject(`HealthBar${this.componentId}`, async gameObject => {
@@ -42,7 +42,7 @@ export abstract class EntityBehaviour extends Behaviour {
 
             gameObject.drawPriority = 10;
             this.healtbar = await gameObject.addComponent(StatusbarBehaviour);
-            this.healtbar.color = '#f00';
+            this.healtbar.color = this.isPlayer ? '#ff549b' : '#ff8d31';
 
             const aS = this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
             gameObject.transform.relativePosition.y = ((aS!.scaledSize.y || 0) / 2 + aS!.relativePosition.y) * 1.1 + texSize.y * 1.5;
@@ -59,31 +59,33 @@ export abstract class EntityBehaviour extends Behaviour {
 
             gameObject.drawPriority = 10;
             this.energybar = await gameObject.addComponent(StatusbarBehaviour);
-            this.energybar.color = '#00f';
+            this.energybar.color = '#30ff56';
 
             const aS = this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
             gameObject.transform.relativePosition.y = ((aS!.scaledSize.y || 0) / 2 + aS!.relativePosition.y) * 1.1;
         });
+
+        this._health = this.maxHealth;
+        this._energy = this.maxEnergy;
     }
 
     async update(gameTime: GameTime) {
         if (this.health === 0) {
-            this.die();
-            this.gameObject.destroy();
+            if (!this.dying) this.die().then(() => this.gameObject.destroy());
             return;
         }
 
         if (this._health < 100) this._health += this.healthRegeneration * gameTime.deltaTime;
         this._health = clamp(0, this.maxHealth, this._health);
 
-        this.healtbar.max = this.maxHealth;
+        this.healtbar.max = this.maxHealth * ~~this.level;
         this.healtbar.value = this.health;
 
 
         if (this._energy < 100) this._energy += this.energyRegeneration * gameTime.deltaTime;
         this._energy = clamp(0, this.maxEnergy, this._energy);
 
-        this.energybar.max = this.maxEnergy;
+        this.energybar.max = this.maxEnergy * ~~this.level;
         this.energybar.value = this.energy;
     }
 
@@ -128,7 +130,7 @@ export abstract class EntityBehaviour extends Behaviour {
 
             await gameObject.addComponent(Texture, async texture => {
                 texture.size = circleCollider.AABB.size;
-                texture.sprite = new Sprite('Images/Items/snowball.png');
+                texture.sprite = new Sprite('Images/Items/fireball.png');
                 await texture.sprite.load;
             });
 
@@ -140,7 +142,9 @@ export abstract class EntityBehaviour extends Behaviour {
             gameObject.rigidbody.useAutoMass = true;
             gameObject.rigidbody.applyImpulse(direction.clone.setLength(3.5));
 
-            gameObject.transform.relativePosition = this.gameObject.transform.position;
+            const cs = this.gameObject.getComponent<Collider>(ComponentType.Collider)?.AABB.size;
+
+            if (cs) gameObject.transform.relativePosition = this.gameObject.transform.position.add(new Vector2(0, cs.y * 0.3));
         });
     }
     async snowballAttack(direction: Vector2, damage: number) {
@@ -165,28 +169,34 @@ export abstract class EntityBehaviour extends Behaviour {
 
             gameObject.rigidbody.applyImpulse(direction.clone.setLength(3.5));
 
-            gameObject.transform.relativePosition = this.gameObject.transform.position;
+            const cs = this.gameObject.getComponent<Collider>(ComponentType.Collider)?.AABB.size;
+
+            if (cs) gameObject.transform.relativePosition = this.gameObject.transform.position.add(new Vector2(0, cs.y * 0.3));
         });
     }
     async beatAttack(direction: Vector2, damage: number) {
         await this.scene.newGameObject('Beat Trigger', async gameObject => {
             this.gameObject.addChild(gameObject);
 
-            gameObject.transform.relativeRotation = Vector2.up.angleTo(new Vector2(), direction);
-            gameObject.transform.relativePosition = Vector2.up.setLength(this.attackRadius).rotateAroundTo(new Vector2(), gameObject.transform.relativeRotation);
+            gameObject.transform.relativePosition = direction.clone.setLength(this.attackRadius).sub(new Vector2(0, this.attackRadius / 5));
 
             await gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.isTrigger = true;
-                polygonCollider.vertices = [new Vector2(0, 0), new Vector2(0, this.attackRadius), new Vector2(0.1, 0), new Vector2(0.1, this.attackRadius)];
             });
 
-            await gameObject.addComponent(PolygonRenderer);
+            const colliderSize = this.gameObject.getComponent<Collider>(ComponentType.Collider)?.AABB.size;
+
+            gameObject.transform.relativeScale = new Vector2(Math.min(colliderSize!.x, Math.abs(this.gameObject.transform.position.x - gameObject.transform.position.x)), colliderSize!.y);
 
 
             await gameObject.addComponent(AttackBehaviour, attackBehaviour => {
                 attackBehaviour.damage = damage;
                 attackBehaviour.attackerID = this.gameObject.id;
             });
+
+            await gameObject.addComponent(PolygonRenderer);
+
+            setTimeout(() => gameObject && gameObject.destroy ? gameObject.destroy() : undefined, this.attackDuration);
         });
     }
 }

@@ -23,6 +23,7 @@ export class Scene {
     public loadingScreen?: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => any;
     private loadingScreenActive?: boolean;
     public hasAudioListener: boolean;
+    private readonly toDestroy: (() => void)[];
     public constructor() {
         this.domElement = document.createElement('canvas');
 
@@ -33,6 +34,7 @@ export class Scene {
         this.ui = new UI(this.input, this);
         this.framedata = new Framedata();
         this.hasAudioListener = false;
+        this.toDestroy = [];
 
         this.stop();
     }
@@ -44,6 +46,15 @@ export class Scene {
      */
     public find(name: string): GameObject | undefined {
         return this.gameObjects.get(name) || this.gameObjects.get([...this.gameObjects.keys()].find(n => (n.match(/(.*) \(\d+\)/) || '')[1] === name) || '');
+    }
+
+    /**
+     *
+     * Returns all GameObjects of the given name.
+     *
+     */
+    public findAll(name: string): GameObject[] {
+        return [...this.gameObjects.entries()].filter(e => (e[0].match(/(.*) \(\d+\)/) || '')[1] === name).map(e => e[1]);
     }
 
     /**
@@ -89,7 +100,7 @@ export class Scene {
         if (!this.ui.pauseScene) {
             gameObjects.forEach(gO => gO.getComponents<Collider>(ComponentType.Collider).forEach(c => c.update(this.gameTime)));
 
-            const idPairs: any = [];
+            const idPairs: number[] = [];
             const collisionPromises: Promise<Collision>[] = [];
 
 
@@ -97,11 +108,10 @@ export class Scene {
 
             for (const gO1 of gOs) {
                 for (const gO2 of gOs) {
-                    const id = gO1.id > gO2.id ? (gO1.id << 16) + gO2.id : (gO2.id << 16) + gO1.id;
+                    const id = gO1.id > gO2.id ? (gO1.id << 8) + gO2.id : (gO2.id << 8) + gO1.id;
 
-                    if (gO1.id !== gO2.id && !idPairs[id]) {
-                        const collisions = Physics.collision(gO1, gO2);
-                        collisionPromises.push(...collisions);
+                    if (!idPairs[id] && gO1.id !== gO2.id) {
+                        collisionPromises.push(...Physics.collision(gO1, gO2));
                         idPairs[id] = 1;
                     }
                 }
@@ -113,8 +123,18 @@ export class Scene {
                 collisions.push(c);
             }
 
-            await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
+            try {
+                await awaitPromises(...gameObjects.map(gameObject => gameObject.update(this.gameTime, collisions)));
+            } catch (e) {
+                console.log(e);
+                debugger;
+            }
         }
+
+
+        this.toDestroy.forEach(d => d());
+        this.toDestroy.splice(0);
+
 
         this.cameraManager.update(gameObjects);
 
@@ -140,22 +160,16 @@ export class Scene {
      * 
      */
     public async start(): Promise<void> {
-        interval(async clear => {
-            if (!this.ui.pauseScene) {
-                clear();
+        this.requestAnimationFrameHandle = 0; // set isRunning true
 
-                this.requestAnimationFrameHandle = 0; // set isRunning true
-
-                for (const gameObject of this.getAllGameObjects()) {
-                    for (const c of gameObject.getComponents<Behaviour>(ComponentType.Behaviour)) {
-                        await c.start();
-                        (<any>c).__initialized = true;
-                    }
-                }
-
-                this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
+        for (const gameObject of this.getAllGameObjects()) {
+            for (const c of gameObject.getComponents<Behaviour>(ComponentType.Behaviour)) {
+                await c.start();
+                (<any>c).__initialized = true;
             }
-        }, 10);
+        }
+
+        this.requestAnimationFrameHandle = requestAnimationFrame(this.update.bind(this));
     }
 
     /**

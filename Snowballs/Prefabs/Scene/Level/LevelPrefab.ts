@@ -1,5 +1,8 @@
 import { TileMapBackgroundBehaviour } from '../../../Behaviours/Scene/Level/TileMapBackgroundBehaviour.js';
 import { GameObject, Noise, PhysicsMaterial, Sprite, TileMap, Vector2 } from '../../../SnowballEngine/Scene.js';
+import { FireWeakEnemyPrefab } from '../Enemies/FireWeakEnemyPrefab.js';
+import { SnowWeakEnemyPrefab } from '../Enemies/SnowWeakEnemyPrefab.js';
+import { FireBossEnemyPrefab } from '../Enemies/FireBossEnemyPrefab.js';
 
 export async function LevelPrefab(gameObject: GameObject) {
     const tiles: string[][] = [
@@ -25,25 +28,25 @@ export async function LevelPrefab(gameObject: GameObject) {
             'Images/Snow/Tiles/middle.png',
         ],
         [
-            'Images/Snow/Tiles/left_top_corner.png',
-            'Images/Snow/Tiles/right_top_corner.png',
-            'Images/Snow/Tiles/left_top_right_top_corner.png',
-            'Images/Snow/Tiles/bottom.png',
-            'Images/Snow/Tiles/top.png',
-            'Images/Snow/Tiles/left.png',
-            'Images/Snow/Tiles/right.png',
-            'Images/Snow/Tiles/left_right.png',
-            'Images/Snow/Tiles/left_top.png',
-            'Images/Snow/Tiles/left_bottom.png',
-            'Images/Snow/Tiles/right_top.png',
-            'Images/Snow/Tiles/right_bottom.png',
-            'Images/Snow/Tiles/top_bottom.png',
-            'Images/Snow/Tiles/left_top_bottom.png',
-            'Images/Snow/Tiles/right_top_bottom.png',
-            'Images/Snow/Tiles/left_right_bottom.png',
-            'Images/Snow/Tiles/left_right_top.png',
-            'Images/Snow/Tiles/left_right_top_bottom.png',
-            'Images/Snow/Tiles/middle.png',
+            'Images/Fire/Tiles/left_top_corner.png',
+            'Images/Fire/Tiles/right_top_corner.png',
+            'Images/Fire/Tiles/left_top_right_top_corner.png',
+            'Images/Fire/Tiles/bottom.png',
+            'Images/Fire/Tiles/top.png',
+            'Images/Fire/Tiles/left.png',
+            'Images/Fire/Tiles/right.png',
+            'Images/Fire/Tiles/left_right.png',
+            'Images/Fire/Tiles/left_top.png',
+            'Images/Fire/Tiles/left_bottom.png',
+            'Images/Fire/Tiles/right_top.png',
+            'Images/Fire/Tiles/right_bottom.png',
+            'Images/Fire/Tiles/top_bottom.png',
+            'Images/Fire/Tiles/left_top_bottom.png',
+            'Images/Fire/Tiles/right_top_bottom.png',
+            'Images/Fire/Tiles/left_right_bottom.png',
+            'Images/Fire/Tiles/left_right_top.png',
+            'Images/Fire/Tiles/left_right_top_bottom.png',
+            'Images/Fire/Tiles/middle.png',
         ],
     ];
 
@@ -57,13 +60,16 @@ export async function LevelPrefab(gameObject: GameObject) {
         ],
         [
             { distance: 1000, sprite: new Sprite('Images/Fire/Background/sky.png') },
-            { distance: 850, sprite: new Sprite('Images/Fire/Background/hill_back.png') },
-            { distance: 849, sprite: new Sprite('Images/Fire/Background/lightning.png') },
-            { distance: 800, sprite: new Sprite('Images/Fire/Background/clouds_back.png') },
-            { distance: 725, sprite: new Sprite('Images/Fire/Background/clouds.png') },
+            { distance: 850, sprite: new Sprite('Images/Fire/Background/clouds_back.png') },
+            { distance: 840, sprite: new Sprite('Images/Fire/Background/hill_back.png') },
+            { distance: 800, sprite: new Sprite('Images/Fire/Background/smoke.png') },
+            { distance: 725, sprite: new Sprite('Images/Fire/Background/lightning_back.png') },
             { distance: 625, sprite: new Sprite('Images/Fire/Background/hill_mid.png') },
-            { distance: 550, sprite: new Sprite('Images/Fire/Background/lightning_mid.png') },
-            { distance: 525, sprite: new Sprite('Images/Fire/Background/hill_front.png') }
+            { distance: 550, sprite: new Sprite('Images/Fire/Background/tree_back.png') },
+            { distance: 525, sprite: new Sprite('Images/Fire/Background/lightning_front.png') },
+            { distance: 450, sprite: new Sprite('Images/Fire/Background/hill_front.png') },
+            { distance: 425, sprite: new Sprite('Images/Fire/Background/clouds_front.png') },
+            { distance: 350, sprite: new Sprite('Images/Fire/Background/tree_front.png') }
         ]
     ];
 
@@ -72,6 +78,7 @@ export async function LevelPrefab(gameObject: GameObject) {
     const flatnessScalar = 0.17;
     const levels = 2;
     const maxGroundHeight = 5;
+    const enemiesPerLevel = 20;
 
     const map: string[][] = [];
 
@@ -138,4 +145,32 @@ export async function LevelPrefab(gameObject: GameObject) {
 
     gameObject.drawPriority = -1;
     await gameObject.addComponent(TileMapBackgroundBehaviour);
+
+    for (let level = 1; level <= levels; level++) {
+        for (let i = 0; i < enemiesPerLevel; i++) {
+            if (level === 1) {
+                await gameObject.scene.newGameObject('Enemy Snow Weak', SnowWeakEnemyPrefab, gO => {
+                    gO.transform.relativePosition = new Vector2(i * (levelSize.x / enemiesPerLevel) + levelSize.x * (level - 1), 10);
+                });
+            } else if (level === 2) {
+                await gameObject.scene.newGameObject('Enemy Fire Weak', FireWeakEnemyPrefab, gO => {
+                    gO.transform.relativePosition = new Vector2(i * (levelSize.x / enemiesPerLevel) + levelSize.x * (level - 1), 10);
+                });
+            }
+        }
+
+        if (level === 1) {
+            await gameObject.scene.newGameObject('Enemy Fire Boss', FireBossEnemyPrefab, gO => {
+                gO.transform.relativePosition = new Vector2(levelSize.x * 0.9 + levelSize.x * (level - 1), 10);
+            });
+        } else if (level === 2) {
+            await gameObject.scene.newGameObject('Enemy Fire Boss', FireBossEnemyPrefab, gO => {
+                gO.transform.relativePosition = new Vector2(levelSize.x * 0.9 + levelSize.x * (level - 1), 10);
+            });
+        }
+    }
+
+    await gameObject.scene.newGameObject('Enemy Fire Boss', FireBossEnemyPrefab, gO => {
+        gO.transform.relativePosition = new Vector2(20, 10);
+    });
 }

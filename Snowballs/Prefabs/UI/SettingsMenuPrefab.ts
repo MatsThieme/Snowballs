@@ -1,4 +1,7 @@
-import { AABB, AlignH, AlignV, Sprite, UIButton, UIFontSize, UIMenu, UINumberInputField, UIText, Vector2, Settings } from '../../SnowballEngine/Scene.js';
+import { AABB, AlignH, AlignV, Sprite, UIButton, UIFontSize, UIMenu, UINumberInputField, UIText, Vector2, Settings, UIDropdown, UICheckbox } from '../../SnowballEngine/Scene.js';
+import { PlayerPrefab } from '../Scene/Players/PlayerPrefab.js';
+import { Player1Prefab } from '../Scene/Players/Player1Prefab.js';
+import { Player2Prefab } from '../Scene/Players/Player2Prefab.js';
 
 export function SettingsMenuPrefab(menu: UIMenu) {
     menu.background = new Sprite((context, canvas) => {
@@ -61,5 +64,45 @@ export function SettingsMenuPrefab(menu: UIMenu) {
         numberInputField.cbOnInput = numberInputField => Settings.volume = numberInputField.value;
 
         numberInputField.aabb = new AABB(new Vector2(5, 7), new Vector2(0, 33));
+    });
+
+    menu.addUIElement(UICheckbox, checkbox => {
+        checkbox.alignH = AlignH.Center;
+        checkbox.alignV = AlignV.Top;
+        checkbox.localAlignH = AlignH.Center;
+        checkbox.localAlignV = AlignV.Center;
+
+        checkbox.label = 'Player 1';
+        checkbox.fitContent(1);
+
+        checkbox.cbOnInput = async c => {
+            if (c.checked) {
+                if (!menu.scene.find('Player1')) await menu.scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
+            } else menu.scene.find('Player1')?.destroy();
+        };
+
+        checkbox.checked = true;
+
+        checkbox.aabb = new AABB(new Vector2(), new Vector2(-15, 50));
+    });
+
+    menu.addUIElement(UICheckbox, checkbox => {
+        checkbox.alignH = AlignH.Center;
+        checkbox.alignV = AlignV.Top;
+        checkbox.localAlignH = AlignH.Center;
+        checkbox.localAlignV = AlignV.Center;
+
+        checkbox.label = 'Player 2';
+        checkbox.fitContent(1);
+
+        checkbox.cbOnInput = async c => {
+            if (c.checked) {
+                if (!menu.scene.find('Player2')) await menu.scene.newGameObject('Player2', PlayerPrefab, Player2Prefab);
+            } else menu.scene.find('Player2')?.destroy();
+        };
+
+        checkbox.checked = true;
+
+        checkbox.aabb = new AABB(new Vector2(), new Vector2(15, 50));
     });
 }

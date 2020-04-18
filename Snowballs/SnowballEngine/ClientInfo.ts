@@ -1,4 +1,5 @@
 import { Vector2 } from './Vector2.js';
+import { asyncTimeout } from './Helpers.js';
 
 export class ClientInfo {
     /**
@@ -6,22 +7,19 @@ export class ClientInfo {
      * Measure the refresh rate of the active monitor for ms.
      * 
      */
-    private static measureMonitorRefreshRate(ms: number): Promise<number> {
-        return new Promise(resolve => {
-            let frames: number = 0;
+    private static async measureMaxRefreshRate(ms: number): Promise<number> {
+        let frames: number = 0;
+        let handle = requestAnimationFrame(update);
 
-            let handle = requestAnimationFrame(update);
+        function update() {
+            frames++;
+            handle = requestAnimationFrame(update);
+        }
 
-            function update() {
-                frames++;
-                handle = requestAnimationFrame(update);
-            }
+        await asyncTimeout(ms);
 
-            setTimeout(() => {
-                resolve(Math.round(frames / ms * 1000));
-                cancelAnimationFrame(handle);
-            }, ms);
-        });
+        cancelAnimationFrame(handle);
+        return Math.round(frames / ms * 1000);
     }
 
     /**
@@ -48,7 +46,7 @@ export class ClientInfo {
             ClientInfo.aspectRatio.copy(ClientInfo.resolution.clone.setLength(new Vector2(16, 9).magnitude));
         });
 
-        ClientInfo.monitorRefreshRate = await ClientInfo.measureMonitorRefreshRate(1000);
+        ClientInfo.monitorRefreshRate = await ClientInfo.measureMaxRefreshRate(1000);
     }
 }
 

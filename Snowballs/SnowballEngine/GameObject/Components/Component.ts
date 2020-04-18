@@ -6,17 +6,30 @@ export class Component {
     public readonly type: ComponentType;
     public readonly componentId: number = Component.nextId++;
     private static nextId: number = 0;
+    private destroyed: boolean;
     public constructor(gameObject: GameObject, type: ComponentType = ComponentType.Component) {
         this.gameObject = gameObject;
         this.type = type;
+        this.destroyed = false;
     }
 
     /**
      * 
-     * Remove this from this.gameObject.
+     * Remove this from this.gameObject and delete all references.
      * 
      */
     public destroy(): void {
-        this.gameObject.removeComponent(this.componentId);
+        if (this.destroyed) return;
+        this.destroyed = true;
+
+        (<any>this.gameObject.scene).toDestroy.push(() => {
+            this.gameObject.removeComponent(this.componentId);
+
+            Object.setPrototypeOf(this, null);
+
+            for (const key of Object.keys(this)) {
+                delete (<any>this)[key];
+            }
+        });
     }
 }

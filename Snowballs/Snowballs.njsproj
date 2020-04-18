@@ -43,6 +43,7 @@
     <Folder Include="Behaviours\Scene\" />
     <Folder Include="Behaviours\Scene\Entities\" />
     <Folder Include="Behaviours\Scene\Level\" />
+    <Folder Include="Prefabs\Scene\ParticleEffects\" />
     <Folder Include="Prefabs\" />
     <Folder Include="Prefabs\Scene\Cameras\" />
     <Folder Include="Prefabs\Scene\Level\" />
@@ -63,16 +64,25 @@
     <Folder Include="SnowballEngine\Worker\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Behaviours\Scene\Camera\CameraFollowPlayers.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Camera\CameraFollowPlayersBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Behaviours\Scene\Camera\FreezeFarAwayObjects.ts">
+    <TypeScriptCompile Include="Behaviours\Scene\Camera\EndGameBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Camera\FreezeFarAwayObjectsBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Entities\AttackBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\BossEnemyBehaviour.ts" />
     <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\WeakEnemyBehaviour.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\BossFireEnemyBehaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\WeakSnowEnemyBehaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\WeakFireEnemyBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Entities\EnemyBehaviour.ts">
@@ -101,14 +111,19 @@
     <TypeScriptCompile Include="Behaviours\Scene\Level\TileMapBackgroundBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefabs\LoadingScreenPrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\Scene\Enemies\FireBossEnemyPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Enemies\SnowWeakEnemyPrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\Scene\ParticleEffects\FireParticlePrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\Scene\ParticleEffects\SnowParticlePrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\UI\LoadingScreenPrefab.ts" />
     <TypeScriptCompile Include="Prefabs\Scene\Cameras\MainCameraPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\Scene\Enemies\FireWeakEnemyPrefab.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Prefabs\Scene\Enemies\WeakEnemyPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\Scene\Items\EnergyBoostPrefab.ts" />
@@ -129,6 +144,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\UI\ControlsMenuPrefab.ts" />
+    <TypeScriptCompile Include="Prefabs\UI\EndMenuPrefab.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Prefabs\UI\SettingsMenuPrefab.ts" />
     <TypeScriptCompile Include="Prefabs\UI\CreditsMenuPrefab.ts">
       <SubType>Code</SubType>

@@ -122,6 +122,6 @@ export class UI {
      * 
      */
     public get pauseScene(): boolean {
-        return [...Object.values(this.menus)].findIndex(m => m.active && m.pauseScene) !== -1;
+        return [...this.menus.values()].some(m => m.active && m.pauseScene);
     }
 }

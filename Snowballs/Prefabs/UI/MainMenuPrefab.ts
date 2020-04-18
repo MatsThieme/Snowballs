@@ -17,8 +17,6 @@ export function MainMenuPrefab(menu: UIMenu) {
         text.alignH = AlignH.Center;
         text.alignV = AlignV.Top;
 
-        text.cbOnInput = b => menu.active = false;
-
         text.label = 'Snowballs';
         text.fontSize = UIFontSize.ExtraLarge;
 

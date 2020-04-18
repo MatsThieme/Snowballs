@@ -31,20 +31,20 @@ export class UIMenu {
      * 
      */
     public drawPriority: number;
-    private uiElements: Map<number, UIElement>;
+    private readonly uiElements: Map<number, UIElement>;
     private _aabb: AABB;
-    public input: Input;
-    private canvas: OffscreenCanvas;
-    private context: OffscreenCanvasRenderingContext2D;
-    public font: UIFont;
+    public readonly input: Input;
+    private readonly canvas: OffscreenCanvas;
+    private readonly context: OffscreenCanvasRenderingContext2D;
+    public readonly font: UIFont;
     public background?: Sprite;
     private frame!: UIFrame;
-    public scene: Scene;
+    public readonly scene: Scene;
     public localAlignH: AlignH;
     public localAlignV: AlignV;
     public alignH: AlignH;
     public alignV: AlignV;
-    public ui: UI;
+    public readonly ui: UI;
     public constructor(input: Input, scene: Scene) {
         this.active = false;
         this.pauseScene = true;

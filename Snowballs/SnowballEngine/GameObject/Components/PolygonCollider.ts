@@ -174,41 +174,4 @@ export class PolygonCollider extends Collider {
         this.scaledSize = this.calculateSize(this.vertices);
         this._aabb = this.calculateAABB();
     }
-    //public findMostAntiParallelFace(vec: Vector2): Face {
-    //    let ret!: Face;
-    //    let lowestDot = Infinity;
-
-    //    for (const face of this.faces) {
-    //        const d = Vector2.dot(face.normal.perpendicularClockwise, vec);
-    //        if (d < lowestDot) {
-    //            ret = face;
-    //            lowestDot = d;
-    //        }
-    //    }
-
-    //    return ret;
-    //}
-    //public getAxis(otherColliderPosition: Vector2): Vector2[] {
-    //    const thisPosition: Vector2 = this.position;
-    //    const axis: Vector2[] = [];
-
-    //    for (const normal of this.faces.map(f => f.normal)) {
-    //        if (axis.findIndex(a => a.equal(normal)) === -1) axis.push(normal);
-    //    }
-
-    //    const bla: Vector2[] = [];
-
-    //    for (const a of axis) {
-    //        let foundOpposite = false;
-    //        for (const b of axis) {
-    //            if (Vector2.dot(a, b) === -1) foundOpposite = true;
-    //        }
-
-    //        if (foundOpposite) {
-    //            bla.push(thisPosition.clone.add(a).distance(otherColliderPosition) > thisPosition.clone.add(a.flipped).distance(otherColliderPosition) ? a : a.flipped);
-    //        } else bla.push(a);
-    //    }
-
-    //    return bla;
-    //}
 }

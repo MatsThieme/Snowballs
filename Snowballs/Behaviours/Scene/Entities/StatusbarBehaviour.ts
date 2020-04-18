@@ -7,15 +7,16 @@ export class StatusbarBehaviour extends Behaviour {
     private _color: string = '#00f';
     private texture!: Texture;
     private size!: Vector2;
+    private bar!: Texture;
 
     async start() {
-        const bar = <Texture>this.gameObject.getComponent<Texture>(ComponentType.Texture);
+        this.bar = <Texture>this.gameObject.getComponent<Texture>(ComponentType.Texture);
 
-        this.size = bar.size.clone;
+        this.size = this.bar.size.clone;
 
         this.texture = await this.gameObject.addComponent(Texture, texture => {
-            texture.relativePosition = bar.relativePosition;
-            texture.size = bar.size.clone;
+            texture.relativePosition = this.bar.relativePosition;
+            texture.size = this.bar.size.clone;
 
             texture.sprite = new Sprite((context, canvas) => {
                 context.fillStyle = this._color;
@@ -27,9 +28,11 @@ export class StatusbarBehaviour extends Behaviour {
     }
     async update(gameTime: GameTime) {
         if (this.texture.sprite) {
-            const scale = this.value / (this.max - this.min);
+            const scale = this.value / (this.max - this.min) / 100 * this.max;
 
             this.texture.size.x = this.size.x * scale;
+
+            this.bar.size.x = this.size.x / 100 * this.max;
         }
     }
 

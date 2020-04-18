@@ -1,26 +1,41 @@
-import { Behaviour, Collision } from '../../../SnowballEngine/Scene.js';
+import { FireParticlePrefab } from '../../../Prefabs/Scene/ParticleEffects/FireParticlePrefab.js';
+import { SnowParticlePrefab } from '../../../Prefabs/Scene/ParticleEffects/SnowParticlePrefab.js';
+import { Behaviour, Collision, Vector2 } from '../../../SnowballEngine/Scene.js';
 import { EntityBehaviour } from './EntityBehaviour.js';
 
 export class AttackBehaviour extends Behaviour {
     damage: number = 10;
-    private player1ID!: number;
-    private player2ID!: number;
     attackerID!: number;
 
-    async start() {
-        this.player1ID = this.scene.find('Player1')!.id;
-        this.player2ID = this.scene.find('Player2')!.id;
-    }
     onTrigger(collision: Collision) {
+        const player1ID = this.scene.find('Player1')?.id || -1;
+        const player2ID = this.scene.find('Player2')?.id || -1;
+
         const otherGO = collision.A.gameObject.id === this.gameObject.id ? collision.B.gameObject : collision.A.gameObject;
 
-        if (this.attackerID === this.player1ID && otherGO.id === this.player2ID || this.attackerID === this.player2ID && otherGO.id === this.player1ID || otherGO.id === this.attackerID || otherGO.name.includes('Fireball') || otherGO.name.includes('Snwoball') || otherGO.name.includes('Beat Trigger')) return;
+        if (this.attackerID === player1ID && otherGO.id === player2ID || this.attackerID === player2ID && otherGO.id === player1ID || otherGO.id === this.attackerID) return;
 
         const eb = otherGO.getComponent<EntityBehaviour>(<any>EntityBehaviour);
 
         if (!eb && this.gameObject.name.includes('Beat Trigger')) return;
 
         eb?.onAttack(this.damage);
-        this.gameObject.destroy();
+
+        if (this.gameObject.name.includes('Beat Trigger')) {
+            this.gameObject.destroy();
+            return;
+        } else if (this.gameObject.name.includes('Fireball')) {
+            this.scene.newGameObject('Fire Particles', FireParticlePrefab, gameObject => {
+                gameObject.transform.relativePosition = Vector2.average(...collision.contactPoints!);
+            });
+
+            this.gameObject.destroy();
+        } else if (this.gameObject.name.includes('Snowball')) {
+            this.scene.newGameObject('Snow Particles', SnowParticlePrefab, gameObject => {
+                gameObject.transform.relativePosition = Vector2.average(...collision.contactPoints!);
+            });
+
+            this.gameObject.destroy();
+        }
     }
 }
