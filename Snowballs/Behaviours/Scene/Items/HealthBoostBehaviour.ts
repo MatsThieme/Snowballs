@@ -10,7 +10,7 @@ export class HealthBoostBehaviour extends Behaviour {
 
         if (stats && stats?.isPlayer) {
             const h = stats.health;
-            stats.health += this.isBoss ? 100 : 10;
+            stats.health += this.isBoss ? 100 : 12;
             if (stats.health === h) return; // ensure that the health boost had an impact on health before destroying
             this.gameObject.destroy();
         }

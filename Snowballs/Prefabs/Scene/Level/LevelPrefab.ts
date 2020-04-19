@@ -1,8 +1,11 @@
+import { WeakFireEnemyBehaviour } from '../../../Behaviours/Scene/Entities/Enemies/WeakFireEnemyBehaviour.js';
+import { WeakSnowEnemyBehaviour } from '../../../Behaviours/Scene/Entities/Enemies/WeakSnowEnemyBehaviour.js';
 import { TileMapBackgroundBehaviour } from '../../../Behaviours/Scene/Level/TileMapBackgroundBehaviour.js';
 import { GameObject, Noise, PhysicsMaterial, Sprite, TileMap, Vector2 } from '../../../SnowballEngine/Scene.js';
-import { FireWeakEnemyPrefab } from '../Enemies/FireWeakEnemyPrefab.js';
-import { SnowWeakEnemyPrefab } from '../Enemies/SnowWeakEnemyPrefab.js';
 import { FireBossEnemyPrefab } from '../Enemies/FireBossEnemyPrefab.js';
+import { FireWeakEnemyPrefab } from '../Enemies/FireWeakEnemyPrefab.js';
+import { SnowBossEnemyPrefab } from '../Enemies/SnowBossEnemyPrefab.js';
+import { SnowWeakEnemyPrefab } from '../Enemies/SnowWeakEnemyPrefab.js';
 
 export async function LevelPrefab(gameObject: GameObject) {
     const tiles: string[][] = [
@@ -146,21 +149,35 @@ export async function LevelPrefab(gameObject: GameObject) {
     gameObject.drawPriority = -1;
     await gameObject.addComponent(TileMapBackgroundBehaviour);
 
+
+
     for (let level = 1; level <= levels; level++) {
+        const items: ('LevelUp' | 'HealthBoost' | 'EnergyBoost')[] = [];
+        for (let i = 0; i < Math.ceil(enemiesPerLevel / 3); i++)
+            items.push('LevelUp');
+        for (let i = 0; i < Math.ceil(enemiesPerLevel / 3); i++)
+            items.push('HealthBoost');
+        for (let i = 0; i < Math.ceil(enemiesPerLevel / 3); i++)
+            items.push('EnergyBoost');
+
+        items.sort((a, b) => Math.random() - 0.5);
+
         for (let i = 0; i < enemiesPerLevel; i++) {
             if (level === 1) {
                 await gameObject.scene.newGameObject('Enemy Snow Weak', SnowWeakEnemyPrefab, gO => {
                     gO.transform.relativePosition = new Vector2(i * (levelSize.x / enemiesPerLevel) + levelSize.x * (level - 1), 10);
+                    gO.getComponent(WeakSnowEnemyBehaviour)!.itemType = items.splice(0, 1)[0];
                 });
             } else if (level === 2) {
                 await gameObject.scene.newGameObject('Enemy Fire Weak', FireWeakEnemyPrefab, gO => {
                     gO.transform.relativePosition = new Vector2(i * (levelSize.x / enemiesPerLevel) + levelSize.x * (level - 1), 10);
+                    gO.getComponent(WeakFireEnemyBehaviour)!.itemType = items.splice(0, 1)[0];
                 });
             }
         }
 
         if (level === 1) {
-            await gameObject.scene.newGameObject('Enemy Fire Boss', FireBossEnemyPrefab, gO => {
+            await gameObject.scene.newGameObject('Enemy Snow Boss', SnowBossEnemyPrefab, gO => {
                 gO.transform.relativePosition = new Vector2(levelSize.x * 0.9 + levelSize.x * (level - 1), 10);
             });
         } else if (level === 2) {
@@ -169,8 +186,4 @@ export async function LevelPrefab(gameObject: GameObject) {
             });
         }
     }
-
-    await gameObject.scene.newGameObject('Enemy Fire Boss', FireBossEnemyPrefab, gO => {
-        gO.transform.relativePosition = new Vector2(20, 10);
-    });
 }

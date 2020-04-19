@@ -17,25 +17,16 @@ export class AttackBehaviour extends Behaviour {
 
         const eb = otherGO.getComponent<EntityBehaviour>(<any>EntityBehaviour);
 
+
         if (!eb && this.gameObject.name.includes('Beat Trigger')) return;
 
         eb?.onAttack(this.damage);
 
-        if (this.gameObject.name.includes('Beat Trigger')) {
-            this.gameObject.destroy();
-            return;
-        } else if (this.gameObject.name.includes('Fireball')) {
-            this.scene.newGameObject('Fire Particles', FireParticlePrefab, gameObject => {
-                gameObject.transform.relativePosition = Vector2.average(...collision.contactPoints!);
-            });
 
-            this.gameObject.destroy();
-        } else if (this.gameObject.name.includes('Snowball')) {
-            this.scene.newGameObject('Snow Particles', SnowParticlePrefab, gameObject => {
-                gameObject.transform.relativePosition = Vector2.average(...collision.contactPoints!);
-            });
+        if (this.gameObject.name.includes('Fireball')) this.scene.newGameObject('Fire Particles', FireParticlePrefab, gameObject => gameObject.transform.relativePosition = Vector2.average(...collision.contactPoints!));
+        else if (this.gameObject.name.includes('Snowball')) this.scene.newGameObject('Snow Particles', SnowParticlePrefab, gameObject => gameObject.transform.relativePosition = Vector2.average(...collision.contactPoints!));
 
-            this.gameObject.destroy();
-        }
+
+        this.gameObject.destroy();
     }
 }

@@ -11,11 +11,11 @@ export abstract class WeakEnemyBehaviour extends EnemyBehaviour {
     abstract attackRadius: number;
     canSeePlayer: number = 10;
     damage: number = 7;
+    itemType!: 'LevelUp' | 'HealthBoost' | 'EnergyBoost';
 
     async die() {
-        const i = ~~(Math.random() * 3);
-        if (i === 0) await this.scene.newGameObject('LevelUp', LevelUpPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
-        else if (i === 1) await this.scene.newGameObject('HealthBoost', HealthBoostPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
-        else if (i === 2) await this.scene.newGameObject('EnergyBoost', EnergyBoostPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
+        if (this.itemType === 'LevelUp') await this.scene.newGameObject('LevelUp', LevelUpPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
+        else if (this.itemType === 'HealthBoost') await this.scene.newGameObject('HealthBoost', HealthBoostPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
+        else if (this.itemType === 'EnergyBoost') await this.scene.newGameObject('EnergyBoost', EnergyBoostPrefab, gameObject => gameObject.transform.relativePosition = this.gameObject.transform.position.clone);
     }
 }

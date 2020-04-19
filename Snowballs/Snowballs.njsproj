@@ -77,6 +77,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\BossEnemyBehaviour.ts" />
+    <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\BossSnowEnemyBehaviour.ts" />
     <TypeScriptCompile Include="Behaviours\Scene\Entities\Enemies\WeakEnemyBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -111,6 +112,7 @@
     <TypeScriptCompile Include="Behaviours\Scene\Level\TileMapBackgroundBehaviour.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Prefabs\Scene\Enemies\SnowBossEnemyPrefab.ts" />
     <TypeScriptCompile Include="Prefabs\Scene\Enemies\FireBossEnemyPrefab.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

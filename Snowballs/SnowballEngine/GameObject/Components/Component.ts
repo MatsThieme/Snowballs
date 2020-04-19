@@ -13,13 +13,23 @@ export class Component {
         this.destroyed = false;
     }
 
+
+    /**
+     * 
+     * Return false to cancel destoy.
+     * 
+     */
+    protected onDestroy(component: Component): boolean {
+        return true;
+    }
+
     /**
      * 
      * Remove this from this.gameObject and delete all references.
      * 
      */
     public destroy(): void {
-        if (this.destroyed) return;
+        if (this.destroyed || !this.onDestroy(this)) return;
         this.destroyed = true;
 
         (<any>this.gameObject.scene).toDestroy.push(() => {

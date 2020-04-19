@@ -3,7 +3,7 @@ import { CircleCollider, GameObject, Sprite, Texture, Vector2 } from '../../../S
 
 export async function LevelUpPrefab(gameObject: GameObject) {
     await gameObject.addComponent(CircleCollider, circleCollider => {
-        circleCollider.radius = 0.25;
+        circleCollider.radius = 0.1;
         circleCollider.isTrigger = true;
     });
 

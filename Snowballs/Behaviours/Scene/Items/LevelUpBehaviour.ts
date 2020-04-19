@@ -8,7 +8,7 @@ export class LevelUpBehaviour extends Behaviour {
         const stats = otherGO.getComponent<EntityBehaviour>(<any>EntityBehaviour);
 
         if (stats && stats.isPlayer) {
-            stats.level += this.isBoss ? 1 : 0.05;
+            stats.level += this.isBoss ? 1 : 0.2;
             this.gameObject.destroy();
         }
     }

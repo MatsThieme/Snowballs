@@ -2,8 +2,8 @@ import { clamp, Collision, ComponentType, GameTime, TileMap, Vector2 } from '../
 import { EntityBehaviour } from './EntityBehaviour.js';
 
 export abstract class EnemyBehaviour extends EntityBehaviour {
-    healthRegeneration: number = 0.0001;
-    energyRegeneration: number = 0.0001;
+    healthRegeneration: number = 0.0005;
+    energyRegeneration: number = 0.0005;
 
     isPlayer: boolean = false;
     protected abstract canSeePlayer: number = 7;

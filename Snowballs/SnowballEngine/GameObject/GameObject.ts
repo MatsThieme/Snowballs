@@ -228,7 +228,7 @@ export class GameObject {
         this.children.forEach(c => c.update(gameTime, currentCollisions));
 
         for (const c of this.components) {
-            if (c.type === ComponentType.ParticleSystem || c.type === ComponentType.AnimatedSprite || c.type === ComponentType.AudioListener || c.type === ComponentType.PolygonRenderer) (<any>c).update(gameTime);
+            if (c.type === ComponentType.ParticleSystem || c.type === ComponentType.AnimatedSprite || c.type === ComponentType.AudioListener) (<any>c).update(gameTime);
         }
     }
 

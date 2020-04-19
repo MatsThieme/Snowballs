@@ -36,6 +36,8 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.label = 'Play';
         button.fontSize = UIFontSize.Large;
 
+        button.aabb = new AABB(new Vector2(), new Vector2(0, -5));
+
         button.fitContent(1.5);
     });
 
@@ -45,7 +47,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.alignH = AlignH.Center;
         button.alignV = AlignV.Center;
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 14));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 10));
 
         button.cbOnInput = b => {
             menu.active = false;
@@ -53,9 +55,9 @@ export function MainMenuPrefab(menu: UIMenu) {
         };
 
         button.label = 'Settings';
-        button.fontSize = UIFontSize.Small;
+        button.fontSize = UIFontSize.Medium;
 
-        button.fitContent(1.5);
+        button.fitContent(1.3);
     });
 
     menu.addUIElement(UIButton, button => {
@@ -64,7 +66,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.alignH = AlignH.Center;
         button.alignV = AlignV.Center;
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 20));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 19));
 
         button.cbOnInput = b => {
             menu.active = false;
@@ -72,9 +74,9 @@ export function MainMenuPrefab(menu: UIMenu) {
         };
 
         button.label = 'Controls';
-        button.fontSize = UIFontSize.Small;
+        button.fontSize = UIFontSize.Medium;
 
-        button.fitContent(1.5);
+        button.fitContent(1.3);
     });
 
     menu.addUIElement(UIButton, button => {
@@ -83,7 +85,7 @@ export function MainMenuPrefab(menu: UIMenu) {
         button.alignH = AlignH.Center;
         button.alignV = AlignV.Center;
 
-        button.aabb = new AABB(new Vector2(), new Vector2(0, 26));
+        button.aabb = new AABB(new Vector2(), new Vector2(0, 28));
 
         button.cbOnInput = b => {
             menu.active = false;
@@ -91,8 +93,25 @@ export function MainMenuPrefab(menu: UIMenu) {
         };
 
         button.label = 'Credits';
+        button.fontSize = UIFontSize.Medium;
+
+        button.fitContent(1.3);
+    });
+
+
+
+    menu.addUIElement(UIButton, button => {
+        button.localAlignH = AlignH.Right;
+        button.localAlignV = AlignV.Bottom;
+        button.alignH = AlignH.Right;
+        button.alignV = AlignV.Bottom;
+
+        button.cbOnInput = b => window.open('https://github.com/MatsThieme/SnowballEngine');
+
+        button.label = 'Made with SnowballEngine';
         button.fontSize = UIFontSize.Small;
 
-        button.fitContent(1.5);
+        button.fitContent(1.7);
     });
+
 }

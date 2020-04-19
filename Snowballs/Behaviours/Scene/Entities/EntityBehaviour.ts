@@ -1,4 +1,4 @@
-import { AnimatedSprite, Behaviour, CircleCollider, clamp, ComponentType, GameTime, PolygonCollider, Sprite, Texture, Vector2, Collider, PolygonRenderer } from '../../../SnowballEngine/Scene.js';
+import { AnimatedSprite, Behaviour, CircleCollider, clamp, Collider, ComponentType, GameTime, PolygonCollider, Sprite, Texture, Vector2 } from '../../../SnowballEngine/Scene.js';
 import { AttackBehaviour } from './AttackBehaviour.js';
 import { StatusbarBehaviour } from './StatusbarBehaviour.js';
 
@@ -6,10 +6,10 @@ export abstract class EntityBehaviour extends Behaviour {
     level: number = 1;
     abstract maxHealth: number = 100;
     private _health: number = 100;
-    abstract healthRegeneration: number = 0.0001; // per ms
+    abstract healthRegeneration: number = 0.0005; // per ms
     abstract maxEnergy: number = 100;
     private _energy: number = 100;
-    abstract energyRegeneration: number = 0.0001; // per ms
+    abstract energyRegeneration: number = 0.0005; // per ms
 
     abstract damage: number;
 
@@ -178,23 +178,21 @@ export abstract class EntityBehaviour extends Behaviour {
         await this.scene.newGameObject('Beat Trigger', async gameObject => {
             this.gameObject.addChild(gameObject);
 
-            gameObject.transform.relativePosition = direction.clone.setLength(this.attackRadius).sub(new Vector2(0, this.attackRadius / 5));
+            gameObject.transform.relativePosition = new Vector2(Math.sign(direction.x) * this.attackRadius / 2, 0);
+
+            const colliderSize = this.gameObject.getComponent<Collider>(ComponentType.Collider)!.AABB.size;
 
             await gameObject.addComponent(PolygonCollider, polygonCollider => {
                 polygonCollider.isTrigger = true;
+                polygonCollider.vertices = [new Vector2(), new Vector2(this.attackRadius, colliderSize.y), new Vector2(this.attackRadius, 0), new Vector2(0, colliderSize.y)];
             });
-
-            const colliderSize = this.gameObject.getComponent<Collider>(ComponentType.Collider)?.AABB.size;
-
-            gameObject.transform.relativeScale = new Vector2(Math.min(colliderSize!.x, Math.abs(this.gameObject.transform.position.x - gameObject.transform.position.x)), colliderSize!.y);
-
 
             await gameObject.addComponent(AttackBehaviour, attackBehaviour => {
                 attackBehaviour.damage = damage;
                 attackBehaviour.attackerID = this.gameObject.id;
             });
 
-            await gameObject.addComponent(PolygonRenderer);
+            //await gameObject.addComponent(PolygonRenderer);
 
             setTimeout(() => gameObject && gameObject.destroy ? gameObject.destroy() : undefined, this.attackDuration);
         });

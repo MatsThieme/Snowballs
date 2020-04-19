@@ -2,11 +2,11 @@ import { AnimatedSprite, Camera, ComponentType, GameTime, PolygonCollider, Vecto
 import { EntityBehaviour } from './EntityBehaviour.js';
 
 export abstract class PlayerBehaviour extends EntityBehaviour {
-    maxHealth: number = 1000;
-    healthRegeneration: number = 0.0001;
-    maxEnergy: number = 10000000;
-    energyRegeneration: number = 0.0001;
-    damage: number = 1000;
+    maxHealth: number = 100;
+    healthRegeneration: number = 0.0005;
+    maxEnergy: number = 100;
+    energyRegeneration: number = 0.0005;
+    damage: number = 10;
     attackRadius: number = 1;
     isPlayer: boolean = true;
 

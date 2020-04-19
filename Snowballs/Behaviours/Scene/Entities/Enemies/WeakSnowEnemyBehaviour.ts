@@ -2,7 +2,7 @@ import { AnimatedSprite, ComponentType, GameTime } from '../../../../SnowballEng
 import { WeakEnemyBehaviour } from './WeakEnemyBehaviour.js';
 
 export class WeakSnowEnemyBehaviour extends WeakEnemyBehaviour {
-    attackRadius: number = 0.7;
+    attackRadius: number = 1;
     protected attackType: 'fireball' | 'snowball' | 'beat' = 'beat';
     private animatedSprite: AnimatedSprite = <AnimatedSprite>this.gameObject.getComponent<AnimatedSprite>(ComponentType.AnimatedSprite);
 

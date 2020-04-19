@@ -1,6 +1,4 @@
-import { LoadingScreenPrefab } from './Prefabs/UI/LoadingScreenPrefab.js';
 import { MainCameraPrefab } from './Prefabs/Scene/Cameras/MainCameraPrefab.js';
-import { FireWeakEnemyPrefab } from './Prefabs/Scene/Enemies/FireWeakEnemyPrefab.js';
 import { LevelPrefab } from './Prefabs/Scene/Level/LevelPrefab.js';
 import { Player1Prefab } from './Prefabs/Scene/Players/Player1Prefab.js';
 import { Player2Prefab } from './Prefabs/Scene/Players/Player2Prefab.js';
@@ -8,12 +6,12 @@ import { PlayerPrefab } from './Prefabs/Scene/Players/PlayerPrefab.js';
 import { ControlsMenuPrefab } from './Prefabs/UI/ControlsMenuPrefab.js';
 import { CreditsMenuPrefab } from './Prefabs/UI/CreditsMenuPrefab.js';
 import { DebugOverlayPrefab } from './Prefabs/UI/DebugOverlayPrefab.js';
+import { EndMenuPrefab } from './Prefabs/UI/EndMenuPrefab.js';
+import { LoadingScreenPrefab } from './Prefabs/UI/LoadingScreenPrefab.js';
 import { MainMenuPrefab } from './Prefabs/UI/MainMenuPrefab.js';
 import { PauseMenuPrefab } from './Prefabs/UI/PauseMenuPrefab.js';
 import { SettingsMenuPrefab } from './Prefabs/UI/SettingsMenuPrefab.js';
-import { FontLoader, PreloadAssets, Scene, Settings, Vector2 } from './SnowballEngine/Scene.js';
-import { EndMenuPrefab } from './Prefabs/UI/EndMenuPrefab.js';
-import { SnowWeakEnemyPrefab } from './Prefabs/Scene/Enemies/SnowWeakEnemyPrefab.js';
+import { FontLoader, PreloadAssets, Scene, Settings } from './SnowballEngine/Scene.js';
 
 class Game {
     private scene: Scene;
@@ -43,6 +41,7 @@ class Game {
 
         await scene.newGameObject('Player1', PlayerPrefab, Player1Prefab);
         await scene.newGameObject('Player2', PlayerPrefab, Player2Prefab);
+
 
 
         await scene.ui.addMenu('Main Menu', MainMenuPrefab);
