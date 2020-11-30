@@ -5,8 +5,7 @@ export class Settings {
      * 
      */
     public static volume: number = 1;
-    //public static appPath: string = 'https://thieme.ml/ABS';
-    public static appPath: string = '';
+    public static appPath: string = window.location.toString().match(/(.*?)(?:index.html)?$/);
     private static relativeAssetPath: string = '/Assets/';
     public static get assetPath(): string {
         return Settings.appPath + Settings.relativeAssetPath;
